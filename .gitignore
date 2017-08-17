@@ -1,0 +1,9 @@
+*
+!opcode_interpreter.cpp
+!atoms.h
+!atoms.cpp
+!CmakeLists.txt
+!main.cpp
+!builder_repl.hpp
+!opmap.hpp
+!.gitignore
