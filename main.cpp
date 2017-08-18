@@ -1,38 +1,17 @@
-//#include "builder_repl.hpp"
+#include "mwin.h"
+#include <qt5/QtWidgets/QApplication>
 #include "atoms.h"
-#include  "ecl/ecl.h"
+//#include  "ecl/ecl.h"
 #include <stdio.h>
 #include "opmap.hpp"
 
-
-
-/* 
-     00: halt
-     01: assignment
-     02: add
-     03: read
-     04: write
-     05: sub
-     06: shl
-     07: shr
-  */
-
-
-
-
-
 using namespace std;
-
-
-int main(int argc, char **argv){
-  /* Initialize the library we linked in. Each library
-   * has to be initialized. It is best if all libraries
-   * are joined using ASDF:MAKE-BUILD.
-   */
- 
-  // start_builder_repl();
-  // auto func = [](auto arg1, auto arg2, auto arg3){arg1(), arg2(), arg3();};
-  // std::vector<std::function<void()>> oi;
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    mwin w;
+    w.show();
+    
   overseer ov;
   ov.control_units.push_back(make_shared<control_unit>(12,4,4,2));
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
@@ -113,8 +92,5 @@ int main(int argc, char **argv){
        << "mdr " << mdr->id << " :" << mdr->info << endl 
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
-  return 0;
+    return a.exec();
 }
-
-
-

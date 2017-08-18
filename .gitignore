@@ -7,3 +7,7 @@
 !builder_repl.hpp
 !opmap.hpp
 !.gitignore
+!jarasper.pro
+!mwin.cpp
+!mwin.h
+!mwin.ui
