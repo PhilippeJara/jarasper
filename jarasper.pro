@@ -32,7 +32,8 @@ SOURCES += \
 HEADERS += \
         mwin.h \
     atoms.h \
-    opmap.hpp
+    opmap.hpp \
+    container.hpp
 
 FORMS += \
         mwin.ui

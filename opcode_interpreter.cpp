@@ -42,7 +42,6 @@ void control_unit::interpret_minst(size_t mcode, const vector<shared_ptr<memory>
 				    indx));
     indx++;
   }
-  
   switch(operador){
   case 1:{
     auto origem = operandos.at(0);
@@ -97,7 +96,7 @@ void control_unit::interpret_minst(size_t mcode, const vector<shared_ptr<memory>
     SHR(operandos.at(0), operandos.at(1));
     break;
   }
-  default:{cout << "código de microinstrućão inválido" << endl; exit(1);}
+  default:{cout << "código de microinstrućão inválido: " << operador << endl; exit(1);}
   }
 }
 void control_unit::sync_bus(){this->reg_out();this->reg_in();}

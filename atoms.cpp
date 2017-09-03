@@ -35,7 +35,14 @@ memory::memory(size_t mem_size,
 
 
 regist::regist() : bits(), info() , in() , out(){}
-regist::regist(size_t bits,size_t id) :bits(bits), id(id), info(), in(), out() {}
+regist::regist(size_t bits,size_t id) :bits(bits), id(id),
+				       info(0), in(),
+				       out(), display() {}
+regist::regist(size_t bits,size_t id, QWidget *parent) :bits(bits), id(id),
+							info(0), in(),
+							out() {
+  display = new mov_cnt<QLabel>(parent);
+}
 void regist::link_in(shared_ptr<bus> arg) {in.push_back(arg);}
 void regist::link_out(shared_ptr<bus> arg) {out.push_back(arg);}
 void regist::remove_link_in(shared_ptr<bus> arg){
@@ -46,8 +53,8 @@ void regist::remove_link_out(shared_ptr<bus> arg){
   out.erase(find (out.begin(),
 		  out.end(),
 		  arg));}  
-void regist::set(int arg) {info = trim_input(bits, arg);}
-void regist::set(bitset<max_bits> arg) {info = arg;}
+void regist::set(int arg) {info = trim_input(bits, arg); display->setText(QString::number(info.to_ulong()));}
+void regist::set(bitset<max_bits> arg) {info = arg;display->setText(QString::number(info.to_ulong()));}
   
 
 
@@ -93,7 +100,7 @@ size_t get_operand(bitset<max_bits> microcode,
 
 
 
-//resolver como tirar o template daqui
+
 
 control_unit::control_unit(size_t cu_reg_s,
 			   size_t operator_s,
@@ -107,7 +114,19 @@ control_unit::control_unit(size_t cu_reg_s,
   this->cu_reg = this->get_register(this->make_regist(cu_reg_s));}
   
 
-  
+control_unit::control_unit(size_t cu_reg_s,
+			   size_t operator_s,
+			   size_t operand_s,
+			   size_t operand_amnt,
+			   QWidget *parent) : cu_reg(), buses(),
+					      regists_in_out(), map_reg_counter(0),
+					      map_bus_counter(0), map_alu_counter(0),
+					      map_mar_counter(0), map_mdr_counter(0),
+					      operator_size(operator_s), operand_size(operand_s),
+					      operand_amnt(operand_amnt){
+  display = new mov_cnt<QLabel>(parent);
+  this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));}
+   
 size_t control_unit::make_bus(int bits){
   buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits)));
   map_bus_counter++;
@@ -116,8 +135,23 @@ size_t control_unit::make_bus(int bits){
 
 size_t control_unit::make_regist(int bits){
   regists_in_out.insert(make_pair(map_reg_counter,
-				  make_tuple(make_shared<regist>(bits,map_reg_counter),
+				  make_tuple(make_shared<regist>(bits,map_reg_counter, this->display),
 					     false,false)));
+  auto nreg = this->get_register(map_reg_counter);
+  nreg->display->setText(QString::number(nreg->info.to_ulong()));
+    
+  map_reg_counter++;
+  
+  return map_reg_counter - 1;
+}
+
+size_t control_unit::make_internal_regist(int bits, QWidget *parent){
+  regists_in_out.insert(make_pair(map_reg_counter,
+				  make_tuple(make_shared<regist>(bits,map_reg_counter, this->display),
+					     false,false)));
+  auto nreg = this->get_register(map_reg_counter);
+  nreg->display->setText(QString::number(nreg->info.to_ulong()));
+    
   map_reg_counter++;
   return map_reg_counter - 1;
 }
@@ -354,6 +388,19 @@ void control_unit::reg_in(){
 
 
 overseer::overseer() : control_units(), memories(){}
+overseer::overseer(QWidget *mwid): control_units(), memories(), mwidget(mwid){}
+control_unit *overseer::make_cu(size_t cu_reg_s,
+				size_t operator_s,
+				size_t operand_s,
+				size_t operand_amnt,
+				QWidget *parent){
+  control_units.push_back(make_shared<control_unit>(cu_reg_s,
+						    operator_s,
+						    operand_s,
+						    operand_amnt,
+						    parent));
+  return control_units.back().get();
+}
 void overseer::cycle_old(){
     
   for(auto& cu:control_units){
