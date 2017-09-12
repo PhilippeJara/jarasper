@@ -11,4 +11,6 @@
 !mwin.cpp
 !mwin.h
 !mwin.ui
+!styles.cpp
+!styles.hpp
 !container.hpp

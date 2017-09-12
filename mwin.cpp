@@ -1,7 +1,9 @@
 #include "mwin.h"
-#include "../builds/build-jarasper-Desktop_Qt_5_9_1_GCC_64bit-Debug/ui_mwin.h"
+//#include "../builds/build-jarasper-Desktop_Qt_5_5_1_GCC_32bit-Debug/ui_mwin.h"
+#include "ui_mwin.h"
 #include <memory>
 #include <qt5/QtWidgets/QLabel>
+
 using namespace std;
 
 mwin::mwin(QWidget *parent) :
@@ -14,9 +16,10 @@ mwin::mwin(QWidget *parent) :
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
-  cu->display->setFixedSize(300, 300);
-  cu->display->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  cu->display->setAlignment(Qt::AlignBottom | Qt::AlignRight);
+  //  set_styling<decltype(cu)>(cu);
+  // cu->display->setFixedSize(300, 300);
+  // cu->display->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  // cu->display->setAlignment(Qt::AlignBottom | Qt::AlignRight);
   cu->opcodes = opmap;
   cu->make_alu(cu->get_register(cu->make_regist(12)),
   	       cu->get_register(cu->make_regist(12)),
@@ -50,6 +53,7 @@ mwin::mwin(QWidget *parent) :
        << "mdr " << mdr->id << " :" << mdr->info << endl 
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
+  //cu->display->show_context_menu(cu->display->pos());
 }
 
 mwin::~mwin()

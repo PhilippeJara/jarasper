@@ -9,9 +9,13 @@
 #include <qt5/QtWidgets/QLabel>
 #include "container.hpp"
 #include "mwin.h"
+#include "styles.hpp"
 #ifndef ATOMS_H
 #define ATOMS_H
 const size_t max_bits = 16;
+
+
+
 
 std::bitset <max_bits> trim_input (int bits, std::bitset <max_bits> input);
 class bus
@@ -52,6 +56,7 @@ public:
   void set(std::bitset<max_bits> arg);
   
 };
+
 
 class alu{
 public:
@@ -117,6 +122,7 @@ public:
 	       size_t operand_s,
 	       size_t operand_amnt,
 	       QWidget *parent);
+    control_unit(size_t arg);
   size_t make_bus(int bits);
 
 
@@ -141,8 +147,8 @@ public:
   std::shared_ptr<alu> get_alu(size_t id);
   void set_in(size_t id);
   void set_out(size_t id);
+  
 
-  control_unit(size_t arg);
 
 
 
@@ -213,4 +219,7 @@ public:
 // avaliar referência de mar's e mdr's à memoria
 
 
-#endif //ATOMS_H
+
+
+
+#endif

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1920</width>
-    <height>1980</height>
+    <width>1178</width>
+    <height>492</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -34,9 +34,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>130</y>
-      <width>1921</width>
-      <height>1051</height>
+      <y>70</y>
+      <width>651</width>
+      <height>541</height>
      </rect>
     </property>
     <property name="cursor">
@@ -55,7 +55,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1920</width>
+     <width>1178</width>
      <height>19</height>
     </rect>
    </property>

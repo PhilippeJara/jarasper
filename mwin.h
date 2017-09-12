@@ -6,6 +6,7 @@
 #include "opmap.hpp"
 #include <memory>
 #include <iostream>
+
 namespace Ui {
 class mwin;
 }
@@ -21,7 +22,7 @@ public:
 
 private slots:
     void on_criar_cu_clicked();
-private:
+  private:
     Ui::mwin *ui;
 };
 

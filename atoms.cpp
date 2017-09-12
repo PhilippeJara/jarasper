@@ -42,6 +42,7 @@ regist::regist(size_t bits,size_t id, QWidget *parent) :bits(bits), id(id),
 							info(0), in(),
 							out() {
   display = new mov_cnt<QLabel>(parent);
+  set_styling<decltype(this)>(this);
 }
 void regist::link_in(shared_ptr<bus> arg) {in.push_back(arg);}
 void regist::link_out(shared_ptr<bus> arg) {out.push_back(arg);}
@@ -53,8 +54,12 @@ void regist::remove_link_out(shared_ptr<bus> arg){
   out.erase(find (out.begin(),
 		  out.end(),
 		  arg));}  
-void regist::set(int arg) {info = trim_input(bits, arg); display->setText(QString::number(info.to_ulong()));}
-void regist::set(bitset<max_bits> arg) {info = arg;display->setText(QString::number(info.to_ulong()));}
+void regist::set(int arg) {
+  info = trim_input(bits, arg);
+  display->setText(QString::number(info.to_ulong()));}
+void regist::set(bitset<max_bits> arg) {
+  info = arg;
+  display->setText(QString::number(info.to_ulong()));}
   
 
 
@@ -125,7 +130,8 @@ control_unit::control_unit(size_t cu_reg_s,
 					      operator_size(operator_s), operand_size(operand_s),
 					      operand_amnt(operand_amnt){
   display = new mov_cnt<QLabel>(parent);
-  this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));}
+  this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));
+  set_styling<decltype(this)>(this);}
    
 size_t control_unit::make_bus(int bits){
   buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits)));
@@ -135,11 +141,10 @@ size_t control_unit::make_bus(int bits){
 
 size_t control_unit::make_regist(int bits){
   regists_in_out.insert(make_pair(map_reg_counter,
-				  make_tuple(make_shared<regist>(bits,map_reg_counter, this->display),
+				  make_tuple(make_shared<regist>(bits,map_reg_counter, this->display->parentWidget()),
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
-    
   map_reg_counter++;
   
   return map_reg_counter - 1;
@@ -151,7 +156,6 @@ size_t control_unit::make_internal_regist(int bits, QWidget *parent){
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
-    
   map_reg_counter++;
   return map_reg_counter - 1;
 }
@@ -194,11 +198,12 @@ shared_ptr<alu> control_unit::get_alu(size_t id){return alus.at(id);}
 void control_unit::set_in(size_t id){get<1>(regists_in_out.at(id)) = true;}
 void control_unit::set_out(size_t id){get<2>(regists_in_out.at(id)) = true;}
 
-control_unit::control_unit(size_t arg) : cu_reg(), buses(),
-					 regists_in_out(), map_reg_counter(0),
-					 map_bus_counter(0), map_alu_counter(0),
-					 map_mar_counter(0), map_mdr_counter(0){
-  this->cu_reg = this->get_register(this->make_regist(arg));}
+// control_unit::control_unit(size_t arg) : cu_reg(), buses(),
+// 					 regists_in_out(), map_reg_counter(0),
+// 					 map_bus_counter(0), map_alu_counter(0),
+// 					 map_mar_counter(0), map_mdr_counter(0){
+//   this->cu_reg = this->get_register(this->make_regist(arg));
+//   }
   
 
 
@@ -281,60 +286,60 @@ void control_unit::write(const shared_ptr<regist> &mar,
   }
 }
 
-void control_unit::execute(const vector<shared_ptr<memory>> &memories){
-  bitset<max_bits> microcode(cu_reg->info);
-  //auto m_inst = (microcode >> oper_b * 2).to_ulong();
-  auto m_inst = get_operator(microcode, operator_size, operand_size, operand_amnt);
-  cout << "m_inst: " << m_inst <<endl
-       <<"microcode: " << microcode << endl;
-  if (m_inst == 1){
-    assignment(get_operand(microcode, operand_size, 0),
-	       get_operand(microcode, operand_size, 1));
-    (cout<< "assign" << endl);}
-  else if(m_inst == 2) {
-    add(get_operand(microcode, operand_size, 0));
-    (cout<< "add: " << endl);
-  }
-  else if(m_inst == 3) {
-    /// a ID do mdr e do mar utilizada é a sua sequencia em mdrs_id e mars_is, não a sua principal em registers_in_out!!!
-    cout << "get_mdr: "
-	 << get_operand(microcode, operand_size, 1)
-	 << endl;	
-    auto mdr = get_mdr(get_operand(microcode, operand_size, 1));
-    cout << "get_mar: "
-	 << get_operand(microcode, operand_size, 0)
-	 << endl;
-    auto mar = get_mar(get_operand(microcode, operand_size, 0));
-    read(mar, mdr, memories);
-    cout << "memread: " << endl;
-  }
-  else if(m_inst == 4){
-    /// a ID do mdr e do mar utilizada é a sua sequencia em mdrs_id e mars_is, não a sua principal em registers_in_out!!!
-    cout << "get_mdr: "
-	 << get_operand(microcode, operand_size, 1)
-	 << endl;	
-    auto mdr = get_mdr(get_operand(microcode, operand_size,1));
-    cout << "get_mar: "
-	 << get_operand(microcode, operand_size, 0)
-	 << endl;
-    auto mar = get_mar(get_operand(microcode, operand_size, 0));
-    write(mar, mdr, memories);
-    (cout << "memwrite: " << endl);
-  }
-  else if(m_inst == 5){
-    add(get_operand(microcode, operand_size, 0));
-    (cout<< "sub(overflow, carry?): " << endl);
+// void control_unit::execute(const vector<shared_ptr<memory>> &memories){
+//   bitset<max_bits> microcode(cu_reg->info);
+//   //auto m_inst = (microcode >> oper_b * 2).to_ulong();
+//   auto m_inst = get_operator(microcode, operator_size, operand_size, operand_amnt);
+//   cout << "m_inst: " << m_inst <<endl
+//        <<"microcode: " << microcode << endl;
+//   if (m_inst == 1){
+//     assignment(get_operand(microcode, operand_size, 0),
+// 	       get_operand(microcode, operand_size, 1));
+//     (cout<< "assign" << endl);}
+//   else if(m_inst == 2) {
+//     add(get_operand(microcode, operand_size, 0));
+//     (cout<< "add: " << endl);
+//   }
+//   else if(m_inst == 3) {
+//     /// a ID do mdr e do mar utilizada é a sua sequencia em mdrs_id e mars_is, não a sua principal em registers_in_out!!!
+//     cout << "get_mdr: "
+// 	 << get_operand(microcode, operand_size, 1)
+// 	 << endl;	
+//     auto mdr = get_mdr(get_operand(microcode, operand_size, 1));
+//     cout << "get_mar: "
+// 	 << get_operand(microcode, operand_size, 0)
+// 	 << endl;
+//     auto mar = get_mar(get_operand(microcode, operand_size, 0));
+//     read(mar, mdr, memories);
+//     cout << "memread: " << endl;
+//   }
+//   else if(m_inst == 4){
+//     /// a ID do mdr e do mar utilizada é a sua sequencia em mdrs_id e mars_is, não a sua principal em registers_in_out!!!
+//     cout << "get_mdr: "
+// 	 << get_operand(microcode, operand_size, 1)
+// 	 << endl;	
+//     auto mdr = get_mdr(get_operand(microcode, operand_size,1));
+//     cout << "get_mar: "
+// 	 << get_operand(microcode, operand_size, 0)
+// 	 << endl;
+//     auto mar = get_mar(get_operand(microcode, operand_size, 0));
+//     write(mar, mdr, memories);
+//     (cout << "memwrite: " << endl);
+//   }
+//   else if(m_inst == 5){
+//     add(get_operand(microcode, operand_size, 0));
+//     (cout<< "sub(overflow, carry?): " << endl);
       
-  }
-  else if(m_inst == 6){
-    SHL(get_operand(microcode, operand_size, 0),
-	get_operand(microcode, operand_size, 1));
-  }
-  else if(m_inst == 7){
-    SHR(get_operand(microcode, operand_size, 0),
-	get_operand(microcode, operand_size, 1));
-  }
-};
+//   }
+//   else if(m_inst == 6){
+//     SHL(get_operand(microcode, operand_size, 0),
+// 	get_operand(microcode, operand_size, 1));
+//   }
+//   else if(m_inst == 7){
+//     SHR(get_operand(microcode, operand_size, 0),
+// 	get_operand(microcode, operand_size, 1));
+//   }
+// };
 
 void control_unit::reg_out(){
   vector<shared_ptr<regist>> outs;
@@ -380,7 +385,6 @@ void control_unit::reg_in(){
     }
   }
 }
-
   
 
 
@@ -401,17 +405,17 @@ control_unit *overseer::make_cu(size_t cu_reg_s,
 						    parent));
   return control_units.back().get();
 }
-void overseer::cycle_old(){
+// void overseer::cycle_old(){
     
-  for(auto& cu:control_units){
-    cu->execute(memories);
-    cu->reg_out();
-  }
+//   for(auto& cu:control_units){
+//     cu->execute(memories);
+//     cu->reg_out();
+//   }
     
-  for(auto& cu:control_units){
-    cu->reg_in();
-  }
-}
+//   for(auto& cu:control_units){
+//     cu->reg_in();
+//   }
+// }
 void overseer::cycle(){
   for(auto& cu:control_units){
     cu->opcode_execute(memories);
@@ -420,6 +424,7 @@ void overseer::cycle(){
 // trocar os "at()" dos mapas por find().
 // reavaliar o uso dos shared_ptrs, principalmente como argumento de funcões.
 // implementar controle sobre ins e outs individuais dos registradores.(?)
+
 
 
 
