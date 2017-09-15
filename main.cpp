@@ -1,9 +1,7 @@
 #include "mwin.h"
 #include <qt5/QtWidgets/QApplication>
-//#include "atoms.h"
 //#include  "ecl/ecl.h"
 #include <stdio.h>
-//#include "opmap.hpp"
 
 using namespace std;
 

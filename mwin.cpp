@@ -1,6 +1,6 @@
 #include "mwin.h"
 //#include "../builds/build-jarasper-Desktop_Qt_5_5_1_GCC_32bit-Debug/ui_mwin.h"
-#include "ui_mwin.h"
+#include <ui_mwin.h>
 #include <memory>
 #include <qt5/QtWidgets/QLabel>
 

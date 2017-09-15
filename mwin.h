@@ -1,8 +1,7 @@
 #ifndef MWIN_H
 #define MWIN_H
-#include <qt5/QtWidgets/QMainWindow>
-#include "container.hpp"
 #include "atoms.h"
+#include <qt5/QtWidgets/QMainWindow>
 #include "opmap.hpp"
 #include <memory>
 #include <iostream>
@@ -25,5 +24,6 @@ private slots:
   private:
     Ui::mwin *ui;
 };
+
 
 #endif // MWIN_H

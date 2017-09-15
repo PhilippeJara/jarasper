@@ -1,10 +1,13 @@
+#ifndef CONTAINER_HPP
+#define CONTAINER_HPP
 #include <qt5/QtWidgets/QWidget>
 #include <qt5/QtGui/QMouseEvent>
 #include <qt5/QtWidgets/QPushButton>
 #include <qt5/QtCore/QPoint>
 #include <iostream>
-#ifndef CONTAINER_HPP
-#define CONTAINER_HPP
+#include <qt5/QtWidgets/QLabel>
+#include <qt5/QtWidgets/QPushButton>
+//#include <qt5/QtCore/QObject>
 template<class T>
 class mov_cnt:public T{
 public:
@@ -24,5 +27,55 @@ public:
     }
   }
 };
+
+
+
+// class register_display : public mov_cnt<QLabel>{
+//   Q_OBJECT
+
+// public:
+
+//   register_display(QWidget *);
+//   ~register_display();
+// public slots:
+
+// signals:
   
+// };
+// class control_unit_display : public mov_cnt<QLabel>{
+//   Q_OBJECT
+
+// public:
+
+//   control_unit_display(QWidget *);
+//   ~control_unit_display();
+// public slots:
+
+// signals:
+// };
+// class alu_display : public mov_cnt<QLabel>{
+
+//   Q_OBJECT
+
+// public:
+
+//   alu_display(QWidget *);
+//   ~alu_display();
+// public slots:
+
+// signals:
+// };
+// class memory_display : public mov_cnt<QLabel>{
+
+//   Q_OBJECT
+
+// public:
+
+//   memory_display(QWidget *);
+//   ~memory_display();
+// public slots:
+
+// signals:
+// }
+//;
 #endif //CONTAINER.HPP

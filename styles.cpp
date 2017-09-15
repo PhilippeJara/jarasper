@@ -1,4 +1,3 @@
-#include "styles.hpp"
 #include "atoms.h"
 template <> void set_styling(regist* obj){
   obj->display->setFixedSize(75, 25);

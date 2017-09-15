@@ -35,7 +35,8 @@ HEADERS += \
     atoms.h \
     opmap.hpp \
     container.hpp \
-    styles.hpp
+    styles.hpp \
+    container.hpp
 
 FORMS += \
         mwin.ui
