@@ -45,9 +45,10 @@ void control_unit::interpret_minst(size_t mcode, const vector<shared_ptr<memory>
   switch(operador){
   case 1:{
     auto origem = operandos.at(0);
-    for(const auto& operando: operandos){
+    set<size_t> destinos(operandos.begin() + 1, operandos.end());
+    for(const auto& destino: destinos){
       cout << "*new assignment*"<< endl;
-      if (operando != origem){this->assignment(origem, operando);}
+      if (destino != origem){this->assignment(origem, destino);}
     }
     break;
   }
