@@ -12,7 +12,7 @@ mwin::mwin(QWidget *parent) :
   ui(new Ui::mwin)
 {
   ui->setupUi(this);
-  ov.make_cu(12,4,4,2,ui->frame)->display->setText("oi");
+  ov.make_cu(12,4,4,2,ui->frame)->display->setText("control unit 0");
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
@@ -64,8 +64,8 @@ mwin::~mwin()
 void mwin::on_criar_cu_clicked()
 {
   auto cu = ov.make_cu(12, 4, 4, 4, ui->frame);
- 
-  cu->display->setText("oi");
+  auto lastindx = ov.control_units.size() - 1;
+  cu->display->setText(QString("control unit" + QString::number(lastindx)));
   cu->display->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   cu->display->setAlignment(Qt::AlignBottom | Qt::AlignRight);
   //cu->display->setParent(ui->frame);

@@ -82,6 +82,7 @@ void alu::SHL(size_t id, size_t amnt) {
   else if (B->id == id){
     (Z->info) = trim_input(Z->bits, (B->info) <<  amnt);}
   else {(cout << "id invávlido em SHL" << endl);}
+}
 
 size_t get_operator(bitset<max_bits> microcode,
 		    size_t operator_size,
