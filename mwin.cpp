@@ -16,10 +16,6 @@ mwin::mwin(QWidget *parent) :
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
-  //  set_styling<decltype(cu)>(cu);
-  // cu->display->setFixedSize(300, 300);
-  // cu->display->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  // cu->display->setAlignment(Qt::AlignBottom | Qt::AlignRight);
   cu->opcodes = opmap;
   cu->make_alu(cu->get_register(cu->make_regist(12)),
   	       cu->get_register(cu->make_regist(12)),
@@ -53,8 +49,7 @@ mwin::mwin(QWidget *parent) :
        << "mdr " << mdr->id << " :" << mdr->info << endl 
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
-  //cu->display->show_context_menu(cu->display->pos());
-}
+  }
 
 mwin::~mwin()
 {
@@ -68,11 +63,5 @@ void mwin::on_criar_cu_clicked()
   cu->display->setText(QString("control unit" + QString::number(lastindx)));
   cu->display->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   cu->display->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-  //cu->display->setParent(ui->frame);
   cu->display->show();
-  // mov_cnt<QLabel> * but = new mov_cnt<QLabel>(ui->frame);
-  // but->setText("ola");
-  // but->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  // but->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-  // but->show();
-}
+  }

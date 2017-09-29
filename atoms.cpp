@@ -261,12 +261,7 @@ void control_unit::reg_out(){
   vector<shared_ptr<regist>> outs;
     
   for(auto& pair:regists_in_out){
-    //auto id = get<0>(pair);
-    // cout << "id: " << id << endl
-    // 		<< "in:" << get_register_in(id) << endl
-    // 		<<"out:" << get_register_out(id) << endl;
-    
-    if(get<2>(pair.second) == true){
+     if(get<2>(pair.second) == true){
       outs.push_back(get<0>(pair.second));
       get<2>(pair.second) = false;}
   }
@@ -317,17 +312,7 @@ control_unit *overseer::make_cu(size_t cu_reg_s,
 						    parent));
   return control_units.back().get();
 }
-// void overseer::cycle_old(){
-    
-//   for(auto& cu:control_units){
-//     cu->execute(memories);
-//     cu->reg_out();
-//   }
-    
-//   for(auto& cu:control_units){
-//     cu->reg_in();
-//   }
-// }
+
 void overseer::cycle(){
   for(auto& cu:control_units){
     cu->opcode_execute(memories);
