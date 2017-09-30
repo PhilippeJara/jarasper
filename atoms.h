@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <map>
 #include <set>
-#include "qt5/QtCore/QObject"
+#include <qt5/QtCore/QObject>
 #include <qt5/QtWidgets/QMainWindow>
 #include <qt5/QtWidgets/QWidget>
 #include <qt5/QtWidgets/QLabel>
