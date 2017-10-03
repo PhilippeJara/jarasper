@@ -63,10 +63,23 @@ void regist::set(bitset<max_bits> arg) {
   
 
 
-alu::alu() : A(), B(), Z() {}
+alu::alu() : A(), B(), Z() , f_zero(0),
+	     f_overflow(0),
+	     f_negative(0),
+	     f_carry(0){}
 alu::alu(shared_ptr<regist> Z,
 	 shared_ptr<regist> B,
-	 shared_ptr<regist> A) : A(A), B(B), Z(Z){}
+	 shared_ptr<regist> A) : A(A),
+				 B(B),
+				 Z(Z),
+				 f_zero(0),
+				 f_overflow(0),
+				 f_negative(0),
+				 f_carry(0){}
+size_t alu::get_overflow(){return f_overflow;}
+size_t alu::get_negative(){return f_negative;}
+size_t alu::get_carry(){return f_carry;}
+size_t alu::get_zero(){return f_zero;}
 void alu::add() {Z->info = trim_input(Z->bits, A->info.to_ulong() + B->info.to_ulong());}
 void alu::sub() {Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());}
 void alu::SHR(size_t id, size_t amnt) {
@@ -261,7 +274,7 @@ void control_unit::reg_out(){
   vector<shared_ptr<regist>> outs;
     
   for(auto& pair:regists_in_out){
-     if(get<2>(pair.second) == true){
+    if(get<2>(pair.second) == true){
       outs.push_back(get<0>(pair.second));
       get<2>(pair.second) = false;}
   }
