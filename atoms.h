@@ -72,10 +72,18 @@ public:
   std::shared_ptr<regist> A;
   std::shared_ptr<regist> B;
   std::shared_ptr<regist> Z;
+  size_t f_overflow;
+  size_t f_negative;
+  size_t f_carry;
+  size_t f_zero;
   alu();
   alu(std::shared_ptr<regist> Z,
       std::shared_ptr<regist> B,
       std::shared_ptr<regist> A);
+  size_t get_overflow();
+  size_t get_negative();
+  size_t get_carry();
+  size_t get_zero();
   void add();
   void sub();
   void SHR(size_t id, size_t amnt);
