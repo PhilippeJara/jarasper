@@ -76,10 +76,10 @@ alu::alu(shared_ptr<regist> Z,
 				 f_overflow(0),
 				 f_negative(0),
 				 f_carry(0){}
-size_t alu::get_overflow(){return f_overflow;}
-size_t alu::get_negative(){return f_negative;}
-size_t alu::get_carry(){return f_carry;}
-size_t alu::get_zero(){return f_zero;}
+bool alu::get_overflow(){return f_overflow;}
+bool alu::get_negative(){return f_negative;}
+bool alu::get_carry(){return f_carry;}
+bool alu::get_zero(){return f_zero;}
 void alu::add() {Z->info = trim_input(Z->bits, A->info.to_ulong() + B->info.to_ulong());}
 void alu::sub() {Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());}
 void alu::SHR(size_t id, size_t amnt) {
@@ -278,7 +278,7 @@ void control_unit::reg_out(){
       outs.push_back(get<0>(pair.second));
       get<2>(pair.second) = false;}
   }
-        
+  
 
   //não verifica se tem out repetidos, colocar depois (?)
   //register -> bus

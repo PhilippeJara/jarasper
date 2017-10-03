@@ -1,4 +1,4 @@
-#include "atoms.hpp"
+#include "atoms.h"
 #include <string>
 
 using namespace std;
