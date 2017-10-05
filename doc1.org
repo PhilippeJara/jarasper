@@ -97,6 +97,9 @@ tratados como iguais, toda conexão por bus deve ser feita nos dois ao
 invés de um só. O único motivo pelo qual ainda não foi retirado é uma
 dependência chata de resolver.
 
+O motivo de não ser fácil refatorar o in e out é a distinćão dos MDR's
+e MAR's que estão conectados em dois buses, um da memoria e um "normal".
+
 Os construtores devem somente ser usado pelas unidade de controle, uma
 vez que não há sentido um registrador "avulso" no sistema.
 
