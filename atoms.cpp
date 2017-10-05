@@ -2,11 +2,9 @@
 
 
 using namespace std;
-
-bitset<max_bits> trim_input(int bits, bitset<max_bits> input){
-  for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
-  return input;
-}
+auto trim_input = [](const int bits, std::bitset<max_bits> input){
+		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
+		    return input;};
 
 
 bus::bus(int bits) : bits(bits), info() {}

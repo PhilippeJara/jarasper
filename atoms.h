@@ -23,7 +23,8 @@ const size_t max_bits = 16;
 
 
 
-std::bitset <max_bits> trim_input (int bits, std::bitset <max_bits> input);
+
+
 class bus : public QObject{
 Q_OBJECT
 public:
@@ -80,10 +81,10 @@ public:
   alu(std::shared_ptr<regist> Z,
       std::shared_ptr<regist> B,
       std::shared_ptr<regist> A);
-  size_t get_overflow();
-  size_t get_negative();
-  size_t get_carry();
-  size_t get_zero();
+  bool get_overflow();
+  bool get_negative();
+  bool get_carry();
+  bool get_zero();
   void add();
   void sub();
   void SHR(size_t id, size_t amnt);
