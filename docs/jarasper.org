@@ -1,0 +1,176 @@
+* Componenetes básicos (bus, registradores, alu)
+** Bus e Registradores
+
+
+O seguinte código ta sendo o maior problema: 
+
+#+BEGIN_SRC c++
+template
+template<size_t bits class bus{
+public:
+  std::bitset<bits> info;
+  };
+
+
+template<size_t bits class reg {
+public:
+  std::bitset<bits> info;
+  std::vector<bus *> in; //está aqui o problema
+  std::vector<bus *> out; // e aqui
+  };
+//isso nao compila
+#+END_SRC
+
+o grande problema sendo o fato que é necessário criar um vetor com as entradas e saídas dos registradores para os barramentos, e isso é impossível tendo o bus genérico, uma vez que ele precisa estar instanciado para que o ponteiro seja criado.
+
+
+O problema foi resolvido utilizando classes templatadas ao invés de bus na declaração dos registradores, da seguinte forma:
+
+#+Begin_Src C++
+template<size_t bits, class in_bus, class out_bus> class reg {
+public:
+  std::bitset<bits> info;
+  std::vector<in_bus> in;
+  std::vector<out_bus> out;
+  };
+#+End_Src 
+
+Fora o problema anterior, este código tem um lado bom e um ruim, o bom é que os barramentos de entrada podem ser maiores ou menores que os de saída, o ruim sendo que não pode haver variação internamente entre si. Isso não era algo possível na idéia anteior de qualquer forma então nada foi perdido.
+
+Foram colocadas as funções para adicionar e retirar os barramentos dos registradores,estas serão chamadas mais pra frente com a gui, e usando shared_pointers nos vetores não é necessário se preocupar com deletar as parada.
+
+#+Begin_Src C++
+  void link_in(in_bus arg) {this->in.push_back(arg);}
+  void link_out(in_bus arg) {this->out.push_back(arg);}
+  void remove_link_in(in_bus arg){
+    in.erase(std::find (in.begin(),
+			in.end(),
+			arg));}
+  void remove_link_out(out_bus arg){
+    out.erase(std::find (out.begin(),
+			 out.end(),
+			 arg));}  
+
+#+End_Src 
+
+
+** ALU básica e patches nos anteriores
+
+A idéia aqui é fazer a alu básica, com dois inputs e um output, provavelmetne mais pra frente será adiconado tempaltes variádicos para que o número de argumentos seja dinâmico, mas isso somente para o futuro. A dúvida inicial de como fazer a alu vem de como o seu template  deve ser construído, ele deve ter como seus argumentos templates pré instanciados ou ele deve construir seus registradores dentro da inicializacão?
+
+#+BEGIN_SRC c++
+template<class in_reg_a, class in_reg_b, class out_reg> class alu
+
+vs
+
+template<size_t bits_in_reg_a, size_t bits_in_reg_b, size_t bit_out_reg> class alu
+#+END_SRC
+
+Eacabei escolhendo utilizar o primeiro caso, uma vez que como os templates já são praticamente constexprs quando compilados, não há porque não usar uq foi feito antes([citation needed lol]), sem contar que isso permite a construćão de alu's utilizando registradores já existente, algo que imagino ser importante mais pra frente (e dava menos trabalho tbh).
+
+No momento a sua arquitetura de dados é a seguinte:
+
+#+BEGIN_SRC c++
+template<class in_reg_a, class in_reg_b, class out_reg> class alu{
+public:
+  in_reg_a A;
+  in_reg_b B;
+  out_reg Z;
+  alu(){}
+  alu(in_reg_a A, in_reg_b B, out_reg Z) : A(A), B(B), Z(Z){}
+};
+ #+END_SRC
+
+ O grande problema com esta estrutura é que os registradores associados (A B Z) tem como tipos os tipos especificados nos templates, isso cria um problema pois forća a instanciaćão do template a conter a informaćão que eles devem ser ponteiros de alguam forma (idealmente shared_ptrs), necessitando código como o seguinte para a sua construćão:
+
+#+BEGIN_SRC c++ 
+//construćão dos ponteiros para os componentes da alu
+  auto ptr4 = make_shared<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>(5);
+  auto ptr5 = make_shared<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>(6);
+  auto ptr6 = make_shared<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>(7);
+
+//construćão da alu
+alu<shared_ptr<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>,
+      shared_ptr<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>,
+      shared_ptr<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>>
+    alu (ptr4, ptr5, ptr6);
+#+END_SRC
+
+Em outras palavras, é feio pra porra, expõe funcionalidade que não deveria ser exposta e pode induzir ao erro e falhar sem ngm notar. Isso acontece também na construćão do registrador, mas lá eu subestimei o dano que podia ser causado. O motivo pelo qual eu não coloquei isso antes era que para que isso fosse razoável iria ser necessário alguma funćão que cria shared_ptrs para os argumentos (se possível prefiro que o usuário não tenha ue se preocupar em qual tipo de ponteiro está endo usado), mas não vale a pena o ganho se for necessário escrever aquela monstruosidade para instanciar uma parada.
+
+As funćões ficaram da seguinte forma após a "reforma" (tudo que não está comentado faz parte das mudanćas, o resto foi colocado para contexto):
+
+#+BEGIN_SRC c++ 
+
+//registrador
+//template<size_t bits, class in_bus, class out_bus> class regist {
+// public:
+//  std::bitset<bits> info;
+  std::vector<std::shared_ptr<in_bus>> in;
+  std::vector<std::shared_ptr<out_bus>> out;
+//  regist() : info(), in(), out() {}
+//  regist(int info) : info(info), in(), out() {}
+  regist(int info, std::shared_ptr<in_bus> in_arg, std::shared_ptr<out_bus> out_arg) : info(info), in(in_arg), out(out_arg) {}
+  void link_in(std::shared_ptr<in_bus> arg) {this->in.push_back(arg);}
+  void link_out(std::shared_ptr<out_bus> arg) {this->out.push_back(arg);}
+  void remove_link_in(std::shared_ptr<in_bus> arg){
+    in.erase(std::find (in.begin(),
+			in.end(),
+			arg));}
+  void remove_link_out(std::shared_ptr<out_bus> arg){
+    out.erase(std::find (out.begin(),
+			 out.end(),
+			 arg));}  
+//  void set(int arg) {this->info = arg;}
+  
+};
+
+//alu
+template<class in_reg_a, class in_reg_b, class out_reg> class alu{
+//public:
+  std::shared_ptr<in_reg_a> A;
+  std::shared_ptr<in_reg_b> B;
+  std::shared_ptr<out_reg> Z;
+//  alu(){}
+  alu(std::shared_ptr<in_reg_a> A, std::shared_ptr<in_reg_b> B, std::shared_ptr<out_reg> Z) : A(A), B(B), Z(Z){}
+};
+#+END_SRC
+
+Agora com essa verbosidade um pouco maior nas classes a construćão fica desta forma comaprada à antiga:
+
+#+BEGIN_SRC c++ 
+*********************************nova*************************************
+//construćão dos ponteiros para os componentes da alu
+  auto ptr4 = make_shared<regist<4,bus<4>,bus<4>>>(5);
+  auto ptr5 = make_shared<regist<4,bus<4>,bus<4>>>(6);
+  auto ptr6 = make_shared<regist<4,bus<4>,bus<4>>>(7);
+//construćão da alu
+  alu<regist<4,bus<4>,bus<4>>,
+      regist<4,bus<4>,bus<4>>,
+      regist<4,bus<4>,bus<4>>>
+    alus (ptr4, ptr5, ptr6);
+
+
+*********************************antiga*************************************
+//construćão dos ponteiros para os componentes da alu
+  auto ptr4 = make_shared<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>(5);
+  auto ptr5 = make_shared<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>(6);
+  auto ptr6 = make_shared<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>(7);
+
+//construćão da alu
+  alu<shared_ptr<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>,
+      shared_ptr<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>,
+      shared_ptr<regist<4,shared_ptr<bus<4>>,shared_ptr<bus<4>>>>>
+    alu (ptr4, ptr5, ptr6);
+#+END_SRC
+
+É uma puta diferenća em caracteres por si só, mas também isso esconde a necessidade de definir qual tipo de ponteiro será usado para os barramentos e registradores. Normalmente isso seria um problema pois implica em aceitar somente shared_ptr's para estruturar as coisas, mas no contexto do programa não faz muito sentido usar qualquer coisa que não seja um ponteiro (pois ele construiria por cópia e duplicaria o registrador/bus se não for por referência), e entre os ponteiros padrão do c++ creio que somente o cru, shared_pointer e weak_ptr iriam funcionar [citation needed] para isso. Como entre esses o shared_ptr oferece um refcount embutido a escolha é trivial, os ganhos na sanidade de quem precisa instanciar os templates é um bônus encima do ganho de sanidade de não precisar manejar ponteiros na mão, não vai ser dessa vez ctulhu.
+
+Adicionei funćões TEMPORARIAS para implementar soma e subtraćão na alu, mais para frente pretendo implementar por meio de um full adder e utilizando portões lógicos (estes que serão disponíveis aos usuários em geral). Por enquanto no entanto  as seguintes funćões fazem as operaćões: 
+
+#+BEGIN_SRC c++ 
+  void add() {this->Z->info = this->A->info.to_ulong() + this->B->info.to_ulong();}
+  void sub() {this->Z->info = this->A->info.to_ulong() - this->B->info.to_ulong();}
+#+END_SRC
+
+Ao menos no gcc não é necessário fazer a conversão explícita de long pra bitset, a conversão implícita já faz com que os valores fiquem corretos de acordo com o tamanho do receptor (Z), de forma que overflows se comportem como se comportam IRL. Na realidade mesmo se eu quisesse usar conversão explícita ou um construtor para depois inserir no Z (algo desta forma: this->Z->info = std::bitset<?>(this->A->info.to_ulong() + this->B->info.to_ulong());) creio que não seria possível, uma vez que [citation needed] o template não tem instrospecćão, então ele não saberia a qnt de bits do Z, para botar no lugar do "?" em cada instanciaćão no exemplo acima (na realidade usando decltype deve funcionar pra esse caso, mas agora é tarde). Cagada? prefiro chamar de habilidade acidental. Esta funćão novamente é temporária e no primeiro sinal de complexidade vai ser abandonada a favor da "permanente". 

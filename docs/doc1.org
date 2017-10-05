@@ -1,0 +1,251 @@
+* Lógica por traz dos componentes básicos e suas implementações
+
+| Bus                 |
+| Registrador         |
+| ALU                 |
+| Unidade de Controle |
+| Memória             |
+
+A idéia port trás do funcionamento da lógica do sistema é em construir
+sistemas usando somente os componentes básicos, componentes "básicos" são
+caracterizados como componentes que oferecem operações
+"exclusivas". Estes no entanto podem necessitar de outros componentes
+para serem criados, como no caso da unidade de controle necessitando
+de um registrador interno. 
+
+O funcionamento do sistema tem como modelo teórico o seguinte:
+A unidade de controle somente pode controlar as flags IN e OUT dos
+registradores, a transferência de dados "fluiria" naturalmente para os
+buses conectados e para os registradores que estiverem conectados pelo
+bus e com suas flags IN ligadas. Isto ocorre da mesma forma nos
+componentes básicos compostos por registradores(ALU e Unidades de
+Controle) e nas memórias externas(usando os buses conectadores aos MAR's
+e MDR's).
+
+Neste modelo teórico existe um fator importante: A unidade de
+controle, os registradores e os barramentos não precisam ter
+conhecimento da "direção" dos dados que estão sendo movimentados pelo
+sistema, cada um faz seu papel de forma completamente independente,
+respeitando somente os clocks. Isto permite uma capacidade de
+composição excelente. Não é possível no implementar algo 100%
+desta forma, no entanto manter estas propiedades é o foco principal do
+código de lógica dos componentes e o modo com que isso é feito será
+detalhado nas implementações.
+
+
+** Implementação do barramento
+O barramento é representado pela classe "bus":
+
+#+Begin_src C++
+class bus : public QObject{
+Q_OBJECT
+public:
+  int bits;
+  std::bitset <max_bits> info;
+  void set (int arg);
+  bus (int bits);
+  bus (int inf, int bits);
+}
+#+End_src
+
+A variável bits representa o tamanho do bus em bits, a variável "info"
+é a informação atualmente no barramento, set() é uma função para
+modificar o valor de "info".
+Ela tem dois construtores, um dando um valor inicial à ela e outro não.
+
+De longe o bus é o componente mais simples do projeto, realmente a
+única coisa que ela precisa fazer é "segurar" valores em si. 
+
+** Implementação do registrador
+O registrador é representado pela classe "regist":
+
+#+Begin_src c++
+class regist : public QObject {
+Q_OBJECT
+public:
+  size_t bits;
+  size_t id;
+  std::bitset<max_bits> info;
+  std::vector<std::shared_ptr<bus>> in;
+  std::vector<std::shared_ptr<bus>> out;
+  mov_cnt<QLabel> * display;
+  regist();
+  regist(size_t bits,size_t id);
+  regist(size_t bits,size_t id, QWidget *parent);
+  void link_in(std::shared_ptr<bus> arg);
+  void link_out(std::shared_ptr<bus> arg);
+  void remove_link_in(std::shared_ptr<bus> arg);
+  void remove_link_out(std::shared_ptr<bus> arg);
+  void set(int arg);
+  void set(std::bitset<max_bits> arg);
+  
+};
+#+End_src
+
+
+A variável bits representa o tamanho em bits do registrador. A
+variável id representa o id do registrador(em relação à sua unidade de
+controle). Info representa os dados dentro dele. in e out são vetores
+com ponteiros para os barramentos conectados aos
+registradores. Display é a sua representação na GUI.
+
+As funções são auto-explicativas.
+
+*** Observações
+"in" e "out" são relíquias de uma implementação anterior e devem ser
+tratados como iguais, toda conexão por bus deve ser feita nos dois ao
+invés de um só. O único motivo pelo qual ainda não foi retirado é uma
+dependência chata de resolver.
+
+O motivo de não ser fácil refatorar o in e out é a distinćão dos MDR's
+e MAR's que estão conectados em dois buses, um da memoria e um "normal".
+
+Os construtores devem somente ser usado pelas unidade de controle, uma
+vez que não há sentido um registrador "avulso" no sistema.
+
+** Implementação da ALU
+A alu é representada pela classe "alu"
+
+#+Begin_src c++
+class alu : public QObject{
+Q_OBJECT
+public:
+  std::shared_ptr<regist> A;
+  std::shared_ptr<regist> B;
+  std::shared_ptr<regist> Z;
+  alu();
+  alu(std::shared_ptr<regist> Z,
+      std::shared_ptr<regist> B,
+      std::shared_ptr<regist> A);
+  void add();
+  void sub();
+  void SHR(size_t id, size_t amnt);
+  void SHL(size_t id, size_t amnt);
+};
+#+End_src
+
+"A", "B" e "Z" são ponteiros para os registradores da alu, sendo o "Z"
+o de resultado.
+
+As funcões são auto-explicativas.
+
+*** Observações
+As flags ainda não foram implementadas, mas não creio que passarão de variáveis
+de cada instância. 
+
+Os registradores da alu não precisam estar conectados entre si por um
+bus interno para simplificação, a alu faz as transferências por si só.
+
+As operações de SHR e SHL operam acima do registrador "A" somente, o
+outro registrador teoricamente tendo a quantidade de bits a serem
+"shiftados"
+
+** Implementação da Unidade de Controle
+A unidade de controle é representada pela classe "control_unit":
+
+#+Begin_src c++
+class control_unit : public QObject{
+Q_OBJECT
+public:
+  std::shared_ptr<regist> cu_reg;
+  std::map <size_t,
+        std::shared_ptr<bus>> buses;
+  std::map <size_t,
+        std::tuple<std::shared_ptr<regist>,
+                  bool,
+                  bool>> regists_in_out;
+  std::map <size_t,
+        std::shared_ptr<alu>> alus;
+  std::map <size_t,
+        std::vector<size_t>> opcodes;
+  size_t map_reg_counter;
+  size_t map_bus_counter;
+  size_t map_alu_counter;
+  size_t map_mar_counter;
+  size_t map_mdr_counter;
+  size_t operator_size;
+  size_t operand_size;
+  size_t operand_amnt;
+  std::map<size_t, size_t> mdrs_id;
+  std::map<size_t, size_t> mars_id;
+  mov_cnt<QLabel> *display;
+  control_unit(size_t cu_reg_s,
+	       size_t operator_s,
+	       size_t operand_s,
+	       size_t operand_amnt);
+
+  control_unit(size_t cu_reg_s,
+	       size_t operator_s,
+	       size_t operand_s,
+	       size_t operand_amnt,
+	       QWidget *parent);
+    control_unit(size_t arg);
+
+  size_t make_bus(int bits);
+  size_t make_regist(int bits);
+  size_t make_internal_regist(int bits, QWidget *parent);
+  size_t make_mdr(int bits, const std::shared_ptr<memory> &mem);
+  size_t make_mar(const int bits, const std::shared_ptr<memory> &mem);
+  size_t make_alu(std::shared_ptr<regist> A, 
+                  std::shared_ptr<regist> B, 
+                  std::shared_ptr<regist> Z);
+
+  std::shared_ptr<regist> get_register(size_t id);
+  std::shared_ptr<regist> get_mar(size_t id);
+  std::shared_ptr<regist> get_mdr(size_t id);
+  bool get_register_in(size_t id);
+  bool get_register_out(size_t id);
+  std::shared_ptr<bus> get_bus(size_t id);
+  std::shared_ptr<alu> get_alu(size_t id);
+  void set_in(size_t id);
+  void set_out(size_t id);
+
+  void assignment(size_t id_reg1, size_t id_reg2);
+  void add(size_t id);
+  void sub(size_t id);
+  void SHR(size_t id_alu, size_t amnt);
+  void SHL(size_t id_alu, size_t amnt);
+
+  void read(const std::shared_ptr<regist> &mar,
+        const std::shared_ptr<regist> &mdr,
+        const std::vector<std::shared_ptr<memory>> &memories);
+  void write(const std::shared_ptr<regist> &mar,
+         const std::shared_ptr<regist> &mdr,
+         const std::vector<std::shared_ptr<memory>> &memories);
+//  void execute(const std::vector<std::shared_ptr<memory>> &memories);
+  void opcode_execute(const std::vector<std::shared_ptr<memory>> &);
+  void interpret_minst(size_t,const std::vector<std::shared_ptr<memory>> &);
+  void reg_out();
+  void reg_in();
+  void sync_bus();
+		 
+};
+#+End_src
+
+** Implementação da Memória
+A memória é implementada pela classe "memory"
+
+#+Begin_src c++
+class memory : public QObject{
+Q_OBJECT
+public:
+  size_t const len;
+  std::vector<size_t> body;
+  std::shared_ptr<bus> addr_bus;
+  std::shared_ptr<bus> data_bus;
+  memory (size_t mem_size, size_t len);
+  memory (size_t mem_size, size_t mem_block_len, size_t abus_len, size_t dbus_len);
+}
+#+End_src
+
+
+
+* TODOS  
+** Unificar a conexão com os buses no registrador( "in" e "out")
+** Modificar funções recebendo e retornando shared_ptr
+   somente os construtores devem receber e retornar shared_ptrs, o
+   resto pode - e deve - usar ponteiros crus
+** Definir todas as variáveis "fixas" com const
+** Separar permissões para acesso das classes
+   atualmente tudo é public, ao menos os construtores das classes que
+   não devem ser construídas na mão deveria ter estes privados
