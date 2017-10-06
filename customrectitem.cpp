@@ -1,7 +1,7 @@
 #include "customrectitem.h"
 
 CustomRectItem::CustomRectItem(const QRect& rect, QGraphicsItem* parent):
-    QObject(), QGraphicsRectItem(rect, parent)
+  QObject(), QGraphicsRectItem(rect, parent), info(this)
 {
     setFlags(QGraphicsItem::ItemIsSelectable |
             QGraphicsItem::ItemIsMovable |

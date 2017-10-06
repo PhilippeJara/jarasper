@@ -49,7 +49,28 @@ mwin::mwin(QWidget *parent) :
        << "mdr " << mdr->id << " :" << mdr->info << endl 
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
-  }
+  
+  auto scene = new Scene(centralWidget());
+  scene->setSceneRect(0,0,500,500);
+  auto view = new QGraphicsView(scene, centralWidget());
+  //  setCentralWidget(view);
+
+  CustomRectItem* rectItem1 = new CustomRectItem(QRect(3,4,80,80));
+  rectItem1->setPos(0,0);
+  rectItem1->setBrush(Qt::gray);
+  scene->addItem(rectItem1);
+
+  CustomRectItem* rectItem2 = new CustomRectItem(QRect(3,4,60,60));
+  rectItem2->setPos(1,19);
+  rectItem2->setBrush(Qt::magenta);
+  scene->addItem(rectItem2);
+
+  CustomRectItem* rectItem3 = new CustomRectItem(QRect(3,4,60,60));
+  rectItem3->setPos(20,10);
+  rectItem3->setBrush(Qt::white);
+  rectItem3->info.setText("diferentessdsfsdfsdfdfsdf");
+  scene->addItem(rectItem3)
+}
 
 mwin::~mwin()
 {

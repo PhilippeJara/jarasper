@@ -15,6 +15,7 @@
 #include <qt5/QtWidgets/QLabel>
 #include "container.hpp"
 #include "styles.hpp"
+#include "customrectitem.h"
 
 #ifndef CONFIG
 #define CONFIG

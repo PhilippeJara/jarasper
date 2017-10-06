@@ -165,7 +165,7 @@ size_t control_unit::make_internal_regist(int bits, QWidget *parent){
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
   map_reg_counter++;
-  return map_reg_counter - 1;
+    return map_reg_counter - 1;
 }
 //reolver as linkagens para permitir o o input de dados na memoria
 size_t control_unit::make_mdr(int bits, const shared_ptr<memory> &mem){
