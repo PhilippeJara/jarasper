@@ -5,6 +5,7 @@
 #include "opmap.hpp"
 #include <memory>
 #include <iostream>
+//#include "customrectitem.h"
 
 namespace Ui {
 class mwin;

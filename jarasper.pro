@@ -28,7 +28,9 @@ SOURCES += \
         mwin.cpp \
     atoms.cpp \
     opcode_interpreter.cpp \
-    styles.cpp
+    styles.cpp \
+    scene.cpp \
+    customrectitem.cpp
 
 HEADERS += \
         mwin.h \
@@ -36,7 +38,9 @@ HEADERS += \
     opmap.hpp \
     container.hpp \
     styles.hpp \
-    container.hpp
+    container.hpp \
+    customrectitem.h \
+    scene.h
 
 FORMS += \
         mwin.ui

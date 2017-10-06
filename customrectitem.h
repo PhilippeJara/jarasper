@@ -1,6 +1,6 @@
 #ifndef CUSTOMRECTITEM_H
 #define CUSTOMRECTITEM_H
-
+#include <QGraphicsView>
 #include <QGraphicsRectItem>
 #include "scene.h"
 #include "math.h"
@@ -8,8 +8,7 @@
 
 class CustomRectItem : public QObject , public QGraphicsRectItem
 {
-   
-  
+     
 Q_OBJECT
 public:
   QGraphicsSimpleTextItem info;

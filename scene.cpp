@@ -4,6 +4,7 @@ Scene::Scene(QObject *parent) :
     QGraphicsScene(parent), gridSize(20)
 {
     Q_ASSERT(gridSize > 0);
+
 }
 
 void Scene::drawBackground(QPainter *painter, const QRectF &rect)
