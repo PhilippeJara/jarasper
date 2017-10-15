@@ -1,7 +1,7 @@
 #ifndef MWIN_H
 #define MWIN_H
 #include "atoms.h"
-#include <qt5/QtWidgets/QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include "opmap.hpp"
 #include <memory>
 #include <iostream>

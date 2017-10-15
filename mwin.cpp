@@ -1,8 +1,9 @@
 #include "mwin.h"
-//#include "../builds/build-jarasper-Desktop_Qt_5_5_1_GCC_32bit-Debug/ui_mwin.h"
 #include <ui_mwin.h>
 #include <memory>
-#include <qt5/QtWidgets/QLabel>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QGraphicsView>
+#include <QtGui/QPen>
 
 using namespace std;
 
@@ -84,4 +85,4 @@ void mwin::on_criar_cu_clicked()
   cu->display->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   cu->display->setAlignment(Qt::AlignBottom | Qt::AlignRight);
   cu->display->show();
-  }
+}

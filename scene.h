@@ -1,9 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <QGraphicsScene>
-#include <QPainter>
-#include <QApplication>
+#include <QtWidgets/QGraphicsScene>
+#include <QtGui/QPainter>
+#include <QtWidgets/QApplication>
 
 class Scene : public QGraphicsScene
 {

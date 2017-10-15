@@ -9,10 +9,10 @@
 #include <algorithm>
 #include <map>
 #include <set>
-#include <qt5/QtCore/QObject>
-#include <qt5/QtWidgets/QMainWindow>
-#include <qt5/QtWidgets/QWidget>
-#include <qt5/QtWidgets/QLabel>
+#include <QtCore/QObject>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QLabel>
 #include "container.hpp"
 #include "styles.hpp"
 #include "customrectitem.h"

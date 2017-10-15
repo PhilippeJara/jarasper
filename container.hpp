@@ -1,13 +1,13 @@
 #ifndef CONTAINER_HPP
 #define CONTAINER_HPP
-#include <qt5/QtWidgets/QWidget>
-#include <qt5/QtGui/QMouseEvent>
-#include <qt5/QtWidgets/QPushButton>
-#include <qt5/QtCore/QPoint>
+#include <QtWidgets/QWidget>
+#include <QtGui/QMouseEvent>
+#include <QtWidgets/QPushButton>
+#include <QtCore/QPoint>
 #include <iostream>
-#include <qt5/QtWidgets/QLabel>
-#include <qt5/QtWidgets/QPushButton>
-//#include <qt5/QtCore/QObject>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+//#include </QtCore/QObject>
 template<class T>
 class mov_cnt:public T{
 public:

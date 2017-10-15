@@ -1,5 +1,5 @@
 #include "mwin.h"
-#include <qt5/QtWidgets/QApplication>
+#include <QtWidgets/QApplication>
 //#include  "ecl/ecl.h"
 #include <stdio.h>
 

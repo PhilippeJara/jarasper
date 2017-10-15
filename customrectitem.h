@@ -1,10 +1,11 @@
 #ifndef CUSTOMRECTITEM_H
 #define CUSTOMRECTITEM_H
-#include <QGraphicsView>
-#include <QGraphicsRectItem>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGraphicsRectItem>
 #include "scene.h"
 #include "math.h"
-#include "qt5/QtGui/QTextDocument"
+#include "QtGui/QTextDocument"
 
 class CustomRectItem : public QObject , public QGraphicsRectItem
 {
