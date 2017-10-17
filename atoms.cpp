@@ -8,7 +8,7 @@ auto trim_input = [](const int bits, std::bitset<max_bits> input){
 
 
 bus::bus(int bits) : bits(bits), info() {}
-bus::bus(int inf, int bits) : info(inf), bits(bits) {}
+bus::bus(int inf, int bits) :  bits(bits), info(inf){}
 void bus::set(int arg){
   auto tmp = bitset<max_bits>(arg);
   info = trim_input(bits, tmp);
@@ -36,11 +36,19 @@ regist::regist() : bits(), info() , in() , out(){}
 regist::regist(size_t bits,size_t id) :bits(bits), id(id),
 				       info(0), in(),
 				       out(), display() {}
-regist::regist(size_t bits,size_t id, QWidget *parent) :bits(bits), id(id),
+// regist::regist(size_t bits,size_t id, QWidget *parent) :bits(bits), id(id),
+// 							info(0), in(),
+// 							out() {
+//   display = new mov_cnt<QLabel>(parent);
+//   set_styling<decltype(this)>(this);
+// }
+regist::regist(size_t bits,size_t id, Scene *scene) :bits(bits), id(id),
 							info(0), in(),
 							out() {
-  display = new mov_cnt<QLabel>(parent);
-  set_styling<decltype(this)>(this);
+  display = new mov_cnt<CustomRectItem>();
+  display->setRect(3,4,60,30);
+  display->setBrush(Qt::gray);
+  scene->addItem(display);
 }
 void regist::link_in(shared_ptr<bus> arg) {in.push_back(arg);}
 void regist::link_out(shared_ptr<bus> arg) {out.push_back(arg);}
@@ -54,26 +62,28 @@ void regist::remove_link_out(shared_ptr<bus> arg){
 		  arg));}  
 void regist::set(int arg) {
   info = trim_input(bits, arg);
-  display->setText(QString::number(info.to_ulong()));}
-void regist::set(bitset<max_bits> arg) {
+  display->setText(QString::number(info.to_ulong()));
+}
+  void regist::set(bitset<max_bits> arg) {
   info = arg;
   display->setText(QString::number(info.to_ulong()));}
   
 
 
-alu::alu() : A(), B(), Z() , f_zero(0),
+alu::alu() : A(), B(), Z(),
 	     f_overflow(0),
 	     f_negative(0),
-	     f_carry(0){}
+	     f_carry(0),
+	     f_zero(0){}
+
 alu::alu(shared_ptr<regist> Z,
 	 shared_ptr<regist> B,
-	 shared_ptr<regist> A) : A(A),
-				 B(B),
-				 Z(Z),
-				 f_zero(0),
+	 shared_ptr<regist> A) : A(A), B(B), Z(Z),
 				 f_overflow(0),
 				 f_negative(0),
-				 f_carry(0){}
+				 f_carry(0),
+				 f_zero(0){}
+
 bool alu::get_overflow(){return f_overflow;}
 bool alu::get_negative(){return f_negative;}
 bool alu::get_carry(){return f_carry;}
@@ -131,15 +141,19 @@ control_unit::control_unit(size_t cu_reg_s,
 			   size_t operator_s,
 			   size_t operand_s,
 			   size_t operand_amnt,
-			   QWidget *parent) : cu_reg(), buses(),
+			   Scene *scen) : cu_reg(), buses(),
 					      regists_in_out(), map_reg_counter(0),
 					      map_bus_counter(0), map_alu_counter(0),
 					      map_mar_counter(0), map_mdr_counter(0),
 					      operator_size(operator_s), operand_size(operand_s),
 					      operand_amnt(operand_amnt){
-  display = new mov_cnt<QLabel>(parent);
+  scene = scen;
+  display = new mov_cnt<CustomRectItem>();
+  display->setRect(69,40,120,120);
+  display->setBrush(Qt::white);
+  scene->addItem(display);
   this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));
-  set_styling<decltype(this)>(this);}
+}
    
 size_t control_unit::make_bus(int bits){
   buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits)));
@@ -149,7 +163,8 @@ size_t control_unit::make_bus(int bits){
 
 size_t control_unit::make_regist(int bits){
   regists_in_out.insert(make_pair(map_reg_counter,
-				  make_tuple(make_shared<regist>(bits,map_reg_counter, this->display->parentWidget()),
+				  make_tuple(make_shared<regist>(bits,map_reg_counter,
+								 scene),
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
@@ -160,9 +175,11 @@ size_t control_unit::make_regist(int bits){
 
 size_t control_unit::make_internal_regist(int bits, QWidget *parent){
   regists_in_out.insert(make_pair(map_reg_counter,
-				  make_tuple(make_shared<regist>(bits,map_reg_counter, this->display),
+				  make_tuple(make_shared<regist>(bits,map_reg_counter,
+								 scene),
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
+  nreg->display->setParentItem(this->display);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
   map_reg_counter++;
     return map_reg_counter - 1;
@@ -315,12 +332,12 @@ control_unit *overseer::make_cu(size_t cu_reg_s,
 				size_t operator_s,
 				size_t operand_s,
 				size_t operand_amnt,
-				QWidget *parent){
+				Scene *scen){
   control_units.push_back(make_shared<control_unit>(cu_reg_s,
 						    operator_s,
 						    operand_s,
 						    operand_amnt,
-						    parent));
+						    scen));
   return control_units.back().get();
 }
 

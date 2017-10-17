@@ -1,13 +1,22 @@
 #include "customrectitem.h"
 
 CustomRectItem::CustomRectItem(const QRect& rect, QGraphicsItem* parent):
-  QObject(), QGraphicsRectItem(rect, parent), info(this)
+  QWidget(), QGraphicsRectItem(rect, parent), info(this)
 {
     setFlags(QGraphicsItem::ItemIsSelectable |
             QGraphicsItem::ItemIsMovable |
             QGraphicsItem::ItemSendsGeometryChanges);
 }
-
+CustomRectItem::CustomRectItem(QGraphicsItem* parent):
+  QWidget(), QGraphicsRectItem(parent), info(this)
+{
+    setFlags(QGraphicsItem::ItemIsSelectable |
+            QGraphicsItem::ItemIsMovable |
+            QGraphicsItem::ItemSendsGeometryChanges);
+}
+void CustomRectItem::setText(const QString string){
+  this->info.setText(string);
+}
 QVariant CustomRectItem::itemChange(GraphicsItemChange change,
 const QVariant &value)
 {

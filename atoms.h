@@ -54,10 +54,11 @@ public:
   std::bitset<max_bits> info;
   std::vector<std::shared_ptr<bus>> in;
   std::vector<std::shared_ptr<bus>> out;
-  mov_cnt<QLabel> * display;
+  mov_cnt<CustomRectItem> * display;
   regist();
   regist(size_t bits,size_t id);
-  regist(size_t bits,size_t id, QWidget *parent);
+  //regist(size_t bits,size_t id, QWidget *parent);
+  regist(size_t bits,size_t id, Scene *scene);
   void link_in(std::shared_ptr<bus> arg);
   void link_out(std::shared_ptr<bus> arg);
   void remove_link_in(std::shared_ptr<bus> arg);
@@ -131,7 +132,8 @@ public:
   size_t operand_amnt;
   std::map<size_t, size_t> mdrs_id;
   std::map<size_t, size_t> mars_id;
-  mov_cnt<QLabel> *display;
+  mov_cnt<CustomRectItem> *display;
+  Scene *scene;
   control_unit(size_t cu_reg_s,
 	       size_t operator_s,
 	       size_t operand_s,
@@ -141,7 +143,7 @@ public:
 	       size_t operator_s,
 	       size_t operand_s,
 	       size_t operand_amnt,
-	       QWidget *parent);
+	       Scene *scen); 
     control_unit(size_t arg);
 
   size_t make_bus(int bits);
@@ -193,9 +195,10 @@ public:
 			   size_t operator_s,
 			   size_t operand_s,
 			size_t operand_amnt,
-			QWidget *parent);
+			Scene *scen);
   std::vector <std::shared_ptr<control_unit>> control_units;
   std::vector <std::shared_ptr<memory>> memories;
+  Scene *scene;
   QWidget *mwidget;
 
 public slots:

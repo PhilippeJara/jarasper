@@ -13,7 +13,12 @@ mwin::mwin(QWidget *parent) :
   ui(new Ui::mwin)
 {
   ui->setupUi(this);
-  ov.make_cu(12,4,4,2,ui->frame)->display->setText("control unit 0");
+  auto scene = new Scene(centralWidget());
+  scene->setSceneRect(0,0,500,500);
+  auto view = new QGraphicsView(scene, centralWidget());
+  view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  ov.scene = scene;
+  ov.make_cu(12,4,4,2,scene)->display->info.setText("control unit 0");
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
@@ -22,7 +27,7 @@ mwin::mwin(QWidget *parent) :
   	       cu->get_register(cu->make_regist(12)),
   	       cu->get_register(cu->make_regist(12)));
   mem->body.at(0x0ffe) = 15;
-  cu->get_register(cu->make_regist(12))->display->show();
+  cu->get_register(cu->make_regist(12));
   cu->make_regist(12);
   for(auto item:cu->regists_in_out){cout << item.first << endl;}
   cu->get_register(4)->set(0xffe);
@@ -51,25 +56,6 @@ mwin::mwin(QWidget *parent) :
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
   
-  auto scene = new Scene(centralWidget());
-  scene->setSceneRect(0,0,500,500);
-  auto view = new QGraphicsView(scene, centralWidget());
-  view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  CustomRectItem* rectItem1 = new CustomRectItem(QRect(3,4,80,80));
-  rectItem1->setPos(0,0);
-  rectItem1->setBrush(Qt::gray);
-  scene->addItem(rectItem1);
-  
-  CustomRectItem* rectItem2 = new CustomRectItem(QRect(3,4,60,60));
-  rectItem2->setPos(1,19);
-  rectItem2->setBrush(Qt::magenta);
-  scene->addItem(rectItem2);
-
-  CustomRectItem* rectItem3 = new CustomRectItem(QRect(3,4,60,60));
-  rectItem3->setPos(20,10);
-  rectItem3->setBrush(Qt::white);
-  rectItem3->info.setText("diferentessdsfsdfsdfdfsdf");
-  scene->addItem(rectItem3);
 }
 
 mwin::~mwin()
@@ -79,10 +65,7 @@ mwin::~mwin()
 
 void mwin::on_criar_cu_clicked()
 {
-  auto cu = ov.make_cu(12, 4, 4, 4, ui->frame);
+  auto cu = ov.make_cu(12, 4, 4, 4, this->ov.scene);
   auto lastindx = ov.control_units.size() - 1;
   cu->display->setText(QString("control unit" + QString::number(lastindx)));
-  cu->display->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  cu->display->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-  cu->display->show();
 }

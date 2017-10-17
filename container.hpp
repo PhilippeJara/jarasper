@@ -16,16 +16,16 @@ public:
   mov_cnt(QWidget *parent):T(parent){}
   ~mov_cnt(){}
 
-  void mousePressEvent(QMouseEvent *event){
-    old_pos=event->globalPos();
-  }
-  void mouseMoveEvent(QMouseEvent *event){
-    if(event && Qt::LeftButton){
-      const QPoint delta = event->globalPos() - old_pos;
-      this->move(this->x()+delta.x(), this->y()+delta.y());
-      old_pos = event->globalPos();
-    }
-  }
+  // void mousePressEvent(QMouseEvent *event){
+  //   old_pos=event->globalPos();
+  // }
+  // void mouseMoveEvent(QMouseEvent *event){
+  //   if(event && Qt::LeftButton){
+  //     const QPoint delta = event->globalPos() - old_pos;
+  //     this->move(this->x()+delta.x(), this->y()+delta.y());
+  //     old_pos = event->globalPos();
+  //   }
+  // }
 };
 
 

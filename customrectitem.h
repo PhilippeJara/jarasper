@@ -7,13 +7,15 @@
 #include "math.h"
 #include "QtGui/QTextDocument"
 
-class CustomRectItem : public QObject , public QGraphicsRectItem
+class CustomRectItem : public QWidget , public QGraphicsRectItem
 {
      
 Q_OBJECT
 public:
   QGraphicsSimpleTextItem info;
+  CustomRectItem(QGraphicsItem* parent = 0);
   CustomRectItem(const QRect& rect, QGraphicsItem* parent = 0);
+  void setText(QString);
 protected:
     QVariant itemChange(GraphicsItemChange change,
                         const QVariant &value);
