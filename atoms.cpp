@@ -36,19 +36,13 @@ regist::regist() : bits(), info() , in() , out(){}
 regist::regist(size_t bits,size_t id) :bits(bits), id(id),
 				       info(0), in(),
 				       out(), display() {}
-// regist::regist(size_t bits,size_t id, QWidget *parent) :bits(bits), id(id),
-// 							info(0), in(),
-// 							out() {
-//   display = new mov_cnt<QLabel>(parent);
-//   set_styling<decltype(this)>(this);
-// }
+
 regist::regist(size_t bits,size_t id, Scene *scene) :bits(bits), id(id),
-							info(0), in(),
-							out() {
+						     info(0), in(),
+						     out() {
   display = new mov_cnt<CustomRectItem>();
-  display->setRect(3,4,60,30);
-  display->setBrush(Qt::gray);
   scene->addItem(display);
+  set_styling(this);
 }
 void regist::link_in(shared_ptr<bus> arg) {in.push_back(arg);}
 void regist::link_out(shared_ptr<bus> arg) {out.push_back(arg);}
@@ -64,7 +58,7 @@ void regist::set(int arg) {
   info = trim_input(bits, arg);
   display->setText(QString::number(info.to_ulong()));
 }
-  void regist::set(bitset<max_bits> arg) {
+void regist::set(bitset<max_bits> arg) {
   info = arg;
   display->setText(QString::number(info.to_ulong()));}
   
@@ -142,16 +136,15 @@ control_unit::control_unit(size_t cu_reg_s,
 			   size_t operand_s,
 			   size_t operand_amnt,
 			   Scene *scen) : cu_reg(), buses(),
-					      regists_in_out(), map_reg_counter(0),
-					      map_bus_counter(0), map_alu_counter(0),
-					      map_mar_counter(0), map_mdr_counter(0),
-					      operator_size(operator_s), operand_size(operand_s),
-					      operand_amnt(operand_amnt){
+					  regists_in_out(), map_reg_counter(0),
+					  map_bus_counter(0), map_alu_counter(0),
+					  map_mar_counter(0), map_mdr_counter(0),
+					  operator_size(operator_s), operand_size(operand_s),
+					  operand_amnt(operand_amnt){
   scene = scen;
   display = new mov_cnt<CustomRectItem>();
-  display->setRect(69,40,120,120);
-  display->setBrush(Qt::white);
   scene->addItem(display);
+  set_styling(this);
   this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));
 }
    
@@ -182,7 +175,7 @@ size_t control_unit::make_internal_regist(int bits, QWidget *parent){
   nreg->display->setParentItem(this->display);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
   map_reg_counter++;
-    return map_reg_counter - 1;
+  return map_reg_counter - 1;
 }
 //reolver as linkagens para permitir o o input de dados na memoria
 size_t control_unit::make_mdr(int bits, const shared_ptr<memory> &mem){

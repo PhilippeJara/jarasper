@@ -1,25 +1,27 @@
 #include "atoms.h"
+
+template <> void set_styling(regist obj){
+  obj.display->setRect(0,0,60,30);
+  obj.display->setBrush(Qt::gray);
+  obj.display->info.setPos(15,10);
+}
+
 template <> void set_styling(regist* obj){
-  obj->display->setFixedSize(75, 25);
-  obj->display->setStyleSheet("background-color:white; \
-                               border: 1px solid black; \
-                               qproperty-alignment: AlignCenter");
+  obj->display->setRect(0,0,60,30);
+  obj->display->setBrush(Qt::gray);
+  obj->display->info.setPos(15,10);
 }
 template <> void set_styling(std::shared_ptr<regist> obj){
-  obj->display->setFixedSize(75, 25);
-  obj->display->setStyleSheet("background-color:white; \
-                               border: 1px solid black; \
-                               qproperty-alignment: AlignCenter");
+  obj->display->setRect(0,0,60,30);
+  obj->display->setBrush(Qt::gray);
+  obj->display->info.setPos(15,10);
 }
 template <> void set_styling(control_unit* obj){
-  obj->display->setFixedSize(150, 150);
-  obj->display->setStyleSheet("background-color:white; \
-                               border: 1px solid black; \
-                               qproperty-alignment: AlignCenter");
+  obj->display->setRect(0,0,120,120);
+  obj->display->setBrush(Qt::white);
 }
+
 template <> void set_styling(std::shared_ptr<control_unit> obj){
-  obj->display->setFixedSize(150, 150);
-  obj->display->setStyleSheet("background-color:white; \
-                               border: 1px solid black; \
-                               qproperty-alignment: AlignCenter");
+  obj->display->setRect(0,0,120,120);
+  obj->display->setBrush(Qt::white);
 }
