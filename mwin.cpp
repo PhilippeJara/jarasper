@@ -25,7 +25,7 @@ mwin::mwin(QWidget *parent) :
   cu->opcodes = opmap;
   cu->make_alu(cu->get_register(cu->make_regist(12)),
   	       cu->get_register(cu->make_regist(12)),
-  	       cu->get_register(cu->make_regist(12)));
+	       cu->get_register(cu->make_regist(12)));
   mem->body.at(0x0ffe) = 15;
   cu->get_register(cu->make_regist(12));
   cu->make_regist(12);

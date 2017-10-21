@@ -79,10 +79,13 @@ public:
   bool f_negative;
   bool f_carry;
   bool f_zero;
+  mov_cnt<CustomRectItem> *display;
+  Scene *scene;
   alu();
   alu(std::shared_ptr<regist> Z,
       std::shared_ptr<regist> B,
-      std::shared_ptr<regist> A);
+      std::shared_ptr<regist> A,
+      Scene *scene);
   bool get_overflow();
   bool get_negative();
   bool get_carry();

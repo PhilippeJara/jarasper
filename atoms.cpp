@@ -72,11 +72,20 @@ alu::alu() : A(), B(), Z(),
 
 alu::alu(shared_ptr<regist> Z,
 	 shared_ptr<regist> B,
-	 shared_ptr<regist> A) : A(A), B(B), Z(Z),
+	 shared_ptr<regist> A,
+	 Scene *scen) : A(A), B(B), Z(Z),
 				 f_overflow(0),
 				 f_negative(0),
 				 f_carry(0),
-				 f_zero(0){}
+				 f_zero(0){
+  display = new mov_cnt<CustomRectItem>();
+  scene = scen;
+  scene->addItem(display);
+  set_styling(this);
+  Z->display->setParentItem(this->display);
+  B->display->setParentItem(this->display);
+  A->display->setParentItem(this->display);
+}
 
 bool alu::get_overflow(){return f_overflow;}
 bool alu::get_negative(){return f_negative;}
@@ -198,8 +207,8 @@ size_t control_unit::make_mar(const int bits, const shared_ptr<memory> &mem){
 size_t control_unit::make_alu(shared_ptr<regist> A,
 			      shared_ptr<regist> B,
 			      shared_ptr<regist> Z){
-  alu al(A,B,Z);
-  alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z)));
+  //alu al(A,B,Z);
+  alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z, this->scene)));
   map_alu_counter++;
   return map_alu_counter -1;
 }
