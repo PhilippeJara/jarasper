@@ -16,4 +16,4 @@ template <> void set_styling(alu* obj){
   obj->display->setBrush(Qt::blue);
   obj->display->info.setPos(15,10);
 }
-a
+

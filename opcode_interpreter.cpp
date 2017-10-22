@@ -23,6 +23,10 @@
    05: sub
    06: shl
    07: shr
+   08: branch on equal
+   09: branch on zero
+   0A: branch on carry
+   0B : branch on negative
 */
 // ASSUMINDO QUE MICROCODES E OPCODES TEM O MESMO COUNT DE OPERANDOS E OPERADORES
 // E MESMA QUANTIDADE DE BITS

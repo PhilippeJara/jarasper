@@ -175,7 +175,7 @@ size_t control_unit::make_regist(int bits){
   return map_reg_counter - 1;
 }
 
-size_t control_unit::make_internal_regist(int bits, QWidget *parent){
+size_t control_unit::make_internal_regist(int bits, QObject *parent){
   regists_in_out.insert(make_pair(map_reg_counter,
 				  make_tuple(make_shared<regist>(bits,map_reg_counter,
 								 scene),
@@ -328,7 +328,7 @@ void control_unit::reg_in(){
 }
   
 overseer::overseer() :  QObject(), control_units(), memories(){}
-overseer::overseer(QWidget *mwid) : QObject(mwid), control_units(), memories(), mwidget(mwid){}
+overseer::overseer(QObject *mwid) : QObject(mwid), control_units(), memories(), mwidget(mwid){}
 overseer::~overseer(){};
 control_unit *overseer::make_cu(size_t cu_reg_s,
 				size_t operator_s,

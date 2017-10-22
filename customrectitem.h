@@ -7,7 +7,7 @@
 #include "math.h"
 #include "QtGui/QTextDocument"
 
-class CustomRectItem : public QWidget , public QGraphicsRectItem
+class CustomRectItem : public QObject , public QGraphicsRectItem
 {
      
 Q_OBJECT

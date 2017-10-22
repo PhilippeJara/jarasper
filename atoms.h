@@ -151,7 +151,7 @@ public:
 
   size_t make_bus(int bits);
   size_t make_regist(int bits);
-  size_t make_internal_regist(int bits, QWidget *parent);
+  size_t make_internal_regist(int bits, QObject *parent);
     //reolver as linkagens para permitir o o input de dados na memoria
   size_t make_mdr(int bits, const std::shared_ptr<memory> &mem);
   size_t make_mar(const int bits, const std::shared_ptr<memory> &mem);
@@ -192,7 +192,7 @@ class overseer : public QObject{
   Q_OBJECT
 public:
     overseer();
-  overseer(QWidget *parent);
+  overseer(QObject *parent);
 ~overseer();
   control_unit *make_cu(size_t cu_reg_s,
 			   size_t operator_s,
@@ -202,7 +202,7 @@ public:
   std::vector <std::shared_ptr<control_unit>> control_units;
   std::vector <std::shared_ptr<memory>> memories;
   Scene *scene;
-  QWidget *mwidget;
+  QObject *mwidget;
 
 public slots:
     void cycle();

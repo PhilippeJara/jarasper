@@ -13,7 +13,7 @@ class mov_cnt:public T{
 public:
   QPoint old_pos;
   mov_cnt():T(){}
-  mov_cnt(QWidget *parent):T(parent){}
+  mov_cnt(QObject *parent):T(parent){}
   ~mov_cnt(){}
 };
 
