@@ -6,7 +6,7 @@
 #include <QtGui/QPen>
 
 using namespace std;
-
+ 
 mwin::mwin(QWidget *parent) :
   QMainWindow(parent),
   ov(this),
@@ -23,11 +23,9 @@ mwin::mwin(QWidget *parent) :
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
   cu->opcodes = opmap;
-  cu->make_alu(cu->get_register(cu->make_regist(12)),
-  	       cu->get_register(cu->make_regist(12)),
-	       cu->get_register(cu->make_regist(12)));
+  cu->make_alu(12);
   mem->body.at(0x0ffe) = 15;
-  cu->get_register(cu->make_regist(12));
+  cu->make_regist(12);
   cu->make_regist(12);
   for(auto item:cu->regists_in_out){cout << item.first << endl;}
   cu->get_register(4)->set(0xffe);

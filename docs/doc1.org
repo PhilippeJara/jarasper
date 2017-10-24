@@ -6,7 +6,7 @@
 | Unidade de Controle |
 | Memória             |
 
-A idéia port trás do funcionamento da lógica do sistema é em construir
+A idéia por trás do funcionamento da lógica do sistema é em construir
 sistemas usando somente os componentes básicos, componentes "básicos" são
 caracterizados como componentes que oferecem operações
 "exclusivas". Estes no entanto podem necessitar de outros componentes

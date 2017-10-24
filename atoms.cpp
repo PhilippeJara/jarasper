@@ -2,7 +2,7 @@
 
 
 using namespace std;
-auto trim_input = [](const int bits, std::bitset<max_bits> input){
+auto trim_input = [](const int bits, bitset<max_bits> input){
 		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
 		    return input;};
 
