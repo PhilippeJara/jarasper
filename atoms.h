@@ -156,6 +156,7 @@ public:
   size_t make_mdr(int bits, const std::shared_ptr<memory> &mem);
   size_t make_mar(const int bits, const std::shared_ptr<memory> &mem);
   size_t make_alu(std::shared_ptr<regist> A, std::shared_ptr<regist> B, std::shared_ptr<regist> Z);
+  size_t make_alu(size_t);
 
   std::shared_ptr<regist> get_register(size_t id);
   std::shared_ptr<regist> get_mar(size_t id);

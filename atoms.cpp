@@ -208,11 +208,21 @@ size_t control_unit::make_alu(shared_ptr<regist> A,
 			      shared_ptr<regist> B,
 			      shared_ptr<regist> Z){
   //alu al(A,B,Z);
+  
   alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z, this->scene)));
   map_alu_counter++;
   return map_alu_counter -1;
 }
-  
+size_t control_unit::make_alu(size_t num_bits){
+  //alu al(A,B,Z);
+  auto A = this->get_register(this->make_regist(num_bits));
+  auto B = this->get_register(this->make_regist(num_bits));
+  auto Z = this->get_register(this->make_regist(num_bits));
+  alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z, this->scene)));
+  map_alu_counter++;
+  return map_alu_counter -1;
+}
+
 shared_ptr<regist> control_unit::get_register(size_t id){
   return get<0>(regists_in_out.at(id));}
 
