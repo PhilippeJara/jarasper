@@ -44,6 +44,10 @@ regist::regist(size_t bits,size_t id, Scene *scene) :bits(bits), id(id),
   scene->addItem(display);
   set_styling(this);
 }
+
+regist::~regist() {
+  delete display;
+}
 void regist::link_in(shared_ptr<bus> arg) {in.push_back(arg);}
 void regist::link_out(shared_ptr<bus> arg) {out.push_back(arg);}
 void regist::remove_link_in(shared_ptr<bus> arg){
@@ -70,9 +74,9 @@ alu::alu() : A(), B(), Z(),
 	     f_carry(0),
 	     f_zero(0){}
 
-alu::alu(shared_ptr<regist> Z,
-	 shared_ptr<regist> B,
-	 shared_ptr<regist> A,
+alu::alu(regist *Z,
+	 regist *B,
+	 regist *A,
 	 Scene *scen) : A(A), B(B), Z(Z),
 				 f_overflow(0),
 				 f_negative(0),
@@ -86,7 +90,9 @@ alu::alu(shared_ptr<regist> Z,
   B->display->setParentItem(this->display);
   A->display->setParentItem(this->display);
 }
-
+alu::~alu(){
+  delete display;
+}
 bool alu::get_overflow(){return f_overflow;}
 bool alu::get_negative(){return f_negative;}
 bool alu::get_carry(){return f_carry;}
@@ -128,16 +134,16 @@ size_t get_operand(bitset<max_bits> microcode,
 
 
 
-control_unit::control_unit(size_t cu_reg_s,
-			   size_t operator_s,
-			   size_t operand_s,
-			   size_t operand_amnt) : cu_reg(), buses(),
-						  regists_in_out(), map_reg_counter(0),
-						  map_bus_counter(0), map_alu_counter(0),
-						  map_mar_counter(0), map_mdr_counter(0),
-						  operator_size(operator_s), operand_size(operand_s),
-						  operand_amnt(operand_amnt){
-  this->cu_reg = this->get_register(this->make_regist(cu_reg_s));}
+// control_unit::control_unit(size_t cu_reg_s,
+// 			   size_t operator_s,
+// 			   size_t operand_s,
+// 			   size_t operand_amnt) : cu_reg(), buses(),
+// 						  regists_in_out(), map_reg_counter(0),
+// 						  map_bus_counter(0), map_alu_counter(0),
+// 						  map_mar_counter(0), map_mdr_counter(0),
+// 						  operator_size(operator_s), operand_size(operand_s),
+// 						  operand_amnt(operand_amnt){
+//   this->cu_reg = this->get_register(this->make_regist(cu_reg_s));}
   
 
 control_unit::control_unit(size_t cu_reg_s,
@@ -204,9 +210,9 @@ size_t control_unit::make_mar(const int bits, const shared_ptr<memory> &mem){
   return map_mar_counter - 1;
 }
   
-size_t control_unit::make_alu(shared_ptr<regist> A,
-			      shared_ptr<regist> B,
-			      shared_ptr<regist> Z){
+size_t control_unit::make_alu(regist *A,
+			      regist *B,
+			      regist *Z){
   //alu al(A,B,Z);
   
   alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z, this->scene)));
@@ -223,11 +229,20 @@ size_t control_unit::make_alu(size_t num_bits){
   return map_alu_counter -1;
 }
 
-shared_ptr<regist> control_unit::get_register(size_t id){
-  return get<0>(regists_in_out.at(id));}
+regist *control_unit::get_register(size_t id){
+  return get<0>(regists_in_out.at(id)).get();}
 
-shared_ptr<regist> control_unit::get_mar(size_t id){return get_register(mars_id.at(id));}
-shared_ptr<regist> control_unit::get_mdr(size_t id){return get_register(mdrs_id.at(id));}
+regist *control_unit::get_mar(size_t id){return get_register(mars_id.at(id));}
+
+void control_unit::remove_regist(size_t id) {
+  get<0>(regists_in_out.at(id)).reset();
+}
+void control_unit::remove_alu(size_t id) {
+  alus.at(id).reset();
+}
+regist *control_unit::get_mdr(size_t id){return get_register(mdrs_id.at(id));}
+
+
 bool control_unit::get_register_in(size_t id){return get<1>(regists_in_out.at(id));}
 bool control_unit::get_register_out(size_t id){return get<2>(regists_in_out.at(id));}
 shared_ptr<bus> control_unit::get_bus(size_t id){return buses.at(id);}
@@ -275,8 +290,8 @@ void control_unit::SHL(size_t id_alu, size_t amnt){
       
 }
 
-void control_unit::read(const shared_ptr<regist> &mar,
-			const shared_ptr<regist> &mdr,
+void control_unit::read( regist *mar,
+			 regist *mdr,
 			const vector<shared_ptr<memory>> &memories){
   for(auto& mem:memories){
     if(find(mar->out.begin(), mar->out.end(), mem->addr_bus) != mar->out.end() &&
@@ -286,8 +301,8 @@ void control_unit::read(const shared_ptr<regist> &mar,
   }
 }
 
-void control_unit::write(const shared_ptr<regist> &mar,
-			 const shared_ptr<regist> &mdr,
+void control_unit::write( regist *mar,
+			  regist *mdr,
 			 const vector<shared_ptr<memory>> &memories){
   for(auto& mem:memories){
     if(find(mar->out.begin(), mar->out.end(), mem->addr_bus) != mar->out.end() &&

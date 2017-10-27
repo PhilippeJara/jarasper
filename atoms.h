@@ -59,6 +59,7 @@ public:
   regist(size_t bits,size_t id);
   //regist(size_t bits,size_t id, QWidget *parent);
   regist(size_t bits,size_t id, Scene *scene);
+  ~regist();
   void link_in(std::shared_ptr<bus> arg);
   void link_out(std::shared_ptr<bus> arg);
   void remove_link_in(std::shared_ptr<bus> arg);
@@ -72,9 +73,9 @@ public:
 class alu : public QObject{
 Q_OBJECT
 public:
-  std::shared_ptr<regist> A;
-  std::shared_ptr<regist> B;
-  std::shared_ptr<regist> Z;
+  regist *A;
+  regist *B;
+  regist *Z;
   bool f_overflow;
   bool f_negative;
   bool f_carry;
@@ -82,10 +83,11 @@ public:
   mov_cnt<CustomRectItem> *display;
   Scene *scene;
   alu();
-  alu(std::shared_ptr<regist> Z,
-      std::shared_ptr<regist> B,
-      std::shared_ptr<regist> A,
+  alu(regist *,
+      regist *,
+      regist *,
       Scene *scene);
+  ~alu();
   bool get_overflow();
   bool get_negative();
   bool get_carry();
@@ -113,7 +115,7 @@ size_t get_operand(std::bitset<max_bits> microcode,
 class control_unit : public QObject{
 Q_OBJECT
 public:
-  std::shared_ptr<regist> cu_reg;
+  regist *cu_reg;
   std::map <size_t,
         std::shared_ptr<bus>> buses;
   std::map <size_t,
@@ -137,17 +139,17 @@ public:
   std::map<size_t, size_t> mars_id;
   mov_cnt<CustomRectItem> *display;
   Scene *scene;
-  control_unit(size_t cu_reg_s,
-	       size_t operator_s,
-	       size_t operand_s,
-	       size_t operand_amnt);
+  // control_unit(size_t cu_reg_s,
+  // 	       size_t operator_s,
+  // 	       size_t operand_s,
+  // 	       size_t operand_amnt);
 
   control_unit(size_t cu_reg_s,
 	       size_t operator_s,
 	       size_t operand_s,
 	       size_t operand_amnt,
 	       Scene *scen); 
-    control_unit(size_t arg);
+  control_unit(size_t arg);
 
   size_t make_bus(int bits);
   size_t make_regist(int bits);
@@ -155,12 +157,16 @@ public:
     //reolver as linkagens para permitir o o input de dados na memoria
   size_t make_mdr(int bits, const std::shared_ptr<memory> &mem);
   size_t make_mar(const int bits, const std::shared_ptr<memory> &mem);
-  size_t make_alu(std::shared_ptr<regist> A, std::shared_ptr<regist> B, std::shared_ptr<regist> Z);
+  size_t make_alu(regist *A, regist *B, regist *Z);
   size_t make_alu(size_t);
 
-  std::shared_ptr<regist> get_register(size_t id);
-  std::shared_ptr<regist> get_mar(size_t id);
-  std::shared_ptr<regist> get_mdr(size_t id);
+  void remove_regist(size_t);
+  void remove_alu(size_t);
+  
+  
+  regist *get_register(size_t id);
+  regist *get_mar(size_t id);
+  regist *get_mdr(size_t id);
   bool get_register_in(size_t id);
   bool get_register_out(size_t id);
   std::shared_ptr<bus> get_bus(size_t id);
@@ -175,11 +181,11 @@ public:
   void SHR(size_t id_alu, size_t amnt);
   void SHL(size_t id_alu, size_t amnt);
 
-  void read(const std::shared_ptr<regist> &mar,
-        const std::shared_ptr<regist> &mdr,
+  void read( regist *mar,
+         regist *mdr,
         const std::vector<std::shared_ptr<memory>> &memories);
-  void write(const std::shared_ptr<regist> &mar,
-         const std::shared_ptr<regist> &mdr,
+  void write( regist *mar,
+          regist *mdr,
          const std::vector<std::shared_ptr<memory>> &memories);
   void execute(const std::vector<std::shared_ptr<memory>> &memories);
   void opcode_execute(const std::vector<std::shared_ptr<memory>> &);

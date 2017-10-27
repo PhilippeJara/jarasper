@@ -53,7 +53,9 @@ mwin::mwin(QWidget *parent) :
        << "mdr " << mdr->id << " :" << mdr->info << endl 
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
-  
+  cu->get_register(cu->make_regist(12))->set(15);
+  cu->remove_regist(8);
+  cu->remove_alu(0);
 }
 
 mwin::~mwin()
