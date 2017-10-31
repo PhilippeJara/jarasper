@@ -1,0 +1,20 @@
+* mudancas estruturais[0/2]
+ - [ ] IN e OUT para os registradores[0/3]
+   - [ ] retirar da CU o in e out
+   - [ ] adicionar aos registradores in e out
+   - [ ] refatorar funcoes onde necessário
+ - [ ] Decidir modificar ou nao controle de fluxo
+            
+* Gerador de código[0/1]
+   - [ ] tentar implementar um gerador básico
+
+
+
+* Definicao de escopos[0/1]
+   - [ ] decidir se "blocos" como alu terão escopo propio
+
+
+* Implementar o grafico inicial dos buses[0/2]
+   - [ ] decidir como que sera feita a conexao com os registradores
+   - [ ] implementar a movimentacao dinamica
+
