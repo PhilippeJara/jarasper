@@ -53,14 +53,13 @@ mwin::mwin(QWidget *parent) :
        << "mdr " << mdr->id << " :" << mdr->info << endl 
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
-  cu->make_bus(12);
-  // QPainterPath pa;
-  // pa.addRect(15, 15, 10, 70);
-  // pa.lineTo(50, 30);
-  // QGraphicsPathItem item(pa);
-  // item.setBrush(Qt::green);
-  // scene->addItem(&item);
-  // cout << item.boundingRect().x()<<endl;
+  //cu->make_bus(12);
+  auto a = new CustomRectItem();
+  a->setRect(0,0,120,120);
+  a->setBrush(Qt::red);
+  scene->addItem(a);
+  QObject::connect(a, SIGNAL(pos_change(QPointF)),
+		   (bu->display), SLOT(update_path(QPointF)));
 }
 
 mwin::~mwin()

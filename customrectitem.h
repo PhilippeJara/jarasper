@@ -16,6 +16,10 @@ public:
   CustomRectItem(QGraphicsItem* parent = 0);
   CustomRectItem(const QRect& rect, QGraphicsItem* parent = 0);
   void setText(QString);
+
+signals:
+  void pos_change(QPointF);
+  
 protected:
     QVariant itemChange(GraphicsItemChange change,
                         const QVariant &value);
