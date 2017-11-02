@@ -30,7 +30,8 @@ SOURCES += \
     opcode_interpreter.cpp \
     styles.cpp \
     scene.cpp \
-    customrectitem.cpp
+    customrectitem.cpp \
+    custom_bus_item.cpp
 
 HEADERS += \
         mwin.h \
@@ -40,7 +41,8 @@ HEADERS += \
     styles.hpp \
     container.hpp \
     customrectitem.h \
-    scene.h
+    scene.h \
+    custom_bus_item.h
 
 FORMS += \
         mwin.ui

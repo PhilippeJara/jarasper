@@ -16,6 +16,7 @@
 #include "container.hpp"
 #include "styles.hpp"
 #include "customrectitem.h"
+#include "custom_bus_item.h"
 
 #ifndef CONFIG
 #define CONFIG
@@ -31,9 +32,12 @@ Q_OBJECT
 public:
   int bits;
   std::bitset <max_bits> info;
+  custom_bus_item *display;
   void set (int arg);
   bus (int bits);
+  bus (int bits, Scene*);
   bus (int inf, int bits);
+
 };
 class memory : public QObject{
 Q_OBJECT

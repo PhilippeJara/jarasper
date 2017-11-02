@@ -6,8 +6,12 @@ auto trim_input = [](const int bits, bitset<max_bits> input){
 		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
 		    return input;};
 
-
 bus::bus(int bits) : bits(bits), info() {}
+bus::bus(int bits, Scene *scene) : bits(bits), info() {
+  display = new custom_bus_item();
+  display->setBrush(Qt::darkGreen);
+  scene->addItem(display);
+}
 bus::bus(int inf, int bits) :  bits(bits), info(inf){}
 void bus::set(int arg){
   auto tmp = bitset<max_bits>(arg);
@@ -164,7 +168,7 @@ control_unit::control_unit(size_t cu_reg_s,
 }
    
 size_t control_unit::make_bus(int bits){
-  buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits)));
+  buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits, scene)));
   map_bus_counter++;
   return map_bus_counter - 1;
 }
