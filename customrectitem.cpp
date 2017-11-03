@@ -21,7 +21,7 @@ QVariant CustomRectItem::itemChange(GraphicsItemChange change,
 				    const QVariant &value)
 {
   if (change == ItemPositionChange && scene()) {
-    emit pos_change(this->pos());
+    emit pos_change(this);
     QPointF newPos = value.toPointF();
     if(QApplication::mouseButtons() == Qt::LeftButton &&
        qobject_cast<Scene*> (scene())){

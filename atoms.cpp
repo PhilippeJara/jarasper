@@ -6,7 +6,7 @@ auto trim_input = [](const int bits, bitset<max_bits> input){
 		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
 		    return input;};
 
-bus::bus(int bits) : bits(bits), info() {}
+bus::bus(int bits) : bits(bits), info() {display = NULL;}
 bus::bus(int bits, Scene *scene) : bits(bits), info() {
   display = new custom_bus_item();
   display->setBrush(Qt::darkGreen);
@@ -16,6 +16,7 @@ bus::bus(int inf, int bits) :  bits(bits), info(inf){}
 void bus::set(int arg){
   auto tmp = bitset<max_bits>(arg);
   info = trim_input(bits, tmp);
+  display = NULL;
 }
 
   
@@ -52,16 +53,30 @@ regist::regist(size_t bits,size_t id, Scene *scene) :bits(bits), id(id),
 regist::~regist() {
   delete display;
 }
-void regist::link_in(shared_ptr<bus> arg) {in.push_back(arg);}
-void regist::link_out(shared_ptr<bus> arg) {out.push_back(arg);}
+void regist::link_in(shared_ptr<bus> arg) {
+  in.push_back(arg);
+  if (arg->display != NULL)
+    arg->display->link(this->display);
+}
+void regist::link_out(shared_ptr<bus> arg) {
+  out.push_back(arg);
+  if (arg->display != NULL)
+    arg->display->link(this->display);
+}
 void regist::remove_link_in(shared_ptr<bus> arg){
   in.erase(find (in.begin(),
 		 in.end(),
-		 arg));}
+		 arg));
+  if (arg->display != NULL)
+    arg->display->remove_link(this->display);
+}
 void regist::remove_link_out(shared_ptr<bus> arg){
   out.erase(find (out.begin(),
 		  out.end(),
-		  arg));}  
+		  arg));
+  if (arg->display != NULL)
+    arg->display->remove_link(this->display);
+}  
 void regist::set(int arg) {
   info = trim_input(bits, arg);
   display->setText(QString::number(info.to_ulong()));

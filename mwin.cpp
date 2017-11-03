@@ -25,7 +25,7 @@ mwin::mwin(QWidget *parent) :
   cu->opcodes = opmap;
   cu->make_alu(12);
   mem->body.at(0x0ffe) = 15;
-  cu->make_regist(12);
+  auto r = cu->get_register(cu->make_regist(12));
   cu->make_regist(12);
   for(auto item:cu->regists_in_out){cout << item.first << endl;}
   cu->get_register(4)->set(0xffe);
@@ -58,8 +58,10 @@ mwin::mwin(QWidget *parent) :
   a->setRect(0,0,120,120);
   a->setBrush(Qt::red);
   scene->addItem(a);
-  QObject::connect(a, SIGNAL(pos_change(QPointF)),
-		   (bu->display), SLOT(update_path(QPointF)));
+  auto bus2 = cu->get_bus(cu->make_bus(12));
+  
+  QObject::connect(r->display, SIGNAL(pos_change(mov_cnt<CustomRectItem>*)),
+		   bu->display, SLOT(update_path(mov_cnt<CustomRectItem>*)));
 }
 
 mwin::~mwin()

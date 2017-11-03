@@ -6,6 +6,7 @@
 #include "scene.h"
 #include "math.h"
 #include "QtGui/QTextDocument"
+#include "container.hpp"
 
 class CustomRectItem : public QObject , public QGraphicsRectItem
 {
@@ -18,7 +19,7 @@ public:
   void setText(QString);
 
 signals:
-  void pos_change(QPointF);
+  void pos_change(CustomRectItem*);
   
 protected:
     QVariant itemChange(GraphicsItemChange change,
