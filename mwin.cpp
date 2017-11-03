@@ -60,8 +60,8 @@ mwin::mwin(QWidget *parent) :
   scene->addItem(a);
   auto bus2 = cu->get_bus(cu->make_bus(12));
   
-  QObject::connect(r->display, SIGNAL(pos_change(mov_cnt<CustomRectItem>*)),
-		   bu->display, SLOT(update_path(mov_cnt<CustomRectItem>*)));
+  QObject::connect(r->display, SIGNAL(pos_change(CustomRectItem*)),
+		   bu->display, SLOT(update_path(CustomRectItem*)));
 }
 
 mwin::~mwin()

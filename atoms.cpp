@@ -45,7 +45,7 @@ regist::regist(size_t bits,size_t id) :bits(bits), id(id),
 regist::regist(size_t bits,size_t id, Scene *scene) :bits(bits), id(id),
 						     info(0), in(),
 						     out() {
-  display = new mov_cnt<CustomRectItem>();
+  display = new CustomRectItem();
   scene->addItem(display);
   set_styling(this);
 }
@@ -101,7 +101,7 @@ alu::alu(regist *Z,
 				 f_negative(0),
 				 f_carry(0),
 				 f_zero(0){
-  display = new mov_cnt<CustomRectItem>();
+  display = new CustomRectItem();
   scene = scen;
   scene->addItem(display);
   set_styling(this);
@@ -176,7 +176,7 @@ control_unit::control_unit(size_t cu_reg_s,
 					  operator_size(operator_s), operand_size(operand_s),
 					  operand_amnt(operand_amnt){
   scene = scen;
-  display = new mov_cnt<CustomRectItem>();
+  display = new CustomRectItem();
   scene->addItem(display);
   set_styling(this);
   this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));

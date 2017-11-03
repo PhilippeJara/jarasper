@@ -13,7 +13,7 @@
 #include "QtGui/QPainterPathStroker"
 #include <unordered_map>
 #include <memory>
-#include "container.hpp"
+
 
 class custom_bus_item : public QObject , public QGraphicsPathItem
 {
@@ -23,16 +23,16 @@ public:
   
 
   custom_bus_item(QGraphicsItem* parent = 0);
-  std::unordered_map<mov_cnt<CustomRectItem> *,
+  std::unordered_map<CustomRectItem *,
 		     std::unique_ptr<QPainterPath>> linked_registers;
   void paint(QPainter *painter,
 	     const QStyleOptionGraphicsItem *option,
 	     QWidget *widget);
-  void link(mov_cnt<CustomRectItem> *);
-  void remove_link(mov_cnt<CustomRectItem> *);
+  void link(CustomRectItem *);
+  void remove_link(CustomRectItem *);
 
 public slots:
-  void update_path(mov_cnt<CustomRectItem>*);
+  void update_path(CustomRectItem*);
 
 };
 

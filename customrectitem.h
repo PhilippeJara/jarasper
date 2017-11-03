@@ -6,7 +6,7 @@
 #include "scene.h"
 #include "math.h"
 #include "QtGui/QTextDocument"
-#include "container.hpp"
+
 
 class CustomRectItem : public QObject , public QGraphicsRectItem
 {

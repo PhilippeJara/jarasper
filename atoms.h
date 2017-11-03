@@ -13,7 +13,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
-#include "container.hpp"
+
 #include "styles.hpp"
 #include "customrectitem.h"
 #include "custom_bus_item.h"
@@ -58,7 +58,7 @@ public:
   std::bitset<max_bits> info;
   std::vector<std::shared_ptr<bus>> in;
   std::vector<std::shared_ptr<bus>> out;
-  mov_cnt<CustomRectItem> * display;
+  CustomRectItem * display;
   regist();
   regist(size_t bits,size_t id);
   //regist(size_t bits,size_t id, QWidget *parent);
@@ -84,7 +84,7 @@ public:
   bool f_negative;
   bool f_carry;
   bool f_zero;
-  mov_cnt<CustomRectItem> *display;
+  CustomRectItem *display;
   Scene *scene;
   alu();
   alu(regist *,
@@ -141,7 +141,7 @@ public:
   size_t operand_amnt;
   std::map<size_t, size_t> mdrs_id;
   std::map<size_t, size_t> mars_id;
-  mov_cnt<CustomRectItem> *display;
+  CustomRectItem *display;
   Scene *scene;
   // control_unit(size_t cu_reg_s,
   // 	       size_t operator_s,

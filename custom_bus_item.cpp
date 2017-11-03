@@ -11,7 +11,7 @@ custom_bus_item::custom_bus_item(QGraphicsItem* parent):linked_registers(), QObj
   this->setPath(path);
 }
 
-void custom_bus_item::update_path(mov_cnt<CustomRectItem> *obj) {
+void custom_bus_item::update_path(CustomRectItem *obj) {
   auto path = std::make_unique<QPainterPath> ();
   auto cur = this->path().currentPosition();
   
@@ -36,13 +36,13 @@ void custom_bus_item::paint(QPainter* painter,
   painter->drawPath(path);
 }
 
-void custom_bus_item::link(mov_cnt<CustomRectItem> * obj) {
+void custom_bus_item::link(CustomRectItem * obj) {
   linked_registers.emplace(obj, std::make_unique<QPainterPath>());
   QObject::connect(obj,SIGNAL(pos_change(CustomRectItem*)),
 		   this, SLOT(update_path(CustomRectItem*)));
 }
 
-void custom_bus_item::remove_link(mov_cnt<CustomRectItem> *obj) {
+void custom_bus_item::remove_link(CustomRectItem *obj) {
   linked_registers.erase(obj);
 }
 
