@@ -1,5 +1,4 @@
 #include "atoms.h"
-
 Scene *scene_info::scene;
 
 
@@ -8,13 +7,13 @@ auto trim_input = [](const int bits, bitset<max_bits> input){
 		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
 		    return input;};
 
-//bus::bus(int bits) : bits(bits), info() {display = NULL;}
+bus::bus(int bits, int tag) : bits(bits), info() {display = NULL;}
 bus::bus(int bits) : bits(bits), info() {
   display = new custom_bus_item();
   display->setBrush(Qt::darkGreen);
   scene_info::scene->addItem(display);
 }
-bus::bus(int inf, int bits) :  bits(bits), info(inf){}
+//bus::bus(int inf, int bits) :  bits(bits), info(inf){}
 void bus::set(int arg){
   auto tmp = bitset<max_bits>(arg);
   info = trim_input(bits, tmp);
@@ -27,15 +26,15 @@ void bus::set(int arg){
 
 memory::memory(size_t mem_size, size_t len ): len(len),
 					      body(vector<size_t>(mem_size)),
-					      addr_bus(make_shared<bus>(len)),
-					      data_bus(make_shared<bus>(len)){}
+					      addr_bus(make_shared<bus>(len,0)),
+					      data_bus(make_shared<bus>(len,0)){}
 memory::memory(size_t mem_size,
 	       size_t mem_block_len,
 	       size_t abus_len,
 	       size_t dbus_len): len(mem_block_len),
 				 body(vector<size_t>(mem_size)),
-				 addr_bus(make_shared<bus>(abus_len)),
-				 data_bus(make_shared<bus>(dbus_len)){}
+				 addr_bus(make_shared<bus>(abus_len,0)),
+				 data_bus(make_shared<bus>(dbus_len,0)){}
 
 
 

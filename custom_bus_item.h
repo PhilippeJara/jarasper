@@ -20,18 +20,15 @@ class custom_bus_item : public QObject , public QGraphicsPathItem
      
   Q_OBJECT
 public:
-  
-
+  QGraphicsRectItem base_bus;
   custom_bus_item(QGraphicsItem* parent = 0);
   std::unordered_map<CustomRectItem *,
 		     std::unique_ptr<QPainterPath>> linked_registers;
-  QRectF boundingRect;
- 
+   
   void paint(QPainter *painter,
 	     const QStyleOptionGraphicsItem *option,
 	     QWidget *widget);
   
-
   void link(CustomRectItem *);
   void remove_link(CustomRectItem *);
 

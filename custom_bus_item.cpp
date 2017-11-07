@@ -1,32 +1,36 @@
 #include "custom_bus_item.h"
 #include "atoms.h"
 
-custom_bus_item::custom_bus_item(QGraphicsItem* parent):linked_registers(), QObject(), QGraphicsPathItem(parent){
-  
+custom_bus_item::custom_bus_item(QGraphicsItem* parent):linked_registers(), QObject(), QGraphicsPathItem(parent), base_bus(0,0,100,10){
+  base_bus.setBrush(Qt::green);
+  scene_info::scene->addItem(&base_bus);
   QPainterPath path;
-  path.addRect(100, 100, 100, 10);
-  this->boundingRect = (QRectF(1000,1000,1000,1000));
-  this->setFlags(QGraphicsItem::ItemIsSelectable|
-		 QGraphicsItem::ItemIsMovable |
-		 QGraphicsItem::ItemSendsGeometryChanges);
+  path.addRect(0, 0, 100, 10);
+  base_bus.setFlags(QGraphicsItem::ItemIsSelectable|
+		    QGraphicsItem::ItemIsMovable |
+		    QGraphicsItem::ItemSendsGeometryChanges);
+  this->setFlags(QGraphicsItem::ItemSendsGeometryChanges);
   this->setPath(path);
+  base_bus.update();
 }
 
 void custom_bus_item::update_path(CustomRectItem *obj) {
   auto path = std::make_unique<QPainterPath> ();
-  auto cur = [&](){return this->pos();};
-  std::cout << "OBJx: "<<obj->x() << "   OBJy: " << obj->y() << std::endl
-	    << "CURx: "<< cur().x() << "   CURy: "<< cur().x() << std::endl
-	    << "RESx: " << fabs(100 - obj->x())
-	    << "   RESy:" << fabs(100 - obj->y())<<std::endl;
-    
+  auto cur = [&](){return base_bus.pos();};
+  // std::cout << "OBJx: "<<obj->x() << "   OBJy: " << obj->y() << std::endl
+  // 	    << "CURx: "<< cur().x() << "   CURy: "<< cur().x() << std::endl
+  // 	    << "RESx: " << fabs(cur().x() - obj->x())
+  // 	    << "   RESy:" << fabs(cur().y() - obj->y())<<std::endl;
+
+  
   if (!this->linked_registers.empty() &&
       this->linked_registers.find(obj) != linked_registers.end()){
-    path->addRect(QRectF(100,obj->y(), fabs(100 - obj->x()) , 10));
-    path->addRect(QRectF(obj->x(), 100, 10, fabs(100 -obj->y())));
+    path->addRect(QRectF(cur().x(),cur().y(), (obj->x() - cur().x() ) , 10));
+    path->addRect(QRectF(obj->x(), cur().y(), 10, (obj->y() - cur().y() )));
     linked_registers[obj] = std::move(path);
     update();
   }
+    
 }
 
   
@@ -34,13 +38,17 @@ void custom_bus_item::update_path(CustomRectItem *obj) {
 void custom_bus_item::paint(QPainter* painter,
 			    const QStyleOptionGraphicsItem* option,
 			    QWidget* widget) {
-  QPainterPath path;
-  path.addPath(this->path());
-  for (auto& arg:linked_registers){
-    path.addPath(*(arg.second));
-  }
-  path = path.simplified();
+  auto update_all_paths_if_base_changed = [&](){
+					   if (base_bus.ItemPositionHasChanged){
+					     for (auto& arg:linked_registers){
+					       update_path(arg.first);}}};
+  update_all_paths_if_base_changed();
   
+  QPainterPath path;
+  for (auto& arg:linked_registers){
+    path = path.united(*(arg.second));
+  }
+    
   path.setFillRule(Qt::WindingFill);
   painter->setBrush(Qt::green);
   painter->drawPath(path);

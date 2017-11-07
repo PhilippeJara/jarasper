@@ -14,7 +14,7 @@ mwin::mwin(QWidget *parent) :
 {
   ui->setupUi(this);
   auto scene = new Scene(centralWidget());
-  scene->setSceneRect(0,0,500,500);
+  scene->setSceneRect(0,0,1000,1000);
   scene_info::scene = scene;
   auto view = new QGraphicsView(scene, centralWidget());
   view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
