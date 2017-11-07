@@ -53,15 +53,8 @@ mwin::mwin(QWidget *parent) :
        << "mdr " << mdr->id << " :" << mdr->info << endl 
        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
        << "mdr info: " << mdr->info.to_ulong() << endl;
-  //cu->make_bus(12);
-  auto a = new CustomRectItem();
-  a->setRect(0,0,120,120);
-  a->setBrush(Qt::red);
-  scene->addItem(a);
-  auto bus2 = cu->get_bus(cu->make_bus(12));
   
-  QObject::connect(r->display, SIGNAL(pos_change(CustomRectItem*)),
-		   bu->display, SLOT(update_path(CustomRectItem*)));
+  
 }
 
 mwin::~mwin()

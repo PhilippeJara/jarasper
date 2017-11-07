@@ -39,7 +39,6 @@ HEADERS += \
     opmap.hpp \
     container.hpp \
     styles.hpp \
-    container.hpp \
     customrectitem.h \
     scene.h \
     custom_bus_item.h
