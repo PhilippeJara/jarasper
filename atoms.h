@@ -21,13 +21,16 @@
 #ifndef CONFIG
 #define CONFIG
 const size_t max_bits = 16;
+class scene_info{
+public:
+  static Scene *scene;
+  static Scene *get_scene(){ return scene;}
+};
 #endif
 
 
 
-
-
-class bus : public QObject{
+class bus : public QObject {
 Q_OBJECT
 public:
   int bits;
@@ -39,7 +42,7 @@ public:
   bus (int inf, int bits);
 
 };
-class memory : public QObject{
+class memory : public QObject {
 Q_OBJECT
 public:
   size_t const len;
@@ -62,7 +65,7 @@ public:
   regist();
   regist(size_t bits,size_t id);
   //regist(size_t bits,size_t id, QWidget *parent);
-  regist(size_t bits,size_t id, Scene *scene);
+  //  regist(size_t bits,size_t id, Scene *scene);
   ~regist();
   void link_in(std::shared_ptr<bus> arg);
   void link_out(std::shared_ptr<bus> arg);
@@ -74,7 +77,7 @@ public:
 };
 
 
-class alu : public QObject{
+class alu : public QObject {
 Q_OBJECT
 public:
   regist *A;
@@ -85,12 +88,12 @@ public:
   bool f_carry;
   bool f_zero;
   CustomRectItem *display;
-  Scene *scene;
+  //Scene *scene;
   alu();
   alu(regist *,
       regist *,
-      regist *,
-      Scene *scene);
+      regist *);
+      
   ~alu();
   bool get_overflow();
   bool get_negative();
@@ -116,7 +119,7 @@ size_t get_operand(std::bitset<max_bits> microcode,
 
 
 
-class control_unit : public QObject{
+class control_unit : public QObject {
 Q_OBJECT
 public:
   regist *cu_reg;
@@ -142,7 +145,7 @@ public:
   std::map<size_t, size_t> mdrs_id;
   std::map<size_t, size_t> mars_id;
   CustomRectItem *display;
-  Scene *scene;
+  //Scene *scene;
   // control_unit(size_t cu_reg_s,
   // 	       size_t operator_s,
   // 	       size_t operand_s,
@@ -151,8 +154,8 @@ public:
   control_unit(size_t cu_reg_s,
 	       size_t operator_s,
 	       size_t operand_s,
-	       size_t operand_amnt,
-	       Scene *scen); 
+	       size_t operand_amnt);
+	       //Scene *scen); 
   control_unit(size_t arg);
 
   size_t make_bus(int bits);
@@ -208,11 +211,11 @@ public:
   control_unit *make_cu(size_t cu_reg_s,
 			   size_t operator_s,
 			   size_t operand_s,
-			size_t operand_amnt,
-			Scene *scen);
+			size_t operand_amnt);
+			//Scene *scen);
   std::vector <std::shared_ptr<control_unit>> control_units;
   std::vector <std::shared_ptr<memory>> memories;
-  Scene *scene;
+  //Scene *scene;
   QObject *mwidget;
 
 public slots:

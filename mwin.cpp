@@ -15,10 +15,10 @@ mwin::mwin(QWidget *parent) :
   ui->setupUi(this);
   auto scene = new Scene(centralWidget());
   scene->setSceneRect(0,0,500,500);
+  scene_info::scene = scene;
   auto view = new QGraphicsView(scene, centralWidget());
   view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  ov.scene = scene;
-  ov.make_cu(12,4,4,2,scene)->display->info.setText("control unit 0");
+  ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
@@ -64,7 +64,7 @@ mwin::~mwin()
 
 void mwin::on_criar_cu_clicked()
 {
-  auto cu = ov.make_cu(12, 4, 4, 4, this->ov.scene);
+  auto cu = ov.make_cu(12, 4, 4, 4);
   auto lastindx = ov.control_units.size() - 1;
   cu->display->setText(QString("control unit" + QString::number(lastindx)));
 }

@@ -89,7 +89,7 @@ void control_unit::interpret_minst(size_t mcode, const vector<shared_ptr<memory>
     break;
   }
   case 5:{
-    this->add(operandos.at(0));
+    this->sub(operandos.at(0));
     (cout<< "sub(overflow, carry?): " << endl);
     break;
   }

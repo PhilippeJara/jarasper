@@ -1,16 +1,18 @@
 #include "atoms.h"
 
+Scene *scene_info::scene;
+
 
 using namespace std;
 auto trim_input = [](const int bits, bitset<max_bits> input){
 		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
 		    return input;};
 
-bus::bus(int bits) : bits(bits), info() {display = NULL;}
-bus::bus(int bits, Scene *scene) : bits(bits), info() {
+//bus::bus(int bits) : bits(bits), info() {display = NULL;}
+bus::bus(int bits) : bits(bits), info() {
   display = new custom_bus_item();
   display->setBrush(Qt::darkGreen);
-  scene->addItem(display);
+  scene_info::scene->addItem(display);
 }
 bus::bus(int inf, int bits) :  bits(bits), info(inf){}
 void bus::set(int arg){
@@ -38,15 +40,15 @@ memory::memory(size_t mem_size,
 
 
 regist::regist() : bits(), info() , in() , out(){}
-regist::regist(size_t bits,size_t id) :bits(bits), id(id),
-				       info(0), in(),
-				       out(), display() {}
+// regist::regist(size_t bits,size_t id) :bits(bits), id(id),
+// 				       info(0), in(),
+// 				       out(), display() {}
 
-regist::regist(size_t bits,size_t id, Scene *scene) :bits(bits), id(id),
+regist::regist(size_t bits,size_t id) :bits(bits), id(id),
 						     info(0), in(),
 						     out() {
   display = new CustomRectItem();
-  scene->addItem(display);
+  scene_info::scene->addItem(display);
   set_styling(this);
 }
 
@@ -95,15 +97,14 @@ alu::alu() : A(), B(), Z(),
 
 alu::alu(regist *Z,
 	 regist *B,
-	 regist *A,
-	 Scene *scen) : A(A), B(B), Z(Z),
+	 regist *A)
+	  : A(A), B(B), Z(Z),
 				 f_overflow(0),
 				 f_negative(0),
 				 f_carry(0),
 				 f_zero(0){
   display = new CustomRectItem();
-  scene = scen;
-  scene->addItem(display);
+  scene_info::scene->addItem(display);
   set_styling(this);
   Z->display->setParentItem(this->display);
   B->display->setParentItem(this->display);
@@ -168,30 +169,30 @@ size_t get_operand(bitset<max_bits> microcode,
 control_unit::control_unit(size_t cu_reg_s,
 			   size_t operator_s,
 			   size_t operand_s,
-			   size_t operand_amnt,
-			   Scene *scen) : cu_reg(), buses(),
+			   size_t operand_amnt)
+			    : cu_reg(), buses(),
 					  regists_in_out(), map_reg_counter(0),
 					  map_bus_counter(0), map_alu_counter(0),
 					  map_mar_counter(0), map_mdr_counter(0),
 					  operator_size(operator_s), operand_size(operand_s),
 					  operand_amnt(operand_amnt){
-  scene = scen;
+  
   display = new CustomRectItem();
-  scene->addItem(display);
+  scene_info::scene->addItem(display);
   set_styling(this);
   this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));
 }
    
 size_t control_unit::make_bus(int bits){
-  buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits, scene)));
+  buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits)));
   map_bus_counter++;
   return map_bus_counter - 1;
 }
 
 size_t control_unit::make_regist(int bits){
   regists_in_out.insert(make_pair(map_reg_counter,
-				  make_tuple(make_shared<regist>(bits,map_reg_counter,
-								 scene),
+				  make_tuple(make_shared<regist>(bits,map_reg_counter)
+								 ,
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
@@ -202,8 +203,8 @@ size_t control_unit::make_regist(int bits){
 
 size_t control_unit::make_internal_regist(int bits, QObject *parent){
   regists_in_out.insert(make_pair(map_reg_counter,
-				  make_tuple(make_shared<regist>(bits,map_reg_counter,
-								 scene),
+				  make_tuple(make_shared<regist>(bits,map_reg_counter
+								 ),
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setParentItem(this->display);
@@ -234,7 +235,7 @@ size_t control_unit::make_alu(regist *A,
 			      regist *Z){
   //alu al(A,B,Z);
   
-  alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z, this->scene)));
+  alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z)));
   map_alu_counter++;
   return map_alu_counter -1;
 }
@@ -243,7 +244,7 @@ size_t control_unit::make_alu(size_t num_bits){
   auto A = this->get_register(this->make_regist(num_bits));
   auto B = this->get_register(this->make_regist(num_bits));
   auto Z = this->get_register(this->make_regist(num_bits));
-  alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z, this->scene)));
+  alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z)));
   map_alu_counter++;
   return map_alu_counter -1;
 }
@@ -377,13 +378,13 @@ overseer::~overseer(){};
 control_unit *overseer::make_cu(size_t cu_reg_s,
 				size_t operator_s,
 				size_t operand_s,
-				size_t operand_amnt,
-				Scene *scen){
+				size_t operand_amnt)
+				{
   control_units.push_back(make_shared<control_unit>(cu_reg_s,
 						    operator_s,
 						    operand_s,
-						    operand_amnt,
-						    scen));
+						    operand_amnt
+						    ));
   return control_units.back().get();
 }
 
