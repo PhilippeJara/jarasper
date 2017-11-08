@@ -18,7 +18,8 @@ custom_bus_item::custom_bus_item(QGraphicsItem* parent):linked_registers(), QObj
 void custom_bus_item::update_path(CustomRectItem *obj) {
   auto path = std::make_unique<QPainterPath> ();
   auto cur = [&](){return base_bus.pos();};
-  // std::cout << "OBJx: "<<obj->x() << "   OBJy: " << obj->y() << std::endl
+  auto objcoord = obj->scenePos();
+      // std::cout << "OBJx: "<<obj->x() << "   OBJy: " << obj->y() << std::endl
   // 	    << "CURx: "<< cur().x() << "   CURy: "<< cur().x() << std::endl
   // 	    << "RESx: " << fabs(cur().x() - obj->x())
   // 	    << "   RESy:" << fabs(cur().y() - obj->y())<<std::endl;
@@ -26,8 +27,8 @@ void custom_bus_item::update_path(CustomRectItem *obj) {
   
   if (!this->linked_registers.empty() &&
       this->linked_registers.find(obj) != linked_registers.end()){
-    path->addRect(QRectF(cur().x(),cur().y(), (obj->x() - cur().x() ) , 5));
-    path->addRect(QRectF(obj->x(), cur().y(), 5, (obj->y() - cur().y() )));
+    path->addRect(QRectF(cur().x(),cur().y(), (objcoord.x() - cur().x() ) , 5));
+    path->addRect(QRectF(objcoord.x(), cur().y(), 5, (objcoord.y() - cur().y() )));
     linked_registers[obj] = std::move(path);
     update();
   }
