@@ -1,11 +1,12 @@
 #include "custom_bus_item.h"
 #include "atoms.h"
 
-custom_bus_item::custom_bus_item(QGraphicsItem* parent):linked_registers(), QObject(), QGraphicsPathItem(parent), base_bus(0,0,100,10){
-  base_bus.setBrush(Qt::green);
+custom_bus_item::custom_bus_item(QGraphicsItem* parent):linked_registers(), QObject(), QGraphicsPathItem(parent), base_bus(0,0,100,5){
+  base_bus.setBrush(Qt::red);
   scene_info::scene->addItem(&base_bus);
+  base_bus.setZValue(100);
   QPainterPath path;
-  path.addRect(0, 0, 100, 10);
+  path.addRect(0, 0, 100, 5);
   base_bus.setFlags(QGraphicsItem::ItemIsSelectable|
 		    QGraphicsItem::ItemIsMovable |
 		    QGraphicsItem::ItemSendsGeometryChanges);
@@ -25,8 +26,8 @@ void custom_bus_item::update_path(CustomRectItem *obj) {
   
   if (!this->linked_registers.empty() &&
       this->linked_registers.find(obj) != linked_registers.end()){
-    path->addRect(QRectF(cur().x(),cur().y(), (obj->x() - cur().x() ) , 10));
-    path->addRect(QRectF(obj->x(), cur().y(), 10, (obj->y() - cur().y() )));
+    path->addRect(QRectF(cur().x(),cur().y(), (obj->x() - cur().x() ) , 5));
+    path->addRect(QRectF(obj->x(), cur().y(), 5, (obj->y() - cur().y() )));
     linked_registers[obj] = std::move(path);
     update();
   }
@@ -39,9 +40,9 @@ void custom_bus_item::paint(QPainter* painter,
 			    const QStyleOptionGraphicsItem* option,
 			    QWidget* widget) {
   auto update_all_paths_if_base_changed = [&](){
-					   if (base_bus.ItemPositionHasChanged){
-					     for (auto& arg:linked_registers){
-					       update_path(arg.first);}}};
+					    if (base_bus.ItemPositionHasChanged){
+					      for (auto& arg:linked_registers){
+						update_path(arg.first);}}};
   update_all_paths_if_base_changed();
   
   QPainterPath path;
@@ -53,7 +54,8 @@ void custom_bus_item::paint(QPainter* painter,
   painter->setBrush(Qt::green);
   painter->drawPath(path);
   this->scene()->update();
-}
+  
+  }
 
 void custom_bus_item::link(CustomRectItem * obj) {
   linked_registers.emplace(obj, std::make_unique<QPainterPath>());

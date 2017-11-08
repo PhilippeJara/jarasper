@@ -37,9 +37,8 @@ public:
   std::bitset <max_bits> info;
   custom_bus_item *display;
   void set (int arg);
-  bus (int bits);
-  bus (int bits, Scene*);
-  bus (int inf, int bits);
+  bus (int bits, int info=0, custom_bus_item* disp = nullptr);
+  //bus (int bits, int tag);
 
 };
 class memory : public QObject {
@@ -49,8 +48,7 @@ public:
   std::vector<size_t> body;
   std::shared_ptr<bus> addr_bus;
   std::shared_ptr<bus> data_bus;
-  memory (size_t mem_size, size_t len);
-  memory (size_t mem_size, size_t mem_block_len, size_t abus_len, size_t dbus_len);
+  memory (size_t mem_size=5000, size_t mem_block_len=12, size_t abus_len=12, size_t dbus_len=12);
 };
 
 class regist : public QObject {
@@ -62,7 +60,7 @@ public:
   std::vector<std::shared_ptr<bus>> in;
   std::vector<std::shared_ptr<bus>> out;
   CustomRectItem * display;
-  regist();
+  //regist();
   regist(size_t bits,size_t id);
   //regist(size_t bits,size_t id, QWidget *parent);
   //  regist(size_t bits,size_t id, Scene *scene);

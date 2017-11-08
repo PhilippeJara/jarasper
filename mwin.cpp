@@ -14,10 +14,10 @@ mwin::mwin(QWidget *parent) :
 {
   ui->setupUi(this);
   auto scene = new Scene(centralWidget());
-  scene->setSceneRect(0,0,1000,1000);
+  scene->setSceneRect(0,0,800,800);
   scene_info::scene = scene;
   auto view = new QGraphicsView(scene, centralWidget());
-  view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  //view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];

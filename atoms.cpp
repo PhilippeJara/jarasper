@@ -6,28 +6,31 @@ using namespace std;
 auto trim_input = [](const int bits, bitset<max_bits> input){
 		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
 		    return input;};
-
-bus::bus(int bits, int tag) : bits(bits), info() {display = NULL;}
-bus::bus(int bits) : bits(bits), info() {
+bus::bus (int bits, int info, custom_bus_item* disp):
+  bits(bits), info(info), display(disp) {
   display = new custom_bus_item();
   display->setBrush(Qt::darkGreen);
   scene_info::scene->addItem(display);
 }
+
+// bus::bus(int bits, int  ) : bits(bits), info() {display = nullptr;}
+// bus::bus(int bits) : bits(bits), info() {
+//   display = new custom_bus_item();
+//   display->setBrush(Qt::darkGreen);
+//   scene_info::scene->addItem(display);
+// }
 //bus::bus(int inf, int bits) :  bits(bits), info(inf){}
 void bus::set(int arg){
   auto tmp = bitset<max_bits>(arg);
   info = trim_input(bits, tmp);
-  display = NULL;
+  display = nullptr;
 }
 
   
 //zerar após cada ciclo?
 
 
-memory::memory(size_t mem_size, size_t len ): len(len),
-					      body(vector<size_t>(mem_size)),
-					      addr_bus(make_shared<bus>(len,0)),
-					      data_bus(make_shared<bus>(len,0)){}
+
 memory::memory(size_t mem_size,
 	       size_t mem_block_len,
 	       size_t abus_len,
@@ -38,7 +41,7 @@ memory::memory(size_t mem_size,
 
 
 
-regist::regist() : bits(), info() , in() , out(){}
+//regist::regist() : bits(), info() , in() , out(){}
 // regist::regist(size_t bits,size_t id) :bits(bits), id(id),
 // 				       info(0), in(),
 // 				       out(), display() {}
@@ -56,26 +59,26 @@ regist::~regist() {
 }
 void regist::link_in(shared_ptr<bus> arg) {
   in.push_back(arg);
-  if (arg->display != NULL)
+  if (arg->display != nullptr)
     arg->display->link(this->display);
 }
 void regist::link_out(shared_ptr<bus> arg) {
   out.push_back(arg);
-  if (arg->display != NULL)
+  if (arg->display != nullptr)
     arg->display->link(this->display);
 }
 void regist::remove_link_in(shared_ptr<bus> arg){
   in.erase(find (in.begin(),
 		 in.end(),
 		 arg));
-  if (arg->display != NULL)
+  if (arg->display != nullptr)
     arg->display->remove_link(this->display);
 }
 void regist::remove_link_out(shared_ptr<bus> arg){
   out.erase(find (out.begin(),
 		  out.end(),
 		  arg));
-  if (arg->display != NULL)
+  if (arg->display != nullptr)
     arg->display->remove_link(this->display);
 }  
 void regist::set(int arg) {
@@ -315,7 +318,7 @@ void control_unit::read( regist *mar,
   for(auto& mem:memories){
     if(find(mar->out.begin(), mar->out.end(), mem->addr_bus) != mar->out.end() &&
        find(mdr->in.begin(), mdr->in.end(), mem->data_bus) != mdr->in.end()){
-      (mdr->set(mem->body.at(mar->info.to_ulong())));
+      mdr->set(mem->body.at(mar->info.to_ulong()));
     }
   }
 }
@@ -333,44 +336,52 @@ void control_unit::write( regist *mar,
 
 void control_unit::reg_out(){
   vector<shared_ptr<regist>> outs;
-    
-  for(auto& pair:regists_in_out){
-    if(get<2>(pair.second) == true){
-      outs.push_back(get<0>(pair.second));
-      get<2>(pair.second) = false;}
-  }
-  
+  auto fill_vec_of_out = [&](){
+			   for(auto& pair:regists_in_out){
+			     if(get<2>(pair.second) == true){
+			       outs.push_back(get<0>(pair.second));
+			       get<2>(pair.second) = false;}
+			   }};
+  fill_vec_of_out();
 
   //não verifica se tem out repetidos, colocar depois (?)
   //register -> bus
-  for(auto& registrador:outs){
-    for(auto& bus:registrador->out){
-      (cout << "******* REGISTER " << registrador->id <<  "  ->  BUS ********" << endl
-       << "bus antes: " <<bus->info << endl);
-      (cout << "reg val : " <<registrador->info.to_ulong() << endl);
-      bus->set(registrador->info.to_ulong());
-      (cout << "bus depois: " <<bus->info << endl);}
-  }
+  auto transfer_out_data_to_bus = [&](){
+				    for(auto& registrador:outs){
+				      for(auto& bus:registrador->out){
+					cout << "******* REGISTER "
+					 << registrador->id <<  "  ->  BUS ********" << endl
+					 << "bus antes: " <<bus->info << endl;
+					(cout << "reg val : " <<registrador->info.to_ulong() << endl);
+					bus->set(registrador->info.to_ulong());
+					cout << "bus depois: " <<bus->info << endl;}
+				    }
+				  };
+  transfer_out_data_to_bus();
 }
-  
 void control_unit::reg_in(){
   vector<shared_ptr<regist>> ins;
   // //bus -> register
-  for(auto& pair:regists_in_out){
-    if(get<1>(pair.second) == true){
-      ins.push_back(get<0>(pair.second));
-      get<1>(pair.second) = false;}}
+  auto fill_vec_of_in = [&](){
+			  for(auto& pair:regists_in_out){
+			    if(get<1>(pair.second) == true)
+			      ins.push_back(get<0>(pair.second));
+			      get<1>(pair.second) = false;}};
+  fill_vec_of_in();
 
-  for(auto& registrador:ins){
-    for(auto& bus:registrador->in){
-      (cout << "******* BUS -> REGISTER "<< registrador->id <<" ********" << endl
-       << "register  antes: " <<registrador->info << endl);
-      registrador->set(bus->info.to_ulong());
-      (cout << "register depois: " <<registrador->info << endl);
-    }
-  }
+
+
+  auto transfer_bus_data_to_in = [&](){
+				   for(auto& registrador:ins){
+				     for(auto& bus:registrador->in){
+				       cout << "******* BUS -> REGISTER "<<
+					registrador->id <<" ********" << endl
+					<< "register  antes: " <<registrador->info << endl;
+				       registrador->set(bus->info.to_ulong());
+				       cout << "register depois: "
+					<<registrador->info << endl;}}};
+  transfer_bus_data_to_in();
 }
-  
 overseer::overseer() :  QObject(), control_units(), memories(){}
 overseer::overseer(QObject *mwid) : QObject(mwid), control_units(), memories(), mwidget(mwid){}
 overseer::~overseer(){};
