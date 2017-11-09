@@ -48,7 +48,9 @@ public:
   std::vector<size_t> body;
   std::shared_ptr<bus> addr_bus;
   std::shared_ptr<bus> data_bus;
+  CustomRectItem *display;
   memory (size_t mem_size=5000, size_t mem_block_len=12, size_t abus_len=12, size_t dbus_len=12);
+  
 };
 
 class regist : public QObject {
@@ -158,7 +160,7 @@ public:
 
   size_t make_bus(int bits);
   size_t make_regist(int bits);
-  size_t make_internal_regist(int bits, QObject *parent);
+  size_t make_internal_regist(int bits);
     //reolver as linkagens para permitir o o input de dados na memoria
   size_t make_mdr(int bits, const std::shared_ptr<memory> &mem);
   size_t make_mar(const int bits, const std::shared_ptr<memory> &mem);

@@ -21,13 +21,12 @@ class custom_bus_item : public QObject , public QGraphicsPathItem
   Q_OBJECT
 public:
   QGraphicsRectItem base_bus;
-  custom_bus_item(QGraphicsItem* parent = 0);
   std::unordered_map<CustomRectItem *,
 		     std::unique_ptr<QPainterPath>> linked_registers;
-   
+  custom_bus_item(QGraphicsItem* parent = 0, size_t wid = 5);   
   void paint(QPainter *painter,
-	     const QStyleOptionGraphicsItem *option,
-	     QWidget *widget);
+	     const QStyleOptionGraphicsItem *,
+	     QWidget *);
   
   void link(CustomRectItem *);
   void remove_link(CustomRectItem *);
@@ -35,6 +34,8 @@ public:
 public slots:
   void update_path(CustomRectItem*);
 
+private:
+  size_t width;
 };
 
 #endif // CUSTOBUSITEM_H

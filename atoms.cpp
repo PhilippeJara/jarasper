@@ -36,8 +36,14 @@ memory::memory(size_t mem_size,
 	       size_t abus_len,
 	       size_t dbus_len): len(mem_block_len),
 				 body(vector<size_t>(mem_size)),
-				 addr_bus(make_shared<bus>(abus_len,0)),
-				 data_bus(make_shared<bus>(dbus_len,0)){}
+				 addr_bus(make_shared<bus>(abus_len)),
+				 data_bus(make_shared<bus>(dbus_len)){
+  display = new CustomRectItem();
+  scene_info::scene->addItem(display);
+  set_styling(this);
+  addr_bus->display->link(this->display);
+  data_bus->display->link(this->display);
+}
 
 
 
@@ -182,7 +188,7 @@ control_unit::control_unit(size_t cu_reg_s,
   display = new CustomRectItem();
   scene_info::scene->addItem(display);
   set_styling(this);
-  this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s, this->display));
+  this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s));
 }
    
 size_t control_unit::make_bus(int bits){
@@ -203,7 +209,7 @@ size_t control_unit::make_regist(int bits){
   return map_reg_counter - 1;
 }
 
-size_t control_unit::make_internal_regist(int bits, QObject *parent){
+size_t control_unit::make_internal_regist(int bits){
   regists_in_out.insert(make_pair(map_reg_counter,
 				  make_tuple(make_shared<regist>(bits,map_reg_counter
 								 ),

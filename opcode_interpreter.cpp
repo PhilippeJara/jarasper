@@ -39,7 +39,7 @@ void control_unit::interpret_minst(size_t mcode, const vector<shared_ptr<memory>
 			       this->operand_size,
 			       this->operand_amnt);
   vector<size_t> operandos{};
-  auto indx = 0;
+  size_t indx = 0;
   while (indx < this->operand_amnt){
     operandos.push_back(get_operand(bitset<max_bits>(mcode),
 				    this->operand_size,
