@@ -13,7 +13,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
-
 #include "styles.hpp"
 #include "customrectitem.h"
 #include "custom_bus_item.h"
@@ -38,7 +37,7 @@ public:
   custom_bus_item *display;
   void set (int arg);
   bus (int bits, int info=0, custom_bus_item* disp = nullptr);
-  //bus (int bits, int tag);
+
 
 };
 class memory : public QObject {
@@ -62,10 +61,7 @@ public:
   std::vector<std::shared_ptr<bus>> in;
   std::vector<std::shared_ptr<bus>> out;
   CustomRectItem * display;
-  //regist();
   regist(size_t bits,size_t id);
-  //regist(size_t bits,size_t id, QWidget *parent);
-  //  regist(size_t bits,size_t id, Scene *scene);
   ~regist();
   void link_in(std::shared_ptr<bus> arg);
   void link_out(std::shared_ptr<bus> arg);
@@ -145,17 +141,11 @@ public:
   std::map<size_t, size_t> mdrs_id;
   std::map<size_t, size_t> mars_id;
   CustomRectItem *display;
-  //Scene *scene;
-  // control_unit(size_t cu_reg_s,
-  // 	       size_t operator_s,
-  // 	       size_t operand_s,
-  // 	       size_t operand_amnt);
-
   control_unit(size_t cu_reg_s,
 	       size_t operator_s,
 	       size_t operand_s,
 	       size_t operand_amnt);
-	       //Scene *scen); 
+
   control_unit(size_t arg);
 
   size_t make_bus(int bits);

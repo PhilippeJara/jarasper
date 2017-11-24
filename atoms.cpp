@@ -13,13 +13,7 @@ bus::bus (int bits, int info, custom_bus_item* disp):
   scene_info::scene->addItem(display);
 }
 
-// bus::bus(int bits, int  ) : bits(bits), info() {display = nullptr;}
-// bus::bus(int bits) : bits(bits), info() {
-//   display = new custom_bus_item();
-//   display->setBrush(Qt::darkGreen);
-//   scene_info::scene->addItem(display);
-// }
-//bus::bus(int inf, int bits) :  bits(bits), info(inf){}
+
 void bus::set(int arg){
   auto tmp = bitset<max_bits>(arg);
   info = trim_input(bits, tmp);
@@ -45,16 +39,9 @@ memory::memory(size_t mem_size,
   data_bus->display->link(this->display);
 }
 
-
-
-//regist::regist() : bits(), info() , in() , out(){}
-// regist::regist(size_t bits,size_t id) :bits(bits), id(id),
-// 				       info(0), in(),
-// 				       out(), display() {}
-
 regist::regist(size_t bits,size_t id) :bits(bits), id(id),
-						     info(0), in(),
-						     out() {
+				       info(0), in(),
+				       out() {
   display = new CustomRectItem();
   scene_info::scene->addItem(display);
   set_styling(this);
@@ -106,11 +93,11 @@ alu::alu() : A(), B(), Z(),
 alu::alu(regist *Z,
 	 regist *B,
 	 regist *A)
-	  : A(A), B(B), Z(Z),
-				 f_overflow(0),
-				 f_negative(0),
-				 f_carry(0),
-				 f_zero(0){
+  : A(A), B(B), Z(Z),
+    f_overflow(0),
+    f_negative(0),
+    f_carry(0),
+    f_zero(0){
   display = new CustomRectItem();
   scene_info::scene->addItem(display);
   set_styling(this);
@@ -129,17 +116,17 @@ void alu::add() {Z->info = trim_input(Z->bits, A->info.to_ulong() + B->info.to_u
 void alu::sub() {Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());}
 void alu::SHR(size_t id, size_t amnt) {
   if (A->id == id){
-    (Z->info) = trim_input(Z->bits, (A->info) >>  amnt);}
+    Z->info = trim_input(Z->bits, A->info >>  amnt);}
   else if (B->id == id){
-    (Z->info) = trim_input(Z->bits, (B->info) >>  amnt);}
+    Z->info = trim_input(Z->bits, B->info >>  amnt);}
   else {(cout << "id invávlido em SHR" <<endl);}
 }
 void alu::SHL(size_t id, size_t amnt) {
   if (A->id == id){
-    (Z->info) = trim_input(Z->bits, (A->info) <<  amnt);}
+    Z->info = trim_input(Z->bits, A->info <<  amnt);}
   else if (B->id == id){
-    (Z->info) = trim_input(Z->bits, (B->info) <<  amnt);}
-  else {(cout << "id invávlido em SHL" << endl);}
+    Z->info = trim_input(Z->bits, B->info <<  amnt);}
+  else {cout << "id invávlido em SHL" << endl;}
 }
 
 size_t get_operator(bitset<max_bits> microcode,
@@ -157,33 +144,16 @@ size_t get_operand(bitset<max_bits> microcode,
 		     microcode >>(operand_size*operand_index))).to_ulong();
 }
 
-
-
-
-
-
-// control_unit::control_unit(size_t cu_reg_s,
-// 			   size_t operator_s,
-// 			   size_t operand_s,
-// 			   size_t operand_amnt) : cu_reg(), buses(),
-// 						  regists_in_out(), map_reg_counter(0),
-// 						  map_bus_counter(0), map_alu_counter(0),
-// 						  map_mar_counter(0), map_mdr_counter(0),
-// 						  operator_size(operator_s), operand_size(operand_s),
-// 						  operand_amnt(operand_amnt){
-//   this->cu_reg = this->get_register(this->make_regist(cu_reg_s));}
-  
-
 control_unit::control_unit(size_t cu_reg_s,
 			   size_t operator_s,
 			   size_t operand_s,
 			   size_t operand_amnt)
-			    : cu_reg(), buses(),
-					  regists_in_out(), map_reg_counter(0),
-					  map_bus_counter(0), map_alu_counter(0),
-					  map_mar_counter(0), map_mdr_counter(0),
-					  operator_size(operator_s), operand_size(operand_s),
-					  operand_amnt(operand_amnt){
+  : cu_reg(), buses(),
+    regists_in_out(), map_reg_counter(0),
+    map_bus_counter(0), map_alu_counter(0),
+    map_mar_counter(0), map_mdr_counter(0),
+    operator_size(operator_s), operand_size(operand_s),
+    operand_amnt(operand_amnt){
   
   display = new CustomRectItem();
   scene_info::scene->addItem(display);
@@ -200,7 +170,7 @@ size_t control_unit::make_bus(int bits){
 size_t control_unit::make_regist(int bits){
   regists_in_out.insert(make_pair(map_reg_counter,
 				  make_tuple(make_shared<regist>(bits,map_reg_counter)
-								 ,
+					     ,
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
@@ -241,14 +211,13 @@ size_t control_unit::make_mar(const int bits, const shared_ptr<memory> &mem){
 size_t control_unit::make_alu(regist *A,
 			      regist *B,
 			      regist *Z){
-  //alu al(A,B,Z);
+
   
   alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z)));
   map_alu_counter++;
   return map_alu_counter -1;
 }
 size_t control_unit::make_alu(size_t num_bits){
-  //alu al(A,B,Z);
   auto A = this->get_register(this->make_regist(num_bits));
   auto B = this->get_register(this->make_regist(num_bits));
   auto Z = this->get_register(this->make_regist(num_bits));
@@ -288,39 +257,38 @@ void control_unit::assignment(size_t id_reg1, size_t id_reg2){
 void control_unit::add(size_t id){
   get_alu(id)->add();
     
-  (cout << "A " << get_alu(id)->A->id << ": " << get_alu(id)->A->info << endl);
-  (cout << "B " << get_alu(id)->B->id << ": " << get_alu(id)->B->info  << endl);
-  (cout << "Z " << get_alu(id)->Z->id << ": " << get_alu(id)->Z->info << endl);
+  cout << "A " << get_alu(id)->A->id << ": " << get_alu(id)->A->info << endl;
+  cout << "B " << get_alu(id)->B->id << ": " << get_alu(id)->B->info  << endl;
+  cout << "Z " << get_alu(id)->Z->id << ": " << get_alu(id)->Z->info << endl;
 }
 
 void control_unit::sub(size_t id){
   get_alu(id)->sub();
     
-  (cout << "A " << get_alu(id)->A->id << ": " << get_alu(id)->A->info << endl);
-  (cout << "B " << get_alu(id)->B->id << ": " << get_alu(id)->B->info  << endl);
-  (cout << "Z " << get_alu(id)->Z->id << ": " << get_alu(id)->Z->info << endl);
+  cout << "A " << get_alu(id)->A->id << ": " << get_alu(id)->A->info << endl;
+  cout << "B " << get_alu(id)->B->id << ": " << get_alu(id)->B->info  << endl;
+  cout << "Z " << get_alu(id)->Z->id << ": " << get_alu(id)->Z->info << endl;
 }
 //no momento só é possível usar SHR  e SHL no primeiro registrador da ALU (A)
 void control_unit::SHR(size_t id_alu, size_t amnt){
   auto A_id = get_alu(id_alu)-> A->id;
-  (get_alu(id_alu)->SHR(A_id, amnt));
+  get_alu(id_alu)->SHR(A_id, amnt);
     
-  (cout << "A " << get_alu(id_alu)->A->id << ": " << get_alu(id_alu)->A->info << endl);
-  (cout << "Z " << get_alu(id_alu)->Z->id << ": " << get_alu(id_alu)->Z->info << endl);
+  cout << "A " << get_alu(id_alu)->A->id << ": " << get_alu(id_alu)->A->info << endl;
+  cout << "Z " << get_alu(id_alu)->Z->id << ": " << get_alu(id_alu)->Z->info << endl;
 }
 
 void control_unit::SHL(size_t id_alu, size_t amnt){
   auto A_id = (get_alu(id_alu)-> A->id);
   (get_alu(id_alu)->SHL(A_id, amnt));
       
-  (cout << "A " << get_alu(id_alu)->A->id << ": " << get_alu(id_alu)->A->info << endl);
-  (cout << "Z " << get_alu(id_alu)->Z->id << ": " << get_alu(id_alu)->Z->info << endl);
-      
+  cout << "A " << get_alu(id_alu)->A->id << ": " << get_alu(id_alu)->A->info << endl;
+  cout << "Z " << get_alu(id_alu)->Z->id << ": " << get_alu(id_alu)->Z->info << endl;
 }
 
 void control_unit::read( regist *mar,
 			 regist *mdr,
-			const vector<shared_ptr<memory>> &memories){
+			 const vector<shared_ptr<memory>> &memories){
   for(auto& mem:memories){
     if(find(mar->out.begin(), mar->out.end(), mem->addr_bus) != mar->out.end() &&
        find(mdr->in.begin(), mdr->in.end(), mem->data_bus) != mdr->in.end()){
@@ -331,11 +299,11 @@ void control_unit::read( regist *mar,
 
 void control_unit::write( regist *mar,
 			  regist *mdr,
-			 const vector<shared_ptr<memory>> &memories){
+			  const vector<shared_ptr<memory>> &memories){
   for(auto& mem:memories){
     if(find(mar->out.begin(), mar->out.end(), mem->addr_bus) != mar->out.end() &&
        find(mdr->out.begin(), mdr->out.end(), mem->data_bus) != mdr->out.end()){
-      (mem->body.at(mar->info.to_ulong()) = mdr->info.to_ulong());
+      mem->body.at(mar->info.to_ulong()) = mdr->info.to_ulong();
     }
   }
 }
@@ -356,13 +324,13 @@ void control_unit::reg_out(){
 				    for(auto& registrador:outs){
 				      for(auto& bus:registrador->out){
 					cout << "******* REGISTER "
-					 << registrador->id <<  "  ->  BUS ********" << endl
-					 << "bus antes: " <<bus->info << endl;
-					(cout << "reg val : " <<registrador->info.to_ulong() << endl);
+					     << registrador->id <<  "  ->  BUS ********" << endl
+					     << "bus antes: " <<bus->info << endl
+					     << "reg val : " <<registrador->info.to_ulong()
+					     << endl;
 					bus->set(registrador->info.to_ulong());
-					cout << "bus depois: " <<bus->info << endl;}
-				    }
-				  };
+					cout << "bus depois: "
+					     << bus->info << endl;}}};
   transfer_out_data_to_bus();
 }
 void control_unit::reg_in(){
@@ -372,7 +340,7 @@ void control_unit::reg_in(){
 			  for(auto& pair:regists_in_out){
 			    if(get<1>(pair.second) == true)
 			      ins.push_back(get<0>(pair.second));
-			      get<1>(pair.second) = false;}};
+			    get<1>(pair.second) = false;}};
   fill_vec_of_in();
 
 
@@ -380,12 +348,13 @@ void control_unit::reg_in(){
   auto transfer_bus_data_to_in = [&](){
 				   for(auto& registrador:ins){
 				     for(auto& bus:registrador->in){
-				       cout << "******* BUS -> REGISTER "<<
-					registrador->id <<" ********" << endl
-					<< "register  antes: " <<registrador->info << endl;
+				       cout << "******* BUS -> REGISTER "
+					    << registrador->id <<" ********" << endl
+					    << "register  antes: " <<registrador->info
+					    << endl;
 				       registrador->set(bus->info.to_ulong());
 				       cout << "register depois: "
-					<<registrador->info << endl;}}};
+					    << registrador->info << endl;}}};
   transfer_bus_data_to_in();
 }
 overseer::overseer() :  QObject(), control_units(), memories(){}
@@ -395,7 +364,7 @@ control_unit *overseer::make_cu(size_t cu_reg_s,
 				size_t operator_s,
 				size_t operand_s,
 				size_t operand_amnt)
-				{
+{
   control_units.push_back(make_shared<control_unit>(cu_reg_s,
 						    operator_s,
 						    operand_s,
