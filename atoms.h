@@ -140,6 +140,10 @@ public:
   size_t operand_amnt;
   std::map<size_t, size_t> mdrs_id;
   std::map<size_t, size_t> mars_id;
+  bool status_negative_flag = false;
+  bool status_zero_flag = false;
+  bool status_carry_flag = false;
+  bool status_overflow_flag = false;
   CustomRectItem *display;
   control_unit(size_t cu_reg_s,
 	       size_t operator_s,
