@@ -22,7 +22,10 @@ public:
 
 private slots:
     void on_criar_cu_clicked();
-  private:
+    void on_repl_input_returnPressed();
+
+
+private:
     Ui::mwin *ui;
 };
 

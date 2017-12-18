@@ -106,15 +106,22 @@ void control_unit::interpret_minst(size_t mcode, const vector<shared_ptr<memory>
 }
 void control_unit::sync_bus(){this->reg_out();this->reg_in();}
 void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
-  auto opcode_inst = this->opcodes.at(get_operator(this->cu_reg->info,
-						   this->operator_size,
-						   this->operand_size,
-						   this->operand_amnt));
-  for(const auto mcode: opcode_inst){
-    this->interpret_minst(mcode, memories);
-    this->sync_bus();
-  }
+  if (get_operator(this->cu_reg->info,
+		   this->operator_size,
+		   this->operand_size,
+		   this->operand_amnt) < this->opcodes.size()){
+    auto opcode_inst = this->opcodes.at(get_operator(this->cu_reg->info,
+						     this->operator_size,
+						     this->operand_size,
+						     this->operand_amnt));
+    for(const auto mcode: opcode_inst){
+      this->interpret_minst(mcode, memories);
+      this->sync_bus();
+    }
   
+  }
+  else{
+    cout << "opcode não existe" << endl;
+  }
 }
-
 
