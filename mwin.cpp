@@ -4,6 +4,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QGraphicsView>
 #include <QtGui/QPen>
+#include <string>
 
 using namespace std;
  
@@ -46,6 +47,9 @@ mwin::mwin(QWidget *parent) :
   auto mar = cu->get_mar(mar_id);
   mar->link_in(bu);
   cu->opcodes.insert(make_pair(0, vector<size_t>{0x174, 0x164, 0x400, 0x300}));
+  cu->opcodes.insert(make_pair(1, vector<size_t>{0x134}));
+  cu->opcodes.insert(make_pair(2, vector<size_t>{0x147}));
+  cu->opcodes.insert(make_pair(3, vector<size_t>{0x400}));
   cu->cu_reg->set(0x043);
   ov.cycle();
 
@@ -68,3 +72,26 @@ void mwin::on_criar_cu_clicked()
   auto lastindx = ov.control_units.size() - 1;
   cu->display->setText(QString("control unit" + QString::number(lastindx)));
 }
+
+void mwin::on_repl_input_returnPressed()
+{
+  
+  if(auto control_unit = this->ov.control_units.at(ui->repl_cu_select->value())){
+    if(ui->repl_input->text().length() ==
+       (control_unit->operand_size * control_unit->operand_amnt + control_unit->operator_size)/4){
+      ui->repl_display->appendPlainText(ui->repl_input->text());
+      control_unit->cu_reg->set(std::stoul(ui->repl_input->text().toStdString(),nullptr,16));
+      this->ov.cycle();
+    }
+    else{
+      ui->repl_display->appendPlainText("tamanho do codigo invalido");
+    }
+  }
+  ui->repl_input->setText("");
+  
+}
+
+
+
+
+
