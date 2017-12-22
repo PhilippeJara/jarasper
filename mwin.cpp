@@ -5,7 +5,11 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtGui/QPen>
 #include <string>
-
+#ifdef slots
+#undef slots
+#endif
+#include <ecl/ecl.h>
+//#include "ecl_injection.h"
 using namespace std;
  
 mwin::mwin(QWidget *parent) :
@@ -87,8 +91,13 @@ void mwin::on_repl_input_returnPressed()
       ui->repl_display->appendPlainText("tamanho do codigo invalido");
     }
   }
-  ui->repl_input->setText("");
-  
+
+    auto val = ui->repl_input->text().toStdString();
+    // auto a1= c_string_to_object(("(print " +val + ".)").data());
+    auto a1= c_string_to_object(("(if (not(eq \"" + val +"\" " "\"\""")) (print \"ok\"))").data());
+    
+  cl_eval(a1);
+ui->repl_input->setText("");
 }
 
 

@@ -22,6 +22,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+QMAKE_CFLAGS += `ecl-config --cflags`
+QMAKE_CXXFLAGS += `ecl-config --cflags`
+QMAKE_LFLAGS += `ecl-config --ldflags`
+LIBS += -lecl
+LIBS += ./lisp_files/asdf_with_dependence/example-with-dep-2--all-systems.a
+
+
 
 SOURCES += \
         main.cpp \
@@ -31,7 +38,9 @@ SOURCES += \
     styles.cpp \
     scene.cpp \
     customrectitem.cpp \
-    custom_bus_item.cpp
+    custom_bus_item.cpp \
+
+
 
 HEADERS += \
         mwin.h \
@@ -41,7 +50,9 @@ HEADERS += \
     styles.hpp \
     customrectitem.h \
     scene.h \
-    custom_bus_item.h
+    custom_bus_item.h \
+    ecl_injection.h \
 
 FORMS += \
         mwin.ui
+
