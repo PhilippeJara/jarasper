@@ -27,7 +27,7 @@ mwin::mwin(QWidget *parent) :
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
-  //cu->opcodes = opmap;
+  cu->opcodes = opmap;
   cu->make_alu(12);
   mem->body.at(0x0ffe) = 15;
   cu->get_register(cu->make_regist(12));
@@ -51,28 +51,17 @@ mwin::mwin(QWidget *parent) :
   auto mar = cu->get_mar(mar_id);
   mar->link_in(bu);
 
-  cu->opcodes.insert(make_pair(0, vector<size_t>{0x100}));
-  // cu->opcodes.insert(make_pair(0, vector<size_t>{0x174, 0x164, 0x400, 0x300}));
-  cu->opcodes.insert(make_pair(1, vector<size_t>{0x143}));
-  cu->opcodes.insert(make_pair(2, vector<size_t>{0x147}));
-  cu->opcodes.insert(make_pair(3, vector<size_t>{0x400}));
   cu->cu_reg->set(0x000);
  
    
   ov.cycle();
-  on_criar_regist_clicked(); 
+  //on_criar_regist_clicked(); 
 //   cout << "mar " << mar->id << " :" << mar->info << endl
 //        << "mdr " << mdr->id << " :" << mdr->info << endl 
 //        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
 //        << "mdr info: " << mdr->info.to_ulong() << endl;
  
-//   for(auto& item:cu->regists_in_out){
-//     (get<0>(item.second))->link_in(bu);
-//     (get<0>(item.second))->link_out(bu);
-//   } 
-//   cu->reg_out();
-//   cu->reg_in();
-// }
+
 }
 mwin::~mwin()
 {
