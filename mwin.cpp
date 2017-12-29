@@ -27,7 +27,7 @@ mwin::mwin(QWidget *parent) :
   ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
-  cu->opcodes = opmap;
+  //cu->opcodes = opmap;
   cu->make_alu(12);
   mem->body.at(0x0ffe) = 15;
   cu->get_register(cu->make_regist(12));
@@ -50,21 +50,30 @@ mwin::mwin(QWidget *parent) :
   mdr->link_out(bu);
   auto mar = cu->get_mar(mar_id);
   mar->link_in(bu);
-  cu->opcodes.insert(make_pair(0, vector<size_t>{0x174, 0x164, 0x400, 0x300}));
-  cu->opcodes.insert(make_pair(1, vector<size_t>{0x134}));
+
+  cu->opcodes.insert(make_pair(0, vector<size_t>{0x100}));
+  // cu->opcodes.insert(make_pair(0, vector<size_t>{0x174, 0x164, 0x400, 0x300}));
+  cu->opcodes.insert(make_pair(1, vector<size_t>{0x143}));
   cu->opcodes.insert(make_pair(2, vector<size_t>{0x147}));
   cu->opcodes.insert(make_pair(3, vector<size_t>{0x400}));
-  cu->cu_reg->set(0x043);
+  cu->cu_reg->set(0x000);
+ 
+   
   ov.cycle();
-
-  cout << "mar " << mar->id << " :" << mar->info << endl
-       << "mdr " << mdr->id << " :" << mdr->info << endl 
-       << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
-       << "mdr info: " << mdr->info.to_ulong() << endl;
-  
-  
+  on_criar_regist_clicked(); 
+//   cout << "mar " << mar->id << " :" << mar->info << endl
+//        << "mdr " << mdr->id << " :" << mdr->info << endl 
+//        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
+//        << "mdr info: " << mdr->info.to_ulong() << endl;
+ 
+//   for(auto& item:cu->regists_in_out){
+//     (get<0>(item.second))->link_in(bu);
+//     (get<0>(item.second))->link_out(bu);
+//   } 
+//   cu->reg_out();
+//   cu->reg_in();
+// }
 }
-
 mwin::~mwin()
 {
   delete ui;
@@ -72,9 +81,9 @@ mwin::~mwin()
 
 void mwin::on_criar_cu_clicked()
 {
-  auto cu = ov.make_cu(12, 4, 4, 4);
+  auto new_cu = ov.make_cu(12, 4, 4, 4);
   auto lastindx = ov.control_units.size() - 1;
-  cu->display->setText(QString("control unit" + QString::number(lastindx)));
+  new_cu->display->setText(QString("control unit" + QString::number(lastindx)));
 }
 
 void mwin::on_repl_input_returnPressed()
@@ -90,7 +99,7 @@ void mwin::on_repl_input_returnPressed()
     else{
       ui->repl_display->appendPlainText("tamanho do codigo invalido");
     }
-  }
+  } 
 
     auto val = ui->repl_input->text().toStdString();
     // auto a1= c_string_to_object(("(print " +val + ".)").data());
@@ -104,3 +113,22 @@ ui->repl_input->setText("");
 
 
 
+
+void mwin::on_criar_regist_clicked()
+{
+  auto selected_cu = ov.control_units.at(ui->repl_cu_select->value());
+  auto selected_bus = selected_cu->get_bus(ui->repl_bus_select->value());
+  auto new_register = selected_cu->get_register(selected_cu->make_regist(12));
+  new_register->link_in(selected_bus);
+  new_register->link_out(selected_bus);
+  
+  
+}
+void mwin::on_criar_bus_clicked()
+{
+  ov.control_units.at(ui->repl_cu_select->value())->make_bus();
+}
+void mwin::on_criar_alu_clicked()
+{
+  ov.control_units.at(ui->repl_cu_select->value())->make_alu();
+}

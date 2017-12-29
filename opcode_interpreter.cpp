@@ -114,7 +114,7 @@ void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
 						     this->operator_size,
 						     this->operand_size,
 						     this->operand_amnt));
-    for(const auto mcode: opcode_inst){
+    for(auto mcode: opcode_inst){
       this->interpret_minst(mcode, memories);
       this->sync_bus();
     }

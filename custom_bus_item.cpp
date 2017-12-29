@@ -29,6 +29,9 @@ void custom_bus_item::update_path(CustomRectItem *obj) {
   // 	    << "   RESy:" << fabs(cur().y() - obj->y())<<std::endl;
 
   
+  
+
+
   if (!this->linked_registers.empty() &&
       this->linked_registers.find(obj) != linked_registers.end()){
     path->addRect(QRectF(cur().x(),cur().y(), (objcoord.x() - cur().x() ) , width));

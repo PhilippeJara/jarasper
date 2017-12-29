@@ -22,9 +22,11 @@ public:
   ~mwin();
 
 private slots:
-    void on_criar_cu_clicked();
-    void on_repl_input_returnPressed();
-
+  void on_criar_cu_clicked();
+  void on_repl_input_returnPressed();
+  void on_criar_regist_clicked();
+  void on_criar_bus_clicked();
+  void on_criar_alu_clicked();
 
 private:
     Ui::mwin *ui;

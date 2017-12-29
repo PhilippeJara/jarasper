@@ -152,14 +152,14 @@ public:
 
   control_unit(size_t arg);
 
-  size_t make_bus(int bits);
-  size_t make_regist(int bits);
+  size_t make_bus(int bits=max_bits);
+  size_t make_regist(int bits=max_bits);
   size_t make_internal_regist(int bits);
     //reolver as linkagens para permitir o o input de dados na memoria
   size_t make_mdr(int bits, const std::shared_ptr<memory> &mem);
   size_t make_mar(const int bits, const std::shared_ptr<memory> &mem);
   size_t make_alu(regist *A, regist *B, regist *Z);
-  size_t make_alu(size_t);
+  size_t make_alu(size_t bits = max_bits);
 
   void remove_regist(size_t);
   void remove_alu(size_t);

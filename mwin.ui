@@ -21,7 +21,7 @@
     <property name="geometry">
      <rect>
       <x>760</x>
-      <y>230</y>
+      <y>200</y>
       <width>111</width>
       <height>22</height>
      </rect>
@@ -33,8 +33,8 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>350</y>
+      <x>900</x>
+      <y>460</y>
       <width>256</width>
       <height>192</height>
      </rect>
@@ -95,6 +95,105 @@
      <string>CU:</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="criar_regist">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>260</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>add register</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="criar_bus">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>290</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>add bus</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="criar_alu">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>320</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>add alu</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>250</y>
+      <width>131</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="repl_bus_select">
+    <property name="geometry">
+     <rect>
+      <x>920</x>
+      <y>260</y>
+      <width>47</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>99</number>
+    </property>
+    <property name="singleStep">
+     <number>1</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="repl_cu_select_label_2">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>260</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>BUS:</string>
+    </property>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>criar_cu</zorder>
+   <zorder>graphicsView</zorder>
+   <zorder>repl_input</zorder>
+   <zorder>repl_display</zorder>
+   <zorder>repl_cu_select</zorder>
+   <zorder>repl_cu_select_label</zorder>
+   <zorder>criar_regist</zorder>
+   <zorder>criar_bus</zorder>
+   <zorder>criar_alu</zorder>
+   <zorder>repl_bus_select</zorder>
+   <zorder>repl_cu_select_label_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
