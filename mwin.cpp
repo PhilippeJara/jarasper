@@ -32,6 +32,7 @@ mwin::mwin(QWidget *parent) :
   mem->body.at(0x0ffe) = 15;
   cu->get_register(cu->make_regist(12));
   cu->make_regist(12);
+
   for(auto item:cu->regists_in_out){cout << item.first << endl;}
   cu->get_register(4)->set(0xffe);
   cu->get_register(5)->set(0x0fe);
@@ -53,7 +54,7 @@ mwin::mwin(QWidget *parent) :
 
   cu->cu_reg->set(0x000);
  
-   
+  
   ov.cycle();
   //on_criar_regist_clicked(); 
 //   cout << "mar " << mar->id << " :" << mar->info << endl
@@ -61,7 +62,7 @@ mwin::mwin(QWidget *parent) :
 //        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
 //        << "mdr info: " << mdr->info.to_ulong() << endl;
  
-
+  
 }
 mwin::~mwin()
 {
@@ -89,13 +90,7 @@ void mwin::on_repl_input_returnPressed()
       ui->repl_display->appendPlainText("tamanho do codigo invalido");
     }
   } 
-
-    auto val = ui->repl_input->text().toStdString();
-    // auto a1= c_string_to_object(("(print " +val + ".)").data());
-    auto a1= c_string_to_object(("(if (not(eq \"" + val +"\" " "\"\""")) (print \"ok\"))").data());
-    
-  cl_eval(a1);
-ui->repl_input->setText("");
+  ui->repl_input->setText("");
 }
 
 
@@ -121,3 +116,14 @@ void mwin::on_criar_alu_clicked()
 {
   ov.control_units.at(ui->repl_cu_select->value())->make_alu();
 }
+
+void mwin::on_ecl_repl_input_returnPressed()
+{
+
+    auto val = ui->ecl_repl_input->text().toStdString();
+    auto val_form = c_string_to_object(val.data());
+    cl_eval(val_form);
+    //si_safe_eval(0,, ECL_NIL);
+    ui->ecl_repl_input->setText("");
+}
+

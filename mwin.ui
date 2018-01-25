@@ -17,57 +17,21 @@
    <string>mwin</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="criar_cu">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>200</y>
-      <width>111</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>add control unit</string>
-    </property>
-   </widget>
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>460</y>
-      <width>256</width>
-      <height>192</height>
+      <x>1060</x>
+      <y>550</y>
+      <width>41</width>
+      <height>71</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="repl_input">
-    <property name="geometry">
-     <rect>
-      <x>850</x>
-      <y>170</y>
-      <width>121</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="repl_display">
-    <property name="geometry">
-     <rect>
-      <x>850</x>
-      <y>100</y>
-      <width>121</width>
-      <height>70</height>
-     </rect>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
     </property>
    </widget>
    <widget class="QSpinBox" name="repl_cu_select">
     <property name="geometry">
      <rect>
-      <x>880</x>
-      <y>70</y>
+      <x>860</x>
+      <y>10</y>
       <width>47</width>
       <height>23</height>
      </rect>
@@ -85,8 +49,8 @@
    <widget class="QLabel" name="repl_cu_select_label">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>70</y>
+      <x>830</x>
+      <y>10</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -95,52 +59,13 @@
      <string>CU:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="criar_regist">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>260</y>
-      <width>111</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>add register</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="criar_bus">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>290</y>
-      <width>111</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>add bus</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="criar_alu">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>320</y>
-      <width>111</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>add alu</string>
-    </property>
-   </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>750</x>
-      <y>250</y>
+      <x>820</x>
+      <y>220</y>
       <width>131</width>
-      <height>101</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -149,51 +74,226 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QPushButton" name="criar_cu">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>add control unit</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="criar_bus">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>add bus</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="repl_cu_select_label_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>50</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>BUS:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="repl_bus_select">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>50</y>
+       <width>47</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>99</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="criar_regist">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>add register</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="criar_alu">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>add alu</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QSpinBox" name="repl_bus_select">
+   <widget class="QTreeWidget" name="opcode_display">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>260</y>
-      <width>47</width>
-      <height>23</height>
+      <x>820</x>
+      <y>380</y>
+      <width>161</width>
+      <height>131</height>
      </rect>
     </property>
-    <property name="minimum">
+    <column>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </column>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>New Subitem</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>New Item</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>New Subitem</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>New Item</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>New Item</string>
+       </property>
+      </item>
+     </item>
+    </item>
+   </widget>
+   <widget class="QTabWidget" name="repls">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>60</y>
+      <width>201</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
      <number>0</number>
     </property>
-    <property name="maximum">
-     <number>99</number>
-    </property>
-    <property name="singleStep">
-     <number>1</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="repl_cu_select_label_2">
-    <property name="geometry">
-     <rect>
-      <x>890</x>
-      <y>260</y>
-      <width>31</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>BUS:</string>
-    </property>
+    <widget class="QWidget" name="opcode_repl">
+     <attribute name="title">
+      <string>opcode</string>
+     </attribute>
+     <widget class="QPlainTextEdit" name="repl_display">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>191</width>
+        <height>70</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="repl_input">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>80</y>
+        <width>191</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>opcode repl</string>
+      </property>
+     </widget>
+     <zorder>repl_display</zorder>
+     <zorder>repl_input</zorder>
+     <zorder>repl_cu_select_label</zorder>
+     <zorder>repl_cu_select</zorder>
+    </widget>
+    <widget class="QWidget" name="ecl_repl">
+     <attribute name="title">
+      <string>ecl</string>
+     </attribute>
+     <widget class="QPlainTextEdit" name="ecl_repl_display">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>191</width>
+        <height>70</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ecl_repl_input">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>80</y>
+        <width>191</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>ecl repl</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>microcode</string>
+     </attribute>
+    </widget>
    </widget>
    <zorder>frame</zorder>
-   <zorder>criar_cu</zorder>
    <zorder>graphicsView</zorder>
-   <zorder>repl_input</zorder>
-   <zorder>repl_display</zorder>
    <zorder>repl_cu_select</zorder>
    <zorder>repl_cu_select_label</zorder>
-   <zorder>criar_regist</zorder>
-   <zorder>criar_bus</zorder>
-   <zorder>criar_alu</zorder>
-   <zorder>repl_bus_select</zorder>
-   <zorder>repl_cu_select_label_2</zorder>
+   <zorder>opcode_display</zorder>
+   <zorder>repls</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

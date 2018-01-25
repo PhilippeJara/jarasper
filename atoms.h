@@ -16,6 +16,7 @@
 #include "styles.hpp"
 #include "customrectitem.h"
 #include "custom_bus_item.h"
+#include "opcode_def.hpp"
 
 #ifndef CONFIG
 #define CONFIG
@@ -128,7 +129,7 @@ public:
   std::map <size_t,
         std::shared_ptr<alu>> alus;
   std::map <size_t,
-        std::vector<size_t>> opcodes;
+	    opcode> opcodes;
   size_t map_reg_counter;
   size_t map_bus_counter;
   size_t map_alu_counter;
@@ -151,7 +152,8 @@ public:
 	       size_t operand_amnt);
 
   control_unit(size_t arg);
-
+  
+  void add_opcode(std::vector<size_t>);
   size_t make_bus(int bits=max_bits);
   size_t make_regist(int bits=max_bits);
   size_t make_internal_regist(int bits);
@@ -190,7 +192,7 @@ public:
          const std::vector<std::shared_ptr<memory>> &memories);
   void execute(const std::vector<std::shared_ptr<memory>> &memories);
   void opcode_execute(const std::vector<std::shared_ptr<memory>> &);
-  void interpret_minst(size_t,const std::vector<std::shared_ptr<memory>> &);
+  void interpret_minst(microcode ,const std::vector<std::shared_ptr<memory>> &);
   void reg_out();
   void reg_in();
   void sync_bus();

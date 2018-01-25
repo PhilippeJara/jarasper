@@ -28,6 +28,8 @@ private slots:
   void on_criar_bus_clicked();
   void on_criar_alu_clicked();
 
+  void on_ecl_repl_input_returnPressed();
+
 private:
     Ui::mwin *ui;
 };

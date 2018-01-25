@@ -33,23 +33,24 @@
 
 using namespace std;
 
-void control_unit::interpret_minst(size_t mcode, const vector<shared_ptr<memory>> &memories){
-  auto operador = get_operator(bitset<max_bits>(mcode),
-			       this->operator_size,
-			       this->operand_size,
-			       this->operand_amnt);
-  vector<size_t> operandos{};
-  size_t indx = 0;
-  while (indx < this->operand_amnt){
-    operandos.push_back(get_operand(bitset<max_bits>(mcode),
-				    this->operand_size,
-				    indx));
-    indx++;
-  }
+void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memory>> &memories){
+  // auto operador = get_operator(bitset<max_bits>(mcode),
+  // 			       this->operator_size,
+  // 			       this->operand_size,
+  // 			       this->operand_amnt);
+  auto operador = mcode.get_operator();
+  auto operandos = mcode.get_operands();
+  // size_t indx = 0;
+  // while (indx < this->operand_amnt){
+  //   operandos.push_back(get_operand(bitset<max_bits>(mcode),
+  // 				    this->operand_size,
+  // 				    indx));
+  //   indx++;
+  // }
   switch(operador){
   case 1:{
     auto origem = operandos.at(0);
-    set<size_t> destinos(operandos.begin() + 1, operandos.end());
+    set<size_t> destinos(operandos.begin(), operandos.end());
     for(const auto& destino: destinos){
       cout << "*new assignment*"<< endl;
       if (destino != origem){this->assignment(origem, destino);}
@@ -114,7 +115,7 @@ void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
 						     this->operator_size,
 						     this->operand_size,
 						     this->operand_amnt));
-    for(auto mcode: opcode_inst){
+    for(auto mcode: opcode_inst.get_microcodes()){
       this->interpret_minst(mcode, memories);
       this->sync_bus();
     }

@@ -26,7 +26,7 @@ QMAKE_CFLAGS += `ecl-config --cflags`
 QMAKE_CXXFLAGS += `ecl-config --cflags`
 QMAKE_LFLAGS += `ecl-config --ldflags`
 LIBS += -lecl
-LIBS += ./lisp_files/asdf_with_dependence/example-with-dep-2--all-systems.a
+LIBS += ./lisp_files/runtime/runtime--all-systems.a
 
 
 

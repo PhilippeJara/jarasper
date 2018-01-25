@@ -160,7 +160,29 @@ control_unit::control_unit(size_t cu_reg_s,
   set_styling(this);
   this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s));
 }
+
+
+void control_unit::add_opcode(std::vector<size_t> microcodes){
    
+   auto construct_opcode = [&](){
+			     vector<microcode> mic{};
+			     for (auto microcode:microcodes){
+			       vector <size_t> mic_operands{0};
+			       size_t mic_operator = get_operator(microcode ,
+								  operator_size,
+								  operand_size,
+								  operand_amnt);
+			       for (int iter = 1; iter < operand_amnt; iter++){
+				 mic_operands.push_back(get_operand(microcode, operand_size, iter));
+			       }
+			       mic.push_back({mic_operator, mic_operands});
+			     }
+			     return opcode(mic);};
+   opcodes.insert({opcodes.size(), construct_opcode()});
+}
+
+
+
 size_t control_unit::make_bus(int bits){
   buses.insert(make_pair(map_bus_counter, make_shared<bus> (bits)));
   map_bus_counter++;
@@ -376,11 +398,11 @@ control_unit *overseer::make_cu(size_t cu_reg_s,
 void overseer::cycle(){
   for(auto& cu:control_units){
     cu->opcode_execute(memories);
+    
   }
 }
 
-// trocar os "at()" dos mapas por find().
-// reavaliar o uso dos shared_ptrs, principalmente como argumento de funcões.
+
 // implementar controle sobre ins e outs individuais dos registradores.(?)
 
 

@@ -10,7 +10,10 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     mwin w;
     w.show();
-    cl_boot(argc,  argv);
-    cl_eval(c_string_to_object("(print \"deu certo !!!\")"));
+    //    cl_boot(argc,  argv);
+    //cl_eval(c_string_to_object("(print \"deu certo !!!\")"));
+    inject_ecl(argc, argv);
+    // cl_eval(c_string_to_object("(print \"deu certo !!!\")"));
     return  a.exec();
+    
 }
