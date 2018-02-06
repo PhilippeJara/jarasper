@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/philippe/Dropbox/Prog/jarasper",
+  "command": "/usr/bin/g++-7      -std=gnu++1z -o CMakeFiles/atoms.dir/atoms.cpp.o -c /home/philippe/Dropbox/Prog/jarasper/atoms.cpp",
+  "file": "/home/philippe/Dropbox/Prog/jarasper/atoms.cpp"
+},
+{
+  "directory": "/home/philippe/Dropbox/Prog/jarasper",
+  "command": "/usr/bin/g++-7      -std=gnu++1z -o CMakeFiles/jarasper.dir/main.cpp.o -c /home/philippe/Dropbox/Prog/jarasper/main.cpp",
+  "file": "/home/philippe/Dropbox/Prog/jarasper/main.cpp"
+}
+]
