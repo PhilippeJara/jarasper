@@ -23,6 +23,6 @@
 
 
 
-(with-open-file (s path)
-    (do ((l (read-line s) (read-line s nil 'eof)))))
+;; (with-open-file (s path)
+;;     (do ((l (read-line s) (read-line s nil 'eof)))))
         
