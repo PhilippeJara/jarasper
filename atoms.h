@@ -38,7 +38,7 @@ public:
   custom_bus_item *display;
   void set (int arg);
   bus (int bits, int info=0, custom_bus_item* disp = nullptr);
-
+  
 
 };
 class memory : public QObject {

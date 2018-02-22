@@ -5,6 +5,7 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtGui/QPen>
 #include <string>
+
 #ifdef slots
 #undef slots
 #endif
