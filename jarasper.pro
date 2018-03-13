@@ -39,20 +39,20 @@ SOURCES += \
     scene.cpp \
     customrectitem.cpp \
     custom_bus_item.cpp \
-
+    ecl_class_acess.cpp\
 
 
 HEADERS += \
         mwin.h \
     atoms.h \
     opmap.hpp \
-    container.hpp \
     styles.hpp \
     customrectitem.h \
     scene.h \
     custom_bus_item.h \
     ecl_injection.h \
-
+    ecl_class_acess.hpp\
+    
 FORMS += \
         mwin.ui
 
