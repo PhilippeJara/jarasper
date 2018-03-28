@@ -24,7 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 QMAKE_CFLAGS += `ecl-config --cflags`
 QMAKE_CXXFLAGS += `ecl-config --cflags`
-QMAKE_LFLAGS += `ecl-config --ldflags`
+#QMAKE_LFLAGS += `ecl-config --ldflags`
 LIBS += -lecl
 LIBS += ./lisp_files/runtime/runtime--all-systems.a
 

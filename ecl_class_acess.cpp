@@ -5,7 +5,9 @@ using namespace std;
 
 auto bus_ecl(bus& busarg){
   //cl_print(1, ecl_make_integer(busarg.info.to_ulong()));
-  return ecl_make_integer(busarg.info.to_ulong());
+  return cl_list(2,
+		 c_string_to_object("list"),
+		 (int)busarg.bits);
 }
 
 auto memory_ecl(memory& memarg){
@@ -13,7 +15,9 @@ auto memory_ecl(memory& memarg){
 }
 
 auto regist_ecl(regist& registarg){
-  return ecl_make_integer((int)registarg.bits);
+  return cl_list(2,
+		 c_string_to_object("list"),
+		 (int)registarg.bits);
 }
 
 // auto alu_ecl(alu aluarg){
