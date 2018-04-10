@@ -1,10 +1,12 @@
 ;;;; parser.lisp
 (defpackage :parser
   (:use :cl :cl-ppcre :alexandria)
-  (:export :load-notice))
+  (:export :load-notice :looker))
 (in-package :parser)
 (print "FASL loaded")
-
+(defun looker (look)
+  (describe look)
+  (princ look))
 (defun load-notice ()
     (princ (ppcre:all-matches-as-strings ".+" "PPCRE"))
     )

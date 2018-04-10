@@ -7,7 +7,7 @@ auto bus_ecl(bus& busarg){
   //cl_print(1, ecl_make_integer(busarg.info.to_ulong()));
   return cl_list(2,
 		 c_string_to_object("list"),
-		 (int)busarg.bits);
+		 ecl_make_integer((int)busarg.bits));
 }
 
 auto memory_ecl(memory& memarg){
@@ -17,7 +17,7 @@ auto memory_ecl(memory& memarg){
 auto regist_ecl(regist& registarg){
   return cl_list(2,
 		 c_string_to_object("list"),
-		 (int)registarg.bits);
+		 ecl_make_integer((int)registarg.bits));
 }
 
 // auto alu_ecl(alu aluarg){
@@ -50,30 +50,48 @@ auto parse_control_units(control_unit& cuarg){
   // 		    control_unit_ecl(cuarg),
   // 		    c_string_to_object(")")));
   //cl_make_array
-  cl_eval(control_unit_ecl(cuarg));
+  auto cu_info = control_unit_ecl(cuarg); 
+  cl_princ(1, cu_info);
+  cl_eval(cl_list(2, c_string_to_object("parser:looker"), cu_info) );
+  //cl_eval(control_unit_ecl(cuarg));
+  auto bus = cl_list(1, c_string_to_object("list"));
+  auto regs = cl_list(1,c_string_to_object("list"));
   
   for (auto& busarg:cuarg.buses){
-    get<0>(busarg);
-    bus_ecl(*(get<1>(busarg)));
+
+    
+    bus = cl_append(2, bus, cl_list(2,
+				    ecl_make_integer(get<0>(busarg)),
+				    bus_ecl(*(get<1>(busarg)))));
+    cl_eval(cl_list(2, c_string_to_object("parser:looker"),bus));
+    
+  }
+  
+  for (auto& regarg:cuarg.regists_in_out){
+
+    regs = cl_append(2,
+		   regs,
+		   cl_list(2,
+			   ecl_make_integer(get<0>(regarg)),
+			   regist_ecl(*get<0>(get<1>(regarg)))));
+    
+    cl_eval(cl_list(2, c_string_to_object("parser:looker"), regs));
+    
   }
 
-
-
-  for (auto& regarg:cuarg.regists_in_out){
-    get<0>(regarg);  
-    regist_ecl(*get<0>(get<1>(regarg)));  }
-
-  
+  return cl_list(3, cu_info, bus, regs);
 }
 
 cl_object parse_overseer(overseer& ovarg){
+  auto cu_full = cl_list(0);
   for (auto& cuarg:ovarg.control_units){
-    parse_control_units(*cuarg);
+    cu_full = cl_append(2,cu_full, parse_control_units(*cuarg));
   }
   for (auto& memarg:ovarg.memories){
     memory_ecl(*memarg);
   }
-  return NULL;
+  
+  return cu_full;
 }
 
 

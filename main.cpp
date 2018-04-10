@@ -8,11 +8,12 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    mwin w;
-    w.show();
-    inject_ecl(argc, argv);
-    parse_overseer(w.ov);
-    return  a.exec();
+  QApplication a(argc, argv);
+  mwin w;
+  w.show();
+  inject_ecl(argc, argv);
+  parse_overseer(w.ov);
+  
+  return  a.exec();
     
 }
