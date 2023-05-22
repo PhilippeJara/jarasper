@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1178</width>
-    <height>716</height>
+    <width>1193</width>
+    <height>772</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -17,16 +17,6 @@
    <string>mwin</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QGraphicsView" name="graphicsView">
-    <property name="geometry">
-     <rect>
-      <x>1060</x>
-      <y>550</y>
-      <width>41</width>
-      <height>71</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QSpinBox" name="repl_cu_select">
     <property name="geometry">
      <rect>
@@ -65,7 +55,7 @@
       <x>820</x>
       <y>220</y>
       <width>131</width>
-      <height>141</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -168,41 +158,27 @@
       <height>131</height>
      </rect>
     </property>
+    <property name="columnCount">
+     <number>3</number>
+    </property>
+    <attribute name="headerDefaultSectionSize">
+     <number>55</number>
+    </attribute>
     <column>
      <property name="text">
-      <string>1</string>
+      <string>op</string>
      </property>
     </column>
-    <item>
+    <column>
      <property name="text">
-      <string>New Item</string>
+      <string>arg</string>
      </property>
-     <item>
-      <property name="text">
-       <string>New Subitem</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>New Item</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>New Subitem</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-     </item>
-    </item>
+    </column>
+    <column>
+     <property name="text">
+      <string>arg</string>
+     </property>
+    </column>
    </widget>
    <widget class="QTabWidget" name="repls">
     <property name="geometry">
@@ -214,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="opcode_repl">
      <attribute name="title">
@@ -246,16 +222,12 @@
        <string>opcode repl</string>
       </property>
      </widget>
-     <zorder>repl_display</zorder>
-     <zorder>repl_input</zorder>
-     <zorder>repl_cu_select_label</zorder>
-     <zorder>repl_cu_select</zorder>
     </widget>
-    <widget class="QWidget" name="ecl_repl">
+    <widget class="QWidget" name="microcode_repl">
      <attribute name="title">
-      <string>ecl</string>
+      <string>microcode</string>
      </attribute>
-     <widget class="QPlainTextEdit" name="ecl_repl_display">
+     <widget class="QPlainTextEdit" name="microcode_repl_display">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -268,7 +240,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="ecl_repl_input">
+     <widget class="QLineEdit" name="microcode_repl_input">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -278,30 +250,35 @@
        </rect>
       </property>
       <property name="placeholderText">
-       <string>ecl repl</string>
+       <string>opcode repl</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>microcode</string>
-     </attribute>
-    </widget>
+   </widget>
+   <widget class="QListWidget" name="memory_list">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>520</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
    </widget>
    <zorder>frame</zorder>
-   <zorder>graphicsView</zorder>
    <zorder>repl_cu_select</zorder>
    <zorder>repl_cu_select_label</zorder>
    <zorder>opcode_display</zorder>
    <zorder>repls</zorder>
+   <zorder>memory_list</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1178</width>
-     <height>19</height>
+     <width>1193</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="defaultUp">

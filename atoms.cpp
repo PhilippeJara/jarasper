@@ -29,7 +29,7 @@ memory::memory(size_t mem_size,
 	       size_t mem_block_len,
 	       size_t abus_len,
 	       size_t dbus_len): len(mem_block_len),
-				 body(vector<size_t>(mem_size)),
+    body(vector<size_t>(mem_size,0)),
 				 addr_bus(make_shared<bus>(abus_len)),
 				 data_bus(make_shared<bus>(dbus_len)){
   display = new CustomRectItem();
@@ -76,12 +76,22 @@ void regist::remove_link_out(shared_ptr<bus> arg){
 }  
 void regist::set(int arg) {
   info = trim_input(bits, arg);
-  display->setText(QString::number(info.to_ulong()));
+  auto value = QString::number(info.to_ulong(),16);
+  auto label = QString::number(id,16);
+  auto disp= label +": " + value;
+  cout << "id:  " << id << endl;
+  //display->setText(QString::number(info.to_ulong(),16));
+  display->setText(disp);
 }
 void regist::set(bitset<max_bits> arg) {
   info = arg;
-  display->setText(QString::number(info.to_ulong()));}
-  
+  auto value = QString::number(info.to_ulong(),16);
+  auto label = QString::number(id,16);
+  auto disp= label +": " + value;
+  cout << "id:  " << id << endl;
+  //display->setText(QString::number(info.to_ulong(),16));}
+  display->setText(disp);
+}
 
 
 alu::alu() : A(), B(), Z(),
@@ -116,9 +126,11 @@ void alu::add() {Z->info = trim_input(Z->bits, A->info.to_ulong() + B->info.to_u
 void alu::sub() {Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());}
 void alu::SHR(size_t id, size_t amnt) {
   if (A->id == id){
-    Z->info = trim_input(Z->bits, A->info >>  amnt);}
+    Z->set(trim_input(Z->bits, A->info >>  amnt));
+  }
   else if (B->id == id){
-    Z->info = trim_input(Z->bits, B->info >>  amnt);}
+    Z->set(trim_input(Z->bits, B->info >>  amnt));
+  }
   else {(cout << "id invávlido em SHR" <<endl);}
 }
 void alu::SHL(size_t id, size_t amnt) {
@@ -140,8 +152,11 @@ size_t get_operator(bitset<max_bits> microcode,
 size_t get_operand(bitset<max_bits> microcode,
 		   size_t operand_size,
 		   size_t operand_index){
+    //cout <<"get_openrand() index: "<< operand_index << "   " <<  trim_input(operand_size,microcode >>(operand_size*operand_index)) << endl;
+    //cout <<"get_openrand() index: "<< operand_index << "   " <<  trim_input(operand_size,microcode >>(operand_size*operand_index)).to_ulong() << endl;
   return (trim_input(operand_size,
-		     microcode >>(operand_size*operand_index))).to_ulong();
+             microcode >>(operand_size*operand_index)).to_ulong()
+          );
 }
 
 control_unit::control_unit(size_t cu_reg_s,
@@ -166,17 +181,24 @@ void control_unit::add_opcode(std::vector<size_t> microcodes){
    
    auto construct_opcode = [&](){
 			     vector<microcode> mic{};
-			     for (auto microcode:microcodes){
-			       vector <size_t> mic_operands{0};
-			       size_t mic_operator = get_operator(microcode ,
+                 for (auto microcod:microcodes){
+                   vector <size_t> mic_operands{};
+                   size_t mic_operator = get_operator(microcod ,
 								  operator_size,
 								  operand_size,
 								  operand_amnt);
-			       for (int iter = 1; iter < operand_amnt; iter++){
-				 mic_operands.push_back(get_operand(microcode, operand_size, iter));
+                   for (int iter = 0; iter < operand_amnt; iter++){
+                       auto op =   get_operand(microcod, operand_size, iter);
+                       cout << "construct_opcode iter : " << iter << "   " << op<< endl;
+
+                        mic_operands.push_back(op);
 			       }
-			       mic.push_back({mic_operator, mic_operands});
+                   std::reverse(mic_operands.begin(), mic_operands.end());
+                   microcode t_microcode{mic_operator,mic_operands};
+                   cout << mic_operands[0] << " " << mic_operands[1] << endl;
+                   mic.push_back(t_microcode);
 			     }
+                 cout << mic[0].get_operands()[0] << " " <<mic[0].get_operands()[1] << endl;
 			     return opcode(mic);};
    opcodes.insert({opcodes.size(), construct_opcode()});
 }
@@ -195,7 +217,17 @@ size_t control_unit::make_regist(int bits){
 					     ,
 					     false,false)));
   auto nreg = this->get_register(map_reg_counter);
-  nreg->display->setText(QString::number(nreg->info.to_ulong()));
+
+
+  //info = trim_input(bits, arg);
+  auto value = QString::number(nreg->info.to_ulong(),16);
+  auto label = QString::number(map_reg_counter,16);
+  auto disp= label +": " + value;
+  //cout << "id:  " << id << endl;
+  //display->setText(QString::number(info.to_ulong(),16));
+  nreg->display->setText(disp);
+  //nreg->display->setText(QString::number(nreg->info.to_ulong()));
+
   map_reg_counter++;
   
   return map_reg_counter - 1;

@@ -8,7 +8,7 @@
 #ifdef slots
 #undef slots
 #endif
-#include <ecl/ecl.h>
+
 //#include "ecl_injection.h"
 using namespace std;
  
@@ -28,14 +28,20 @@ mwin::mwin(QWidget *parent) :
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
   cu->opcodes = opmap;
+  //cu->add_opcode(std::vector<size_t>(0x1, {0x4,0x7}));
+  cu->add_opcode(std::vector<size_t>{0x701,0x175});
+  //cu->opcodes.insert(make_pair(2, vector<size_t>{0x147}));
+  //cu->opcodes.insert(make_pair(3, vector<size_t>{0x400}));
   cu->make_alu(12);
-  mem->body.at(0x0ffe) = 15;
-  cu->get_register(cu->make_regist(12));
+  cu->get_alu(0)->A->set(std::bitset<max_bits>(0xfff));
+  mem->body.at(0x002) = 15;
+  //cu->get_register(cu->make_regist(12));
+  cu->make_regist(12);
   cu->make_regist(12);
 
   for(auto item:cu->regists_in_out){cout << item.first << endl;}
-  cu->get_register(4)->set(0xffe);
-  cu->get_register(5)->set(0x0fe);
+  cu->get_register(4)->set(0x002);
+  cu->get_register(5)->set(0x003);
   auto bu = cu->get_bus(cu->make_bus(12));
   for(auto& item:cu->regists_in_out){
     (get<0>(item.second))->link_in(bu);
@@ -51,18 +57,19 @@ mwin::mwin(QWidget *parent) :
   mdr->link_out(bu);
   auto mar = cu->get_mar(mar_id);
   mar->link_in(bu);
+  mar->link_out(bu);
 
   cu->cu_reg->set(0x000);
  
   
-  ov.cycle();
+  //ov.cycle();
   //on_criar_regist_clicked(); 
-//   cout << "mar " << mar->id << " :" << mar->info << endl
-//        << "mdr " << mdr->id << " :" << mdr->info << endl 
-//        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
-//        << "mdr info: " << mdr->info.to_ulong() << endl;
- 
-  
+   cout << "mar " << mar->id << " :" << mar->info << endl
+        << "mdr " << mdr->id << " :" << mdr->info << endl
+        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
+        << "mdr info: " << mdr->info.to_ulong() << endl;
+ fill_opcodes_tree();
+ fill_memory_list();
 }
 mwin::~mwin()
 {
@@ -93,7 +100,25 @@ void mwin::on_repl_input_returnPressed()
   ui->repl_input->setText("");
 }
 
+void mwin::on_microcode_repl_input_returnPressed()
+{
+  //NEED TO FIX THIS
+  if(auto control_unit = this->ov.control_units.at(ui->repl_cu_select->value())){
+    if(ui->microcode_repl_input->text().length() ==
+       (control_unit->operand_size * control_unit->operand_amnt + control_unit->operator_size)/4){
+      ui->microcode_repl_display->appendPlainText(ui->repl_input->text());
+      control_unit->cu_reg->set(std::stoul(ui->microcode_repl_input->text().toStdString(),nullptr,16));
+      auto cu = this->ov.control_units.at(ui->repl_cu_select->value());
+      //cu->interpret_minst(cu->cu_reg->info,ov.memories);
+      //cu->sync_bus();
 
+    }
+    else{
+      ui->microcode_repl_display->appendPlainText("tamanho do codigo invalido");
+    }
+  }
+  ui->microcode_repl_input->setText("");
+}
 
 
 
@@ -117,13 +142,53 @@ void mwin::on_criar_alu_clicked()
   ov.control_units.at(ui->repl_cu_select->value())->make_alu();
 }
 
-void mwin::on_ecl_repl_input_returnPressed()
-{
+void mwin::fill_opcodes_tree(){
+    auto selected_cu = ov.control_units.at(ui->repl_cu_select->value());
+    auto opcodes = selected_cu->opcodes;
+    auto tree_widget = ui->opcode_display;
+    tree_widget->setColumnCount(3);
+    QList<QTreeWidgetItem*>items;
+    for (auto it = opcodes.begin(); it!= opcodes.end(); it++){
+        auto tree_w = new QTreeWidgetItem(
+                    static_cast<QTreeWidget*>(nullptr),
+                    QStringList(QString("%0").arg(it->first)));
 
-    auto val = ui->ecl_repl_input->text().toStdString();
-    auto val_form = c_string_to_object(val.data());
-    cl_eval(val_form);
-    //si_safe_eval(0,, ECL_NIL);
-    ui->ecl_repl_input->setText("");
+
+        items.append(tree_w);
+
+
+
+
+        std::vector<size_t> mc;
+        std::vector<microcode> micro = (it->second).get_microcodes();
+        for (auto mic :micro){
+            QStringList q_lst = QStringList{};
+            mc.push_back(mic.get_operator());
+            q_lst.append(QString("%0").arg(mic.get_operator()));
+            for (auto operand: mic.get_operands()){
+                q_lst.append(QString("%0").arg(operand));
+            }
+            tree_w->addChild(new QTreeWidgetItem(
+                                 static_cast<QTreeWidget*>(nullptr),
+                                 q_lst));
+        };
+
+    }
+    tree_widget->insertTopLevelItems(0,items);
+
 }
-
+void mwin::fill_memory_list(){
+    std::vector<size_t> membody = ov.memories[0]->body;
+    int iter = 0;
+    for (auto memval: membody){
+        auto q = std::to_string(iter);
+        //auto qs = QString(q.c_str()).toUtf8().toHex();
+        auto g = std::to_string(memval);
+        //auto gh = QString(g.c_str()).toUtf8().toHex();
+        std::string gg = (q + " : "+ g);
+        //new QListWidgetItem(tr("%1").arg(gg), ui->memory_list);
+        new QListWidgetItem(tr(gg.c_str()), ui->memory_list);
+        iter++;
+    }
+    return;
+}

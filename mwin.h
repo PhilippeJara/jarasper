@@ -19,6 +19,8 @@ class mwin : public QMainWindow
 public:
   overseer ov;
   explicit mwin(QWidget *parent = 0);
+  void fill_opcodes_tree();
+  void fill_memory_list();
   ~mwin();
 
 private slots:
@@ -27,8 +29,8 @@ private slots:
   void on_criar_regist_clicked();
   void on_criar_bus_clicked();
   void on_criar_alu_clicked();
+  void on_microcode_repl_input_returnPressed();
 
-  void on_ecl_repl_input_returnPressed();
 
 private:
     Ui::mwin *ui;
