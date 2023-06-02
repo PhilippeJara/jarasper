@@ -39,6 +39,8 @@ private slots:
 
   void on_memory_list_itemChanged(QListWidgetItem *item);
 
+  void on_toggle_hex_memory_list_stateChanged(int arg1);
+
 private:
     Ui::mwin *ui;
 };

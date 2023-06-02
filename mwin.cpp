@@ -5,6 +5,8 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtGui/QPen>
 #include <string>
+#include <iostream>
+#include <sstream>
 #ifdef slots
 #undef slots
 #endif
@@ -179,14 +181,18 @@ void mwin::fill_opcodes_tree(){
 }
 
 void mwin::fill_memory_list(){
+    //std::stringstream stream;
     std::vector<size_t> membody = ov.memories[0]->body;
     int iter = 0;
     for (auto memval: membody){
+        std::stringstream stream;
         auto q = std::to_string(iter);
         //auto qs = QString(q.c_str()).toUtf8().toHex();
         auto g = std::to_string(memval);
         //auto gh = QString(g.c_str()).toUtf8().toHex();
-        std::string gg = (q + " : "+ g);
+        //std::string gg = (q + " : "+ g);
+        stream<<std::hex << iter << std::hex << " : " << std::hex << memval;
+        std::string gg = stream.str();
         //new QListWidgetItem(tr("%1").arg(gg), ui->memory_list);
         auto n = new QListWidgetItem(tr(gg.c_str()), ui->memory_list);//, Qt::ItemIsEditable);
         n->setFlags(n->flags() | Qt::ItemIsEditable);
@@ -203,19 +209,54 @@ void mwin::on_pushButton_clicked()
 
 void mwin::on_memory_list_itemChanged(QListWidgetItem *item)
 {
-    //NEED TO MAKE IT HEX LATER
     auto po = ui->memory_list->row(item);
-    int val;
-    auto ret = sscanf(item->text().toStdString().c_str(), "%*d : %d", &val);
-    if (ret == -1){
-        auto ret = sscanf(item->text().toStdString().c_str(), "%d", &val);
+    int val,radix;
+
+    //if(ui->toggle_hex_memory_list->checkState()){
+        char scanf_str_1[] = "%*x : %x";
+        char scanf_str_2[] = "%x";
+        radix = 16;
+        auto ret = sscanf(item->text().toStdString().c_str(), scanf_str_1 , &val);
         if (ret == -1){
-            return;
+            cout << item->text().toStdString().c_str() << endl;
+            auto ret = sscanf(item->text().toStdString().c_str(), scanf_str_2 , &val);
+            if (ret == -1){
+                return;
+            }
         }
-    }
+
+    //}
+//    else{
+//        char scanf_str_1[] = "%*d : %d";
+//        char scanf_str_2[] = "%d";
+//        radix = 10;
+//        auto ret = sscanf(item->text().toStdString().c_str(), scanf_str_1 , &val);
+//        if (ret == -1){
+//            auto ret = sscanf(item->text().toStdString().c_str(), scanf_str_2 , &val);
+//            if (ret == -1){
+//                return;
+//            }
+//        }
+//    }
+
+    if (po < 5){
     cout << "po" << ": " << po<< endl;
     cout << "val: " << val << endl;
-    item->setText(QString("%1 : %2").arg(po,0,10).arg(val,0,10));
+    cout << "radix: " << radix << endl;
+    }
+    item->setText(QString("%1 : %2").arg(po,0,radix).arg(val,0,radix));
     ov.memories[0]->body[po] = val;
     return;
+}
+
+void mwin::on_toggle_hex_memory_list_stateChanged(int arg1)
+{
+    if (arg1){
+        ui->memory_list->clear();
+        fill_memory_list();
+    }
+    else{
+        ui->memory_list->clear();
+        fill_memory_list();
+    }
 }

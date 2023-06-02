@@ -271,14 +271,27 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>1010</x>
-      <y>480</y>
+      <x>1000</x>
+      <y>460</y>
       <width>121</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>redraw memory</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="toggle_hex_memory_list">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>490</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>hex(doesnt work)memory)</string>
     </property>
    </widget>
    <zorder>frame</zorder>
@@ -288,6 +301,7 @@
    <zorder>repls</zorder>
    <zorder>memory_list</zorder>
    <zorder>pushButton</zorder>
+   <zorder>toggle_hex_memory_list</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
