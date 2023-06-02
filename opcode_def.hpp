@@ -18,8 +18,10 @@ class microcode {
   size_t get_operator(){return operatr;}
   std::vector<size_t> get_operands(){return operands;}
   size_t get_operand(int index){
-    if((operands.size() < index) || (index == 0)){return 0;}
-    else { return operands.at(index -1);}}
+    //if((operands.size() < index) || (index == 0)){return 0;}
+    //else { return operands.at(index -1);}}
+      return operands[index];}
+
 
 };
 class opcode{

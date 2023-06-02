@@ -29,7 +29,7 @@ memory::memory(size_t mem_size,
 	       size_t mem_block_len,
 	       size_t abus_len,
 	       size_t dbus_len): len(mem_block_len),
-    body(vector<size_t>(mem_size,0)),
+				 body(vector<size_t>(mem_size,0)),
 				 addr_bus(make_shared<bus>(abus_len)),
 				 data_bus(make_shared<bus>(dbus_len)){
   display = new CustomRectItem();
@@ -152,10 +152,10 @@ size_t get_operator(bitset<max_bits> microcode,
 size_t get_operand(bitset<max_bits> microcode,
 		   size_t operand_size,
 		   size_t operand_index){
-    //cout <<"get_openrand() index: "<< operand_index << "   " <<  trim_input(operand_size,microcode >>(operand_size*operand_index)) << endl;
-    //cout <<"get_openrand() index: "<< operand_index << "   " <<  trim_input(operand_size,microcode >>(operand_size*operand_index)).to_ulong() << endl;
+  //cout <<"get_openrand() index: "<< operand_index << "   " <<  trim_input(operand_size,microcode >>(operand_size*operand_index)) << endl;
+  //cout <<"get_openrand() index: "<< operand_index << "   " <<  trim_input(operand_size,microcode >>(operand_size*operand_index)).to_ulong() << endl;
   return (trim_input(operand_size,
-             microcode >>(operand_size*operand_index)).to_ulong()
+		     microcode >>(operand_size*operand_index)).to_ulong()
           );
 }
 
@@ -176,31 +176,49 @@ control_unit::control_unit(size_t cu_reg_s,
   this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s));
 }
 
+microcode control_unit::parse_microcode(size_t microcod){
+  vector <size_t> mic_operands{};
+  size_t mic_operator = get_operator(microcod ,
+				     operator_size,
+				     operand_size,
+				     operand_amnt);
+  for (int iter = 0; iter < operand_amnt; iter++){
+    auto op =   get_operand(microcod, operand_size, iter);
+    cout << "construct_opcode iter inner: " << iter << "   " << op<< endl;
+
+    mic_operands.push_back(op);
+
+  }
+  std::reverse(mic_operands.begin(), mic_operands.end());
+  //microcode t_microcode{mic_operator,mic_operands};
+  microcode t_microcode = microcode(mic_operator,mic_operands);
+  return t_microcode;
+}
 
 void control_unit::add_opcode(std::vector<size_t> microcodes){
    
-   auto construct_opcode = [&](){
-			     vector<microcode> mic{};
-                 for (auto microcod:microcodes){
-                   vector <size_t> mic_operands{};
-                   size_t mic_operator = get_operator(microcod ,
-								  operator_size,
-								  operand_size,
-								  operand_amnt);
-                   for (int iter = 0; iter < operand_amnt; iter++){
-                       auto op =   get_operand(microcod, operand_size, iter);
-                       cout << "construct_opcode iter : " << iter << "   " << op<< endl;
+  auto construct_opcode = [&](){
+			    vector<microcode> mic{};
+			    for (auto microcod:microcodes){
+			      vector <size_t> mic_operands{};
+			      size_t mic_operator = get_operator(microcod ,
+								 operator_size,
+								 operand_size,
+								 operand_amnt);
+			      for (int iter = 0; iter < operand_amnt; iter++){
+				auto op =   get_operand(microcod, operand_size, iter);
+				cout << "construct_opcode iter : " << iter << "   " << op<< endl;
 
-                        mic_operands.push_back(op);
-			       }
-                   std::reverse(mic_operands.begin(), mic_operands.end());
-                   microcode t_microcode{mic_operator,mic_operands};
-                   cout << mic_operands[0] << " " << mic_operands[1] << endl;
-                   mic.push_back(t_microcode);
-			     }
-                 cout << mic[0].get_operands()[0] << " " <<mic[0].get_operands()[1] << endl;
-			     return opcode(mic);};
-   opcodes.insert({opcodes.size(), construct_opcode()});
+				mic_operands.push_back(op);
+			      }
+			      std::reverse(mic_operands.begin(), mic_operands.end());
+			      microcode t_microcode{mic_operator,mic_operands};
+			      cout << mic_operands[0] << " " << mic_operands[1] << endl;
+			      mic.push_back(t_microcode);
+			    }
+			    cout << mic[0].get_operands()[0] << " " <<mic[0].get_operands()[1] << endl;
+			    return opcode(mic);};
+  opcodes.insert({opcodes.size(), construct_opcode()});
 }
 
 
@@ -413,7 +431,7 @@ void control_unit::reg_in(){
 }
 overseer::overseer() :  QObject(), control_units(), memories(){}
 overseer::overseer(QObject *mwid) : QObject(mwid), control_units(), memories(), mwidget(mwid){}
-overseer::~overseer(){};
+overseer::~overseer(){}
 control_unit *overseer::make_cu(size_t cu_reg_s,
 				size_t operator_s,
 				size_t operand_s,

@@ -165,7 +165,7 @@ public:
 
   void remove_regist(size_t);
   void remove_alu(size_t);
-  
+
   
   regist *get_register(size_t id);
   regist *get_mar(size_t id);
@@ -196,6 +196,8 @@ public:
   void reg_out();
   void reg_in();
   void sync_bus();
+  //UTILITY
+  microcode parse_microcode(size_t);
 		 
 };
 class overseer : public QObject{

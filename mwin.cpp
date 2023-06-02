@@ -60,7 +60,8 @@ mwin::mwin(QWidget *parent) :
   auto mar = cu->get_mar(mar_id);
   mar->link_in(bu);
   mar->link_out(bu);
-
+  mar->set(0x002);
+  mdr->set(0x002);
   cu->cu_reg->set(0x000);
  
   
@@ -109,8 +110,14 @@ void mwin::on_microcode_repl_input_returnPressed()
     if(ui->microcode_repl_input->text().length() ==
        (control_unit->operand_size * control_unit->operand_amnt + control_unit->operator_size)/4){
       ui->microcode_repl_display->appendPlainText(ui->repl_input->text());
-      control_unit->cu_reg->set(std::stoul(ui->microcode_repl_input->text().toStdString(),nullptr,16));
-      auto cu = this->ov.control_units.at(ui->repl_cu_select->value());
+      //control_unit->cu_reg->set(std::stoul(ui->microcode_repl_input->text().toStdString(),nullptr,16));
+      size_t r = std::stoul(ui->microcode_repl_input->text().toStdString(),nullptr,16);
+      microcode microcod = control_unit->parse_microcode(r);
+      cout << microcod.get_operator() << microcod.get_operand(0) << microcod.get_operand(1)<<endl;
+      control_unit->interpret_minst(microcod,ov.memories);
+      control_unit->sync_bus();
+      //this->ov.cycle();
+      //auto cu = this->ov.control_units.at(ui->repl_cu_select->value());
       //cu->interpret_minst(cu->cu_reg->info,ov.memories);
       //cu->sync_bus();
 

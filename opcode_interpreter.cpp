@@ -34,19 +34,8 @@
 using namespace std;
 
 void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memory>> &memories){
-  // auto operador = get_operator(bitset<max_bits>(mcode),
-  // 			       this->operator_size,
-  // 			       this->operand_size,
-  // 			       this->operand_amnt);
   auto operador = mcode.get_operator();
   auto operandos = mcode.get_operands();
-  // size_t indx = 0;
-  // while (indx < this->operand_amnt){
-  //   operandos.push_back(get_operand(bitset<max_bits>(mcode),
-  // 				    this->operand_size,
-  // 				    indx));
-  //   indx++;
-  // }
   switch(operador){
   case 1:{
     auto origem = operandos.at(0);
@@ -109,7 +98,7 @@ void control_unit::sync_bus(){this->reg_out();this->reg_in();}
 void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
   if (get_operator(this->cu_reg->info,
 		   this->operator_size,
-		   this->operand_size,
+           this->operand_size,
 		   this->operand_amnt) < this->opcodes.size()){
     auto opcode_inst = this->opcodes.at(get_operator(this->cu_reg->info,
 						     this->operator_size,
