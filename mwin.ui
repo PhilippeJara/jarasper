@@ -264,6 +264,22 @@
       <height>192</height>
      </rect>
     </property>
+    <property name="modelColumn">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>480</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>redraw memory</string>
+    </property>
    </widget>
    <zorder>frame</zorder>
    <zorder>repl_cu_select</zorder>
@@ -271,6 +287,7 @@
    <zorder>opcode_display</zorder>
    <zorder>repls</zorder>
    <zorder>memory_list</zorder>
+   <zorder>pushButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

@@ -2,6 +2,9 @@
 #define MWIN_H
 #include "atoms.h"
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QLabel>
+#include <ui_mwin.h>
 #include "opmap.hpp"
 #include <memory>
 #include <iostream>
@@ -31,6 +34,10 @@ private slots:
   void on_criar_alu_clicked();
   void on_microcode_repl_input_returnPressed();
 
+
+  void on_pushButton_clicked();
+
+  void on_memory_list_itemChanged(QListWidgetItem *item);
 
 private:
     Ui::mwin *ui;

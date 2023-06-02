@@ -177,6 +177,7 @@ void mwin::fill_opcodes_tree(){
     tree_widget->insertTopLevelItems(0,items);
 
 }
+
 void mwin::fill_memory_list(){
     std::vector<size_t> membody = ov.memories[0]->body;
     int iter = 0;
@@ -187,8 +188,34 @@ void mwin::fill_memory_list(){
         //auto gh = QString(g.c_str()).toUtf8().toHex();
         std::string gg = (q + " : "+ g);
         //new QListWidgetItem(tr("%1").arg(gg), ui->memory_list);
-        new QListWidgetItem(tr(gg.c_str()), ui->memory_list);
+        auto n = new QListWidgetItem(tr(gg.c_str()), ui->memory_list);//, Qt::ItemIsEditable);
+        n->setFlags(n->flags() | Qt::ItemIsEditable);
         iter++;
     }
+    return;
+}
+
+void mwin::on_pushButton_clicked()
+{
+    ui->memory_list->clear();
+    fill_memory_list();
+}
+
+void mwin::on_memory_list_itemChanged(QListWidgetItem *item)
+{
+    //NEED TO MAKE IT HEX LATER
+    auto po = ui->memory_list->row(item);
+    int val;
+    auto ret = sscanf(item->text().toStdString().c_str(), "%*d : %d", &val);
+    if (ret == -1){
+        auto ret = sscanf(item->text().toStdString().c_str(), "%d", &val);
+        if (ret == -1){
+            return;
+        }
+    }
+    cout << "po" << ": " << po<< endl;
+    cout << "val: " << val << endl;
+    item->setText(QString("%1 : %2").arg(po,0,10).arg(val,0,10));
+    ov.memories[0]->body[po] = val;
     return;
 }
