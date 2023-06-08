@@ -17,16 +17,18 @@
 
    00: halt
    01: assignment
-   02: add
+   02: add   (what alu)
    03: read from memory adress
    04: write to memory adress
-   05: sub
-   06: shl
-   07: shr
+   05: sub   (what alu)
+   06: shl   (what alu, how many bits)
+   07: shr   (what alu, how many bits)
    08: branch on equal
    09: branch on zero
    0A: branch on carry
-   0B : branch on negative
+   0B: branch on negative
+   0C: assignment from literal
+   0D: increment   (what register, should only be program counter tbh)
 */
 // ASSUMINDO QUE MICROCODES E OPCODES TEM O MESMO COUNT DE OPERANDOS E OPERADORES
 // E MESMA QUANTIDADE DE BITS
@@ -37,7 +39,7 @@ void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memo
   auto operador = mcode.get_operator();
   auto operandos = mcode.get_operands();
   switch(operador){
-  case 1:{
+  case 0x1:{
     auto origem = operandos.at(0);
     set<size_t> destinos(operandos.begin(), operandos.end());
     for(const auto& destino: destinos){
@@ -46,12 +48,12 @@ void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memo
     }
     break;
   }
-  case 2:{
+  case 0x2:{
     cout<<"*new add*" << endl;
     this->add(operandos.at(0));
     break;
   }
-  case 3:{
+  case 0x3:{
     cout << "get_mdr: "
 	 << operandos.at(1)
 	 << endl;	
@@ -64,7 +66,7 @@ void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memo
     cout << "memread: " << endl;
     break;
   }
-  case 4:{
+  case 0x4:{
     /// a ID do mdr e do mar utilizada é a sua sequencia em mdrs_id e mars_is, não a sua principal em registers_in_out!!!
     cout << "get_mdr: "
 	 << operandos.at(1)
@@ -78,17 +80,32 @@ void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memo
     (cout << "memwrite: " << endl);
     break;
   }
-  case 5:{
+  case 0x5:{
     this->sub(operandos.at(0));
     (cout<< "sub(overflow, carry?): " << endl);
     break;
   }
-  case 6:{
+  case 0x6:{
     SHL(operandos.at(0), operandos.at(1));
     break;
   }
-  case 7:{
+  case 0x7:{
     SHR(operandos.at(0), operandos.at(1));
+    break;
+  }
+  case 0xC:{
+      auto literal = operandos.at(0);
+      set<size_t> destinos(operandos.begin(), operandos.end());
+//      for(const auto& destino: destinos){
+//        cout << "*new assignment literal*"<< endl;
+        /*if (destino != literal){*/
+      this->assignment_literal(literal, operandos.at(1));
+//      }
+      break;
+    //cout<<"aaaaaaaaa"<<endl;
+  }
+  case 0xD:{
+    //increment
     break;
   }
   default:{cout << "código de microinstrućão inválido: " << operador << endl; exit(1);}
@@ -96,11 +113,11 @@ void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memo
 }
 void control_unit::sync_bus(){this->reg_out();this->reg_in();}
 void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
-  if (get_operator(this->cu_reg->info,
+  if (get_operator(this->instruction_register->info,
 		   this->operator_size,
            this->operand_size,
 		   this->operand_amnt) < this->opcodes.size()){
-    auto opcode_inst = this->opcodes.at(get_operator(this->cu_reg->info,
+    auto opcode_inst = this->opcodes.at(get_operator(this->instruction_register->info,
 						     this->operator_size,
 						     this->operand_size,
 						     this->operand_amnt));

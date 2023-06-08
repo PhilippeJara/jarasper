@@ -93,6 +93,30 @@ void regist::set(bitset<max_bits> arg) {
   display->setText(disp);
 }
 
+//void inc::set(int arg) {
+
+//  info = trim_input(bits, arg+1);
+//  auto value = QString::number(info.to_ulong(),16);
+//  auto label = QString::number(id,16);
+//  auto disp= label +": " + value;
+//  cout << "id:  " << id << endl;
+//  //display->setText(QString::number(info.to_ulong(),16));
+//  display->setText(disp);
+//}
+//void inc::set(bitset<max_bits> arg) {
+
+//  info = trim_input(bits,arg.to_ulong()+1);
+//  auto value = QString::number(info.to_ulong(),16);
+//  auto label = QString::number(id,16);
+//  auto disp= label +": " + value;
+//  cout << "id:  " << id << endl;
+//  //display->setText(QString::number(info.to_ulong(),16));}
+//  display->setText(disp);
+//}
+
+
+
+
 
 alu::alu() : A(), B(), Z(),
 	     f_overflow(0),
@@ -107,7 +131,8 @@ alu::alu(regist *Z,
     f_overflow(0),
     f_negative(0),
     f_carry(0),
-    f_zero(0){
+    f_zero(0),
+    f_equal(0){
   display = new CustomRectItem();
   scene_info::scene->addItem(display);
   set_styling(this);
@@ -122,8 +147,17 @@ bool alu::get_overflow(){return f_overflow;}
 bool alu::get_negative(){return f_negative;}
 bool alu::get_carry(){return f_carry;}
 bool alu::get_zero(){return f_zero;}
-void alu::add() {Z->info = trim_input(Z->bits, A->info.to_ulong() + B->info.to_ulong());}
-void alu::sub() {Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());}
+bool alu::get_equal(){return f_equal;}
+void alu::add() {
+    Z->set(trim_input(Z->bits, A->info.to_ulong() + B->info.to_ulong()));
+    this->set_flags(sum);
+
+
+                }
+void alu::sub() {
+    Z->set(trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong()));
+    //Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());
+                this->set_flags(subt);}
 void alu::SHR(size_t id, size_t amnt) {
   if (A->id == id){
     Z->set(trim_input(Z->bits, A->info >>  amnt));
@@ -140,6 +174,30 @@ void alu::SHL(size_t id, size_t amnt) {
     Z->info = trim_input(Z->bits, B->info <<  amnt);}
   else {cout << "id invávlido em SHL" << endl;}
 }
+
+void alu::set_flags(operation op){
+    //if sub is true, assume it was a subtraction operation
+    //carry is when the result doesnt make sense when interpreted as unsigned
+    //overflow is when the result doesn't make sense when interpreted as signed
+    f_overflow = 0;
+    f_negative = 0;
+    f_carry = 0;
+    f_zero = 0;
+    f_equal = 0;
+    auto al = A->info.to_ulong();
+    auto bl = B->info.to_ulong();
+    auto zl = Z->info.to_ulong();
+    if(al ==bl){ f_equal =1;};
+    if(zl ==0){f_zero = 1;}
+    //need to double check these
+    if (al + bl > (pow(2,Z->bits)/2)){f_negative =1;}
+    if (al + bl > (pow(2,Z->bits))){f_overflow =1;}
+    this->display->setText(QString("E:%1 Z:%2 N:%3 O:%4 C:%5").arg(this->f_equal).arg(this->f_zero).arg(this->f_negative).arg(this->f_overflow).arg(this->f_carry));
+    //todo carry
+
+
+}
+
 
 size_t get_operator(bitset<max_bits> microcode,
 		    size_t operator_size,
@@ -163,17 +221,19 @@ control_unit::control_unit(size_t cu_reg_s,
 			   size_t operator_s,
 			   size_t operand_s,
 			   size_t operand_amnt)
-  : cu_reg(), buses(),
+  : instruction_register(), instruction_counter(),
+    buses(),
     regists_in_out(), map_reg_counter(0),
     map_bus_counter(0), map_alu_counter(0),
     map_mar_counter(0), map_mdr_counter(0),
     operator_size(operator_s), operand_size(operand_s),
     operand_amnt(operand_amnt){
-  
+  //im setting the instruction counter size the same as the IR necessarily for now
   display = new CustomRectItem();
   scene_info::scene->addItem(display);
   set_styling(this);
-  this->cu_reg = this->get_register(this->make_internal_regist(cu_reg_s));
+  this->instruction_register = this->get_register(this->make_internal_regist(cu_reg_s));
+  this->instruction_counter = this->get_register(this->make_internal_regist(cu_reg_s));
 }
 
 microcode control_unit::parse_microcode(size_t microcod){
@@ -259,10 +319,13 @@ size_t control_unit::make_internal_regist(int bits){
   auto nreg = this->get_register(map_reg_counter);
   nreg->display->setParentItem(this->display);
   nreg->display->setText(QString::number(nreg->info.to_ulong()));
+  nreg->set(0);
   map_reg_counter++;
+  //cout<< map_reg_counter<< endl;
   return map_reg_counter - 1;
 }
 //reolver as linkagens para permitir o o input de dados na memoria
+//psure its already solved
 size_t control_unit::make_mdr(int bits, const shared_ptr<memory> &mem){
   auto id = make_regist(bits);
   mdrs_id.insert(make_pair(map_mdr_counter, id));
@@ -318,20 +381,30 @@ shared_ptr<bus> control_unit::get_bus(size_t id){return buses.at(id);}
 shared_ptr<alu> control_unit::get_alu(size_t id){return alus.at(id);}
 void control_unit::set_in(size_t id){get<1>(regists_in_out.at(id)) = true;}
 void control_unit::set_out(size_t id){get<2>(regists_in_out.at(id)) = true;}
-  
+
 void control_unit::assignment(size_t id_reg1, size_t id_reg2){
   set_out(id_reg1);
   set_in(id_reg2);
   cout <<get_register_out(id_reg1) << "  "<< get_register_in(id_reg1) << endl
        <<get_register_in(id_reg2) <<"  " <<get_register_out(id_reg1) << endl;
 }
-  
+void control_unit::assignment_literal(size_t literal, size_t id_reg){
+  //set_out(id_reg1);
+  set_in(id_reg);
+  //what i'm doing here is setting the bus value directly, so I don't need to make a different register for the IR operand in case of literals
+  auto buses = this->get_register(id_reg)->in;
+  for (auto &bu:buses){
+      //should probably change it later so that only the buses that have connection with the IR get filled
+      bu->set(literal);
+  }
+}
 void control_unit::add(size_t id){
   get_alu(id)->add();
     
   cout << "A " << get_alu(id)->A->id << ": " << get_alu(id)->A->info << endl;
   cout << "B " << get_alu(id)->B->id << ": " << get_alu(id)->B->info  << endl;
   cout << "Z " << get_alu(id)->Z->id << ": " << get_alu(id)->Z->info << endl;
+
 }
 
 void control_unit::sub(size_t id){

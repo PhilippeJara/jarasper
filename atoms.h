@@ -73,9 +73,16 @@ public:
   
 };
 
-
+//class inc : public regist {
+//    Q_OBJECT
+//public:
+//    //the different set doesn't seem to be working
+//    void set(int arg);
+//    void set(std::bitset<max_bits> arg);
+//};
 class alu : public QObject {
 Q_OBJECT
+    enum operation {sum=0, subt=1, cmp=2};
 public:
   regist *A;
   regist *B;
@@ -84,6 +91,7 @@ public:
   bool f_negative;
   bool f_carry;
   bool f_zero;
+  bool f_equal;
   CustomRectItem *display;
   //Scene *scene;
   alu();
@@ -96,10 +104,12 @@ public:
   bool get_negative();
   bool get_carry();
   bool get_zero();
+  bool get_equal();
   void add();
   void sub();
   void SHR(size_t id, size_t amnt);
   void SHL(size_t id, size_t amnt);
+  void set_flags(operation);
 };
 
 size_t get_operator(std::bitset<max_bits> microcode,
@@ -119,7 +129,8 @@ size_t get_operand(std::bitset<max_bits> microcode,
 class control_unit : public QObject {
 Q_OBJECT
 public:
-  regist *cu_reg;
+  regist *instruction_register;
+  regist *instruction_counter;
   std::map <size_t,
         std::shared_ptr<bus>> buses;
   std::map <size_t,
@@ -178,6 +189,7 @@ public:
   void set_out(size_t id);
 
   void assignment(size_t id_reg1, size_t id_reg2);
+  void assignment_literal(size_t literal, size_t id_reg);
   void add(size_t id);
   void sub(size_t id);
   //no momento só é possível usar SHR  e SHL no primeiro registrador da ALU (A)

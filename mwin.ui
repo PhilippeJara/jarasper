@@ -281,6 +281,32 @@
      <string>redraw memory</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>40</y>
+      <width>21</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>save_state_test</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>40</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>load_state</string>
+    </property>
+   </widget>
    <zorder>frame</zorder>
    <zorder>repl_cu_select</zorder>
    <zorder>repl_cu_select_label</zorder>
@@ -288,6 +314,8 @@
    <zorder>repls</zorder>
    <zorder>memory_list</zorder>
    <zorder>pushButton</zorder>
+   <zorder>pushButton_2</zorder>
+   <zorder>pushButton_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

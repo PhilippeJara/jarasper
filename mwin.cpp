@@ -62,7 +62,7 @@ mwin::mwin(QWidget *parent) :
   mar->link_out(bu);
   mar->set(0x002);
   mdr->set(0x002);
-  cu->cu_reg->set(0x000);
+  cu->instruction_register->set(0x000);
  
   
   //ov.cycle();
@@ -93,7 +93,7 @@ void mwin::on_repl_input_returnPressed()
     if(ui->repl_input->text().length() ==
        (control_unit->operand_size * control_unit->operand_amnt + control_unit->operator_size)/4){
       ui->repl_display->appendPlainText(ui->repl_input->text());
-      control_unit->cu_reg->set(std::stoul(ui->repl_input->text().toStdString(),nullptr,16));
+      control_unit->instruction_register->set(std::stoul(ui->repl_input->text().toStdString(),nullptr,16));
       this->ov.cycle();
     }
     else{
@@ -266,4 +266,20 @@ void mwin::on_toggle_hex_memory_list_stateChanged(int arg1)
         ui->memory_list->clear();
         fill_memory_list();
     }
+}
+
+void mwin::on_pushButton_2_clicked()
+{
+    QSettings settings("MyCompany", "MyApp");
+    //settings.setValue("geometry", QMainWindow::saveGeometry(1));
+    settings.setValue("windowState",QMainWindow::saveState(1));
+}
+
+void mwin::on_pushButton_3_clicked()
+{
+    QSettings settings("MyCompany", "MyApp");
+    //QMainWindow::restoreGeometry(settings.value("myWidget/geometry",1).toByteArray());
+    QMainWindow::restoreState(settings.value("myWidget/windowState",1).toByteArray());
+
+
 }

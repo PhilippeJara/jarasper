@@ -10,7 +10,7 @@
 
 class CustomRectItem : public QObject , public QGraphicsRectItem
 {
-     
+
 Q_OBJECT
 public:
   QGraphicsSimpleTextItem info;
