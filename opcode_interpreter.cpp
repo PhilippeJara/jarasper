@@ -23,10 +23,10 @@
    05: sub   (what alu)
    06: shl   (what alu, how many bits)
    07: shr   (what alu, how many bits)
-   08: branch on equal
-   09: branch on zero
-   0A: branch on carry
-   0B: branch on negative
+   08: branch on equal (what alu, if true or false)
+   09: branch on zero   (what alu, if true or false)
+   0A: branch on carry   (what alu, if true or false)
+   0B: branch on negative   (what alu, if true or false)
    0C: assignment from literal
    0D: increment instruction counter
 */
@@ -40,7 +40,7 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
   auto operandos = mcode.get_operands();
   switch(operador){
   case 0x0:{
-      //returns -1 in order to stop the operation of the opcode
+      //returns -1 in order to stop the operation period, not just of the opcode
       return -1;
   }
   case 0x1:{
@@ -97,6 +97,40 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
     SHR(operandos.at(0), operandos.at(1));
     break;
   }
+//      08: branch on equal
+//      09: branch on zero
+//      0A: branch on carry
+//      0B: branch on negative
+
+      //STILL NEED TO TEST IN OPCODES THE BRANCH MICROINSTRUCTIONS
+  case 0x8:{
+      //returns 1 to stop just the opcode in question
+      auto alu = this->get_alu(operandos.at(0));
+      int condition = operandos.at(1);
+      if(alu->get_equal() != condition){return 1;}
+    break;
+  }
+  case 0x9:{
+      //returns 1 to stop just the opcode in question
+      auto alu = this->get_alu(operandos.at(0));
+      int condition = operandos.at(1);
+      if(alu->get_zero() != condition){return 1;}
+    break;
+  }
+  case 0xA:{
+      //returns 1 to stop just the opcode in question
+      auto alu= this->get_alu(operandos.at(0));
+      int condition = operandos.at(1);
+      if(alu->get_carry() != condition){return 1;}
+    break;
+  }
+  case 0xB:{
+      //returns 1 to stop just the opcode in question
+     auto alu = this->get_alu(operandos.at(0));
+      int condition = operandos.at(1);
+      if(alu->get_negative() != condition){return 1;}
+    break;
+  }
   case 0xC:{
       auto literal = operandos.at(0);
       set<size_t> destinos(operandos.begin(), operandos.end());
@@ -118,7 +152,7 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
   return 0;
 }
 void control_unit::sync_bus(){this->reg_out();this->reg_in();}
-void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
+int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
   if (get_operator(this->instruction_register->info,
 		   this->operator_size,
            this->operand_size,
@@ -130,12 +164,16 @@ void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
     for(auto mcode: opcode_inst.get_microcodes()){
       int ret = this->interpret_minst(mcode, memories);
       this->sync_bus();
-      if (ret == -1){break;}
+      //if return is -1 we reached a HALT, so all the opcodes should stop
+      if (ret == -1){return -1;}
+      //if return is 1 we didn't satisfy a branch condition, so this opcode execution should stop
+      if (ret == 1){break;}
     }
   
   }
   else{
     cout << "opcode não existe" << endl;
   }
+  return 0;
 }
 

@@ -522,7 +522,8 @@ control_unit *overseer::make_cu(size_t cu_reg_s,
 
 void overseer::cycle(){
   for(auto& cu:control_units){
-    cu->opcode_execute(memories);
+    int ret = cu->opcode_execute(memories);
+    if (ret == -1){break;}
     
   }
 }
