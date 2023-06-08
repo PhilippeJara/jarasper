@@ -204,7 +204,7 @@ public:
          const std::vector<std::shared_ptr<memory>> &memories);
   void execute(const std::vector<std::shared_ptr<memory>> &memories);
   void opcode_execute(const std::vector<std::shared_ptr<memory>> &);
-  void interpret_minst(microcode ,const std::vector<std::shared_ptr<memory>> &);
+  int interpret_minst(microcode ,const std::vector<std::shared_ptr<memory>> &);
   void reg_out();
   void reg_in();
   void sync_bus();

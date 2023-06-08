@@ -28,17 +28,21 @@
    0A: branch on carry
    0B: branch on negative
    0C: assignment from literal
-   0D: increment   (what register, should only be program counter tbh)
+   0D: increment instruction counter
 */
 // ASSUMINDO QUE MICROCODES E OPCODES TEM O MESMO COUNT DE OPERANDOS E OPERADORES
 // E MESMA QUANTIDADE DE BITS
 
 using namespace std;
 
-void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memory>> &memories){
+int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memory>> &memories){
   auto operador = mcode.get_operator();
   auto operandos = mcode.get_operands();
   switch(operador){
+  case 0x0:{
+      //returns -1 in order to stop the operation of the opcode
+      return -1;
+  }
   case 0x1:{
     auto origem = operandos.at(0);
     set<size_t> destinos(operandos.begin(), operandos.end());
@@ -102,14 +106,16 @@ void control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memo
       this->assignment_literal(literal, operandos.at(1));
 //      }
       break;
-    //cout<<"aaaaaaaaa"<<endl;
   }
   case 0xD:{
-    //increment
+      //increment instruction counter
+      auto current_val = this->instruction_counter->info;
+      this->instruction_counter->set(current_val.to_ulong() + 1);
     break;
   }
   default:{cout << "código de microinstrućão inválido: " << operador << endl; exit(1);}
   }
+  return 0;
 }
 void control_unit::sync_bus(){this->reg_out();this->reg_in();}
 void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
@@ -122,8 +128,9 @@ void control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
 						     this->operand_size,
 						     this->operand_amnt));
     for(auto mcode: opcode_inst.get_microcodes()){
-      this->interpret_minst(mcode, memories);
+      int ret = this->interpret_minst(mcode, memories);
       this->sync_bus();
+      if (ret == -1){break;}
     }
   
   }
