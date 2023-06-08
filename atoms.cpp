@@ -159,6 +159,7 @@ void alu::sub() {
     //Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());
                 this->set_flags(subt);}
 void alu::SHR(size_t id, size_t amnt) {
+    //maybe need to set the flags here?
   if (A->id == id){
     Z->set(trim_input(Z->bits, A->info >>  amnt));
   }
@@ -168,10 +169,11 @@ void alu::SHR(size_t id, size_t amnt) {
   else {(cout << "id invávlido em SHR" <<endl);}
 }
 void alu::SHL(size_t id, size_t amnt) {
+    //maybe need to set the flags here?
   if (A->id == id){
-    Z->info = trim_input(Z->bits, A->info <<  amnt);}
+    Z->set(trim_input(Z->bits, A->info <<  amnt));}
   else if (B->id == id){
-    Z->info = trim_input(Z->bits, B->info <<  amnt);}
+    Z->set(trim_input(Z->bits, B->info <<  amnt));}
   else {cout << "id invávlido em SHL" << endl;}
 }
 
