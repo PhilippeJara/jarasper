@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1193</width>
-    <height>772</height>
+    <width>1202</width>
+    <height>993</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -20,8 +20,8 @@
    <widget class="QSpinBox" name="repl_cu_select">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>10</y>
+      <x>410</x>
+      <y>780</y>
       <width>47</width>
       <height>23</height>
      </rect>
@@ -39,8 +39,8 @@
    <widget class="QLabel" name="repl_cu_select_label">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>10</y>
+      <x>380</x>
+      <y>780</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -52,10 +52,10 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>220</y>
-      <width>131</width>
-      <height>151</height>
+      <x>0</x>
+      <y>800</y>
+      <width>371</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -68,7 +68,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>0</y>
+       <y>10</y>
        <width>111</width>
        <height>22</height>
       </rect>
@@ -80,8 +80,8 @@
     <widget class="QPushButton" name="criar_bus">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>90</y>
+       <x>120</x>
+       <y>40</y>
        <width>111</width>
        <height>22</height>
       </rect>
@@ -93,8 +93,8 @@
     <widget class="QLabel" name="repl_cu_select_label_2">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>50</y>
+       <x>240</x>
+       <y>10</y>
        <width>31</width>
        <height>21</height>
       </rect>
@@ -106,8 +106,8 @@
     <widget class="QSpinBox" name="repl_bus_select">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>50</y>
+       <x>270</x>
+       <y>10</y>
        <width>47</width>
        <height>23</height>
       </rect>
@@ -126,7 +126,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>30</y>
+       <y>40</y>
        <width>111</width>
        <height>22</height>
       </rect>
@@ -138,8 +138,8 @@
     <widget class="QPushButton" name="criar_alu">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>120</y>
+       <x>120</x>
+       <y>10</y>
        <width>111</width>
        <height>22</height>
       </rect>
@@ -153,9 +153,9 @@
     <property name="geometry">
      <rect>
       <x>820</x>
-      <y>380</y>
+      <y>0</y>
       <width>161</width>
-      <height>131</height>
+      <height>381</height>
      </rect>
     </property>
     <property name="columnCount">
@@ -183,8 +183,8 @@
    <widget class="QTabWidget" name="repls">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>60</y>
+      <x>510</x>
+      <y>790</y>
       <width>201</width>
       <height>131</height>
      </rect>
@@ -259,9 +259,9 @@
     <property name="geometry">
      <rect>
       <x>820</x>
-      <y>520</y>
-      <width>256</width>
-      <height>192</height>
+      <y>400</y>
+      <width>201</width>
+      <height>401</height>
      </rect>
     </property>
     <property name="modelColumn">
@@ -271,8 +271,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>1000</x>
-      <y>490</y>
+      <x>970</x>
+      <y>380</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -284,8 +284,8 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>40</y>
+      <x>810</x>
+      <y>850</y>
       <width>21</width>
       <height>23</height>
      </rect>
@@ -297,8 +297,8 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>870</x>
-      <y>40</y>
+      <x>860</x>
+      <y>830</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -322,7 +322,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1193</width>
+     <width>1202</width>
      <height>20</height>
     </rect>
    </property>

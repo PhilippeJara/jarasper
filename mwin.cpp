@@ -21,7 +21,7 @@ mwin::mwin(QWidget *parent) :
 {
   ui->setupUi(this);
   auto scene = new Scene(centralWidget());
-  scene->setSceneRect(0,0,800,800);
+  scene->setSceneRect(0,0,800,750);
   scene_info::scene = scene;
   new QGraphicsView(scene, centralWidget());
   //view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -105,7 +105,7 @@ void mwin::on_repl_input_returnPressed()
 
 void mwin::on_microcode_repl_input_returnPressed()
 {
-  //NEED TO FIX THIS
+  //NEED TO FIX THIS?? seems to work fine
   if(auto control_unit = this->ov.control_units.at(ui->repl_cu_select->value())){
     if(ui->microcode_repl_input->text().length() ==
        (control_unit->operand_size * control_unit->operand_amnt + control_unit->operator_size)/4){
