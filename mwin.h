@@ -8,8 +8,9 @@
 #include "opmap.hpp"
 #include <memory>
 #include <iostream>
+#include<file_loader.h>
 //#include "customrectitem.h"
-
+#include "global_macros.h"
 
 namespace Ui {
 class mwin;
@@ -44,6 +45,8 @@ private slots:
   void on_pushButton_2_clicked();
 
   void on_pushButton_3_clicked();
+
+  void on_memory_fpath_input_returnPressed();
 
 private:
     Ui::mwin *ui;

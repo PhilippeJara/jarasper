@@ -307,6 +307,16 @@
      <string>load_state</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="memory_fpath_input">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>880</y>
+      <width>281</width>
+      <height>23</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>frame</zorder>
    <zorder>repl_cu_select</zorder>
    <zorder>repl_cu_select_label</zorder>
@@ -316,6 +326,7 @@
    <zorder>pushButton</zorder>
    <zorder>pushButton_2</zorder>
    <zorder>pushButton_3</zorder>
+   <zorder>memory_fpath_input</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

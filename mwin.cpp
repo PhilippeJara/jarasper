@@ -11,7 +11,6 @@
 #undef slots
 #endif
 
-//#include "ecl_injection.h"
 using namespace std;
  
 mwin::mwin(QWidget *parent) :
@@ -26,14 +25,12 @@ mwin::mwin(QWidget *parent) :
   new QGraphicsView(scene, centralWidget());
   //view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
-  ov.memories.push_back(make_shared<memory>(5000, 12, 12, 12));
+  ov.memories.push_back(make_shared<memory>(MEMSIZE, 12, 12, 12));
+  ui->memory_fpath_input->setText(MEMTEMPHARDCODEDPATH);
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
   cu->opcodes = opmap;
-  //cu->add_opcode(std::vector<size_t>(0x1, {0x4,0x7}));
   cu->add_opcode(std::vector<size_t>{0x701,0x175});
-  //cu->opcodes.insert(make_pair(2, vector<size_t>{0x147}));
-  //cu->opcodes.insert(make_pair(3, vector<size_t>{0x400}));
   cu->make_alu(12);
   cu->get_alu(0)->A->set(std::bitset<max_bits>(0xfff));
   mem->body.at(0x002) = 15;
@@ -71,8 +68,9 @@ mwin::mwin(QWidget *parent) :
         << "mdr " << mdr->id << " :" << mdr->info << endl
         << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
         << "mdr info: " << mdr->info.to_ulong() << endl;
- fill_opcodes_tree();
- fill_memory_list();
+
+ this->fill_opcodes_tree();
+ this->fill_memory_list();
 }
 mwin::~mwin()
 {
@@ -260,11 +258,11 @@ void mwin::on_toggle_hex_memory_list_stateChanged(int arg1)
 {
     if (arg1){
         ui->memory_list->clear();
-        fill_memory_list();
+        this->fill_memory_list();
     }
     else{
         ui->memory_list->clear();
-        fill_memory_list();
+        this->fill_memory_list();
     }
 }
 
@@ -282,4 +280,15 @@ void mwin::on_pushButton_3_clicked()
     QMainWindow::restoreState(settings.value("myWidget/windowState",1).toByteArray());
 
 
+}
+
+void mwin::on_memory_fpath_input_returnPressed()
+{
+  //need to add a place to decide which memory im loading, when multiple memories get proper support
+  memory* mem = ov.memories[0].get(); //get because its a shared pointer
+  string path = ui->memory_fpath_input->text().toStdString();
+  //cout << path << endl;
+  loadMem(path, mem);
+  ui->memory_list->clear();
+  this->fill_memory_list();
 }

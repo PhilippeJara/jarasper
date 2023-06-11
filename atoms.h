@@ -17,10 +17,12 @@
 #include "customrectitem.h"
 #include "custom_bus_item.h"
 #include "opcode_def.hpp"
+#include "global_macros.h"
+//#include "file_loader.h"
 
 #ifndef CONFIG
 #define CONFIG
-const size_t max_bits = 16;
+const size_t max_bits = MAX_BITS;
 class scene_info{
 public:
   static Scene *scene;
@@ -49,7 +51,8 @@ public:
   std::shared_ptr<bus> addr_bus;
   std::shared_ptr<bus> data_bus;
   CustomRectItem *display;
-  memory (size_t mem_size=5000, size_t mem_block_len=12, size_t abus_len=12, size_t dbus_len=12);
+  //memory (size_t mem_size=5000, size_t mem_block_len=12, size_t abus_len=12, size_t dbus_len=12);
+  memory (size_t mem_size=5000, size_t mem_block_len=12, size_t abus_len=12, size_t dbus_len=12, std::string file_path = "");
   
 };
 

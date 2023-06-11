@@ -1,4 +1,5 @@
 #include "atoms.h"
+#include "file_loader.h"
 Scene *scene_info::scene;
 
 
@@ -23,21 +24,22 @@ void bus::set(int arg){
   
 //zerar após cada ciclo?
 
-
-
 memory::memory(size_t mem_size,
-	       size_t mem_block_len,
-	       size_t abus_len,
-	       size_t dbus_len): len(mem_block_len),
-				 body(vector<size_t>(mem_size,0)),
-				 addr_bus(make_shared<bus>(abus_len)),
-				 data_bus(make_shared<bus>(dbus_len)){
+           size_t mem_block_len,
+           size_t abus_len,
+           size_t dbus_len,
+           std::string file_path): len(mem_block_len),
+                 body(vector<size_t>(mem_size,0)),
+                 addr_bus(make_shared<bus>(abus_len)),
+                 data_bus(make_shared<bus>(dbus_len)){
+  loadMem(file_path, this);
   display = new CustomRectItem();
   scene_info::scene->addItem(display);
   set_styling(this);
   addr_bus->display->link(this->display);
   data_bus->display->link(this->display);
 }
+
 
 regist::regist(size_t bits,size_t id) :bits(bits), id(id),
 				       info(0), in(),
