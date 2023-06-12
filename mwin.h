@@ -52,6 +52,12 @@ private slots:
 
   void on_opcodes_fpath_input_returnPressed();
 
+  void on_fetch_button_clicked();
+
+  void on_execute_button_clicked();
+
+  void on_fetch_execute_button_clicked();
+
 private:
     Ui::mwin *ui;
 };

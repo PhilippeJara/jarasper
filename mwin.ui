@@ -20,8 +20,8 @@
    <widget class="QSpinBox" name="repl_cu_select">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>780</y>
+      <x>40</x>
+      <y>770</y>
       <width>47</width>
       <height>23</height>
      </rect>
@@ -39,8 +39,8 @@
    <widget class="QLabel" name="repl_cu_select_label">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>780</y>
+      <x>10</x>
+      <y>770</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -154,7 +154,7 @@
      <rect>
       <x>820</x>
       <y>0</y>
-      <width>161</width>
+      <width>281</width>
       <height>381</height>
      </rect>
     </property>
@@ -201,7 +201,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="opcode_repl">
      <attribute name="title">
@@ -261,7 +261,7 @@
        </rect>
       </property>
       <property name="placeholderText">
-       <string>opcode repl</string>
+       <string>microcode repl</string>
       </property>
      </widget>
     </widget>
@@ -271,7 +271,7 @@
      <rect>
       <x>820</x>
       <y>400</y>
-      <width>201</width>
+      <width>211</width>
       <height>401</height>
      </rect>
     </property>
@@ -323,7 +323,7 @@
      <rect>
       <x>20</x>
       <y>880</y>
-      <width>281</width>
+      <width>351</width>
       <height>23</height>
      </rect>
     </property>
@@ -342,12 +342,51 @@
      <rect>
       <x>20</x>
       <y>910</y>
-      <width>281</width>
+      <width>351</width>
       <height>23</height>
      </rect>
     </property>
     <property name="placeholderText">
      <string>Opcodes load path</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="fetch_button">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>770</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Fetch</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="execute_button">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>770</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Execute</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="fetch_execute_button">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>770</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Fetch + Execute</string>
     </property>
    </widget>
    <zorder>frame</zorder>
@@ -361,6 +400,9 @@
    <zorder>pushButton_3</zorder>
    <zorder>memory_fpath_input</zorder>
    <zorder>opcodes_fpath_input</zorder>
+   <zorder>fetch_button</zorder>
+   <zorder>execute_button</zorder>
+   <zorder>fetch_execute_button</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

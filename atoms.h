@@ -210,7 +210,7 @@ public:
           regist *mdr,
          const std::vector<std::shared_ptr<memory>> &memories);
   void execute(const std::vector<std::shared_ptr<memory>> &memories);
-  int opcode_execute(const std::vector<std::shared_ptr<memory>> &);
+  int opcode_execute(const std::vector<std::shared_ptr<memory>> &, bool fetch=false, size_t delay = 0);
   int interpret_minst(microcode ,const std::vector<std::shared_ptr<memory>> &);
   void reg_out();
   void reg_in();

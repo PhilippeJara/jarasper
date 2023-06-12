@@ -526,6 +526,7 @@ control_unit *overseer::make_cu(size_t cu_reg_s,
 }
 
 void overseer::cycle(){
+    //not actually one cycle, the cycle is decided inside by the sync_bus()
   for(auto& cu:control_units){
     int ret = cu->opcode_execute(memories);
     if (ret == -1){break;}

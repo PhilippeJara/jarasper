@@ -157,7 +157,20 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
   return 0;
 }
 void control_unit::sync_bus(){this->reg_out();this->reg_in();}
-int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
+int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories, bool fetch, size_t delay){
+    if (fetch){
+        auto opcode_inst = this->opcodes.at(0);
+        for(auto mcode: opcode_inst.get_microcodes()){
+          int ret = this->interpret_minst(mcode, memories);
+          this->sync_bus();
+          //if return is -1 we reached a HALT, so all the opcodes should stop
+          if (ret == -1){return -1;}
+          //if return is 1 we didn't satisfy a branch condition, so this opcode execution should stop
+          if (ret == 1){break;}
+          QThread::msleep(delay);
+        }
+        return 0;
+    }
   if (get_operator(this->instruction_register->info,
 		   this->operator_size,
            this->operand_size,
@@ -166,7 +179,6 @@ int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
 						     this->operator_size,
 						     this->operand_size,
 						     this->operand_amnt));
-    auto opcode_operand = opcode_inst.operand;
     for(auto mcode: opcode_inst.get_microcodes()){
       int ret = this->interpret_minst(mcode, memories);
       this->sync_bus();
@@ -174,6 +186,8 @@ int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
       if (ret == -1){return -1;}
       //if return is 1 we didn't satisfy a branch condition, so this opcode execution should stop
       if (ret == 1){break;}
+      QThread::msleep(delay);
+      std::cout<<"test"<<std::endl;
     }
   
   }

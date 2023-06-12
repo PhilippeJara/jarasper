@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <QThread>
 #ifdef slots
 #undef slots
 #endif
@@ -24,7 +25,10 @@ mwin::mwin(QWidget *parent) :
   scene_info::scene = scene;
   new QGraphicsView(scene, centralWidget());
   //view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
+  //ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
+  ov.make_cu(12,8,4,1)->display->info.setText("control unit 0");
+
+
   ov.memories.push_back(make_shared<memory>(MEMSIZE, 12, 12, 12));
   ui->memory_fpath_input->setText(MEMTEMPHARDCODEDPATH);
   ui->opcodes_fpath_input->setText(OPCODETEMPHARDCODEDPATH);
@@ -72,14 +76,14 @@ mwin::mwin(QWidget *parent) :
 
  this->fill_opcodes_tree();
  this->fill_memory_list();
- std::string opcodes[MAXOPCODE][MAXMICROC];
- std::string path{OPCODETEMPHARDCODEDPATH};
- loadOpcode(opcodes, path);
- std::string Dopcode[100][MAXMICROC];
+// std::string opcodes[MAXOPCODE][MAXMICROC];
+// std::string path{OPCODETEMPHARDCODEDPATH};
+// loadOpcode(opcodes, path);
+// std::string Dopcode[100][MAXMICROC];
  //opcode ocs[100][MAXMICROC]{};
  //parseAllOpcodes(opcodes,  Dopcode);
- cu->opcodes = parseAllOpcodes(opcodes,  Dopcode);
- cout << "oi" << endl;
+ //cu->opcodes = parseAllOpcodes(opcodes,  Dopcode);
+ //cout << "oi" << endl;
 
 
 
@@ -313,7 +317,7 @@ void mwin::on_memory_fpath_input_returnPressed()
 
 void mwin::on_opcodes_fpath_input_returnPressed()
 {
-    control_unit* cu = ov.control_units[0].get(); //get because its a shared pointer
+    control_unit* cu = ov.control_units[ui->repl_cu_select->value()].get(); //get because its a shared pointer
     string path = ui->opcodes_fpath_input->text().toStdString();
     std::string opcodes[MAXOPCODE][MAXMICROC];
     loadOpcode(opcodes, path);
@@ -321,4 +325,24 @@ void mwin::on_opcodes_fpath_input_returnPressed()
     cu->opcodes = parseAllOpcodes(opcodes,  Dopcode);
     ui->opcode_display->clear();
     this->fill_opcodes_tree();
+}
+
+void mwin::on_fetch_button_clicked()
+{
+    control_unit* cu = ov.control_units[ui->repl_cu_select->value()].get(); //get because its a shared pointer
+    cu->opcode_execute(ov.memories,true);
+}
+
+void mwin::on_execute_button_clicked()
+{
+    control_unit* cu = ov.control_units[ui->repl_cu_select->value()].get(); //get because its a shared pointer
+    cu->opcode_execute(ov.memories);
+}
+
+
+void mwin::on_fetch_execute_button_clicked()
+{
+    control_unit* cu = ov.control_units[ui->repl_cu_select->value()].get(); //get because its a shared pointer
+    cu->opcode_execute(ov.memories,true);
+    cu->opcode_execute(ov.memories);
 }
