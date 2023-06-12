@@ -4,9 +4,9 @@ Scene *scene_info::scene;
 
 
 using namespace std;
-auto trim_input = [](const int bits, bitset<max_bits> input){
-		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
-		    return input;};
+//auto trim_input = [](const int bits, bitset<max_bits> input){
+//		    for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
+//		    return input;};
 bus::bus (int bits, int info, custom_bus_item* disp):
   bits(bits), info(info), display(disp) {
   display = new custom_bus_item();
@@ -126,9 +126,9 @@ alu::alu() : A(), B(), Z(),
 	     f_carry(0),
 	     f_zero(0){}
 
-alu::alu(regist *Z,
+alu::alu(regist *A,
 	 regist *B,
-	 regist *A)
+     regist *Z)
   : A(A), B(B), Z(Z),
     f_overflow(0),
     f_negative(0),
@@ -281,7 +281,7 @@ void control_unit::add_opcode(std::vector<size_t> microcodes){
 			      mic.push_back(t_microcode);
 			    }
 			    cout << mic[0].get_operands()[0] << " " <<mic[0].get_operands()[1] << endl;
-			    return opcode(mic);};
+                return opcode(mic);};
   opcodes.insert({opcodes.size(), construct_opcode()});
 }
 
@@ -357,9 +357,12 @@ size_t control_unit::make_alu(regist *A,
   return map_alu_counter -1;
 }
 size_t control_unit::make_alu(size_t num_bits){
+  //auto Z = this->get_register(this->make_regist(num_bits));
   auto A = this->get_register(this->make_regist(num_bits));
   auto B = this->get_register(this->make_regist(num_bits));
   auto Z = this->get_register(this->make_regist(num_bits));
+  //auto Z = this->get_register(this->make_regist(num_bits));
+  //auto Z = this->get_register(this->make_regist(num_bits));
   alus.insert(make_pair(map_alu_counter, make_shared<alu>(A,B,Z)));
   map_alu_counter++;
   return map_alu_counter -1;

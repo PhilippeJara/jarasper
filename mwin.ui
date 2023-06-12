@@ -158,15 +158,21 @@
       <height>381</height>
      </rect>
     </property>
+    <property name="indentation">
+     <number>10</number>
+    </property>
     <property name="columnCount">
-     <number>3</number>
+     <number>4</number>
     </property>
     <attribute name="headerDefaultSectionSize">
-     <number>55</number>
+     <number>30</number>
+    </attribute>
+    <attribute name="headerMinimumSectionSize">
+     <number>10</number>
     </attribute>
     <column>
      <property name="text">
-      <string>op</string>
+      <string>op............</string>
      </property>
     </column>
     <column>
@@ -177,6 +183,11 @@
     <column>
      <property name="text">
       <string>arg</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>literal</string>
      </property>
     </column>
    </widget>
@@ -271,7 +282,7 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>970</x>
+      <x>870</x>
       <y>380</y>
       <width>121</width>
       <height>23</height>
@@ -316,6 +327,28 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Memory path&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="toolTipDuration">
+     <number>1</number>
+    </property>
+    <property name="placeholderText">
+     <string>Memory load path</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="opcodes_fpath_input">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>910</y>
+      <width>281</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Opcodes load path</string>
+    </property>
    </widget>
    <zorder>frame</zorder>
    <zorder>repl_cu_select</zorder>
@@ -327,6 +360,7 @@
    <zorder>pushButton_2</zorder>
    <zorder>pushButton_3</zorder>
    <zorder>memory_fpath_input</zorder>
+   <zorder>opcodes_fpath_input</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

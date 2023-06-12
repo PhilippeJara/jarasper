@@ -23,6 +23,10 @@
 #ifndef CONFIG
 #define CONFIG
 const size_t max_bits = MAX_BITS;
+auto trim_input = [](const int bits, std::bitset<max_bits> input){
+            for (int i = max_bits-1; i > bits-1; i--){input.reset(i);}
+            return input;};
+
 class scene_info{
 public:
   static Scene *scene;
@@ -143,7 +147,7 @@ public:
   std::map <size_t,
         std::shared_ptr<alu>> alus;
   std::map <size_t,
-	    opcode> opcodes;
+        opcode> opcodes;
   size_t map_reg_counter;
   size_t map_bus_counter;
   size_t map_alu_counter;

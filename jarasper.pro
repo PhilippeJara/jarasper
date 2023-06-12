@@ -39,7 +39,8 @@ SOURCES += \
     scene.cpp \
     customrectitem.cpp \
     custom_bus_item.cpp \
-    file_loader.cpp
+    file_loader.cpp \
+    opcode_parser.cpp
 
 
 
@@ -54,7 +55,8 @@ HEADERS += \
     custom_bus_item.h \
     opcode_def.hpp \
     file_loader.h \
-    global_macros.h
+    global_macros.h \
+    opcode_parser.h
 
 FORMS += \
         mwin.ui

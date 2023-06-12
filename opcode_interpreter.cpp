@@ -27,7 +27,7 @@
    09: branch on zero   (what alu, if true or false)
    0A: branch on carry   (what alu, if true or false)
    0B: branch on negative   (what alu, if true or false)
-   0C: assignment from literal
+   0C: assignment from literal (will take the literal from opcode operand)
    0D: increment instruction counter
 */
 // ASSUMINDO QUE MICROCODES E OPCODES TEM O MESMO COUNT DE OPERANDOS E OPERADORES
@@ -35,9 +35,11 @@
 
 using namespace std;
 
+
 int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memory>> &memories){
   auto operador = mcode.get_operator();
   auto operandos = mcode.get_operands();
+
   switch(operador){
   case 0x0:{
       //returns -1 in order to stop the operation period, not just of the opcode
@@ -90,11 +92,13 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
     break;
   }
   case 0x6:{
-    SHL(operandos.at(0), operandos.at(1));
+    auto amnt = this->get_alu(0)->B->info.to_ulong();
+    SHL(operandos.at(0), amnt);
     break;
   }
   case 0x7:{
-    SHR(operandos.at(0), operandos.at(1));
+    auto amnt = this->get_alu(0)->B->info.to_ulong();
+    SHR(operandos.at(0), amnt);
     break;
   }
 //      08: branch on equal
@@ -102,7 +106,7 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
 //      0A: branch on carry
 //      0B: branch on negative
 
-      //STILL NEED TO TEST IN OPCODES THE BRANCH MICROINSTRUCTIONS
+
   case 0x8:{
       //returns 1 to stop just the opcode in question
       auto alu = this->get_alu(operandos.at(0));
@@ -132,7 +136,8 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
     break;
   }
   case 0xC:{
-      auto literal = operandos.at(0);
+      //auto literal = operandos.at(0);
+      auto literal = trim_input(this->operand_amnt * this->operand_size,this->instruction_register->info).to_ulong();
       set<size_t> destinos(operandos.begin(), operandos.end());
 //      for(const auto& destino: destinos){
 //        cout << "*new assignment literal*"<< endl;
@@ -161,6 +166,7 @@ int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories){
 						     this->operator_size,
 						     this->operand_size,
 						     this->operand_amnt));
+    auto opcode_operand = opcode_inst.operand;
     for(auto mcode: opcode_inst.get_microcodes()){
       int ret = this->interpret_minst(mcode, memories);
       this->sync_bus();

@@ -27,6 +27,7 @@ mwin::mwin(QWidget *parent) :
   ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
   ov.memories.push_back(make_shared<memory>(MEMSIZE, 12, 12, 12));
   ui->memory_fpath_input->setText(MEMTEMPHARDCODEDPATH);
+  ui->opcodes_fpath_input->setText(OPCODETEMPHARDCODEDPATH);
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
   cu->opcodes = opmap;
@@ -46,9 +47,9 @@ mwin::mwin(QWidget *parent) :
     (get<0>(item.second))->link_in(bu);
     (get<0>(item.second))->link_out(bu);
   }
-  
-  auto mdr_id = cu->make_mdr(12, mem);
   auto mar_id = cu->make_mar(12, mem);
+  auto mdr_id = cu->make_mdr(12, mem);
+  //auto mar_id = cu->make_mar(12, mem);
   cout <<   cu->get_register(4)->info << endl;  
   cout <<   cu->get_register(5)->info << endl;  
   auto mdr = cu->get_mdr(mdr_id);
@@ -59,7 +60,7 @@ mwin::mwin(QWidget *parent) :
   mar->link_out(bu);
   mar->set(0x002);
   mdr->set(0x002);
-  cu->instruction_register->set(0x000);
+  cu->instruction_register->set(0xF53);
  
   
   //ov.cycle();
@@ -71,6 +72,19 @@ mwin::mwin(QWidget *parent) :
 
  this->fill_opcodes_tree();
  this->fill_memory_list();
+ std::string opcodes[MAXOPCODE][MAXMICROC];
+ std::string path{OPCODETEMPHARDCODEDPATH};
+ loadOpcode(opcodes, path);
+ std::string Dopcode[100][MAXMICROC];
+ //opcode ocs[100][MAXMICROC]{};
+ //parseAllOpcodes(opcodes,  Dopcode);
+ cu->opcodes = parseAllOpcodes(opcodes,  Dopcode);
+ cout << "oi" << endl;
+
+
+
+
+
 }
 mwin::~mwin()
 {
@@ -91,7 +105,8 @@ void mwin::on_repl_input_returnPressed()
     if(ui->repl_input->text().length() ==
        (control_unit->operand_size * control_unit->operand_amnt + control_unit->operator_size)/4){
       ui->repl_display->appendPlainText(ui->repl_input->text());
-      control_unit->instruction_register->set(std::stoul(ui->repl_input->text().toStdString(),nullptr,16));
+      //control_unit->instruction_register->set(std::stoul(ui->repl_input->text().toStdString(),nullptr,16));
+      control_unit->instruction_register->set(std::stoi(ui->repl_input->text().toStdString(),nullptr,16));
       this->ov.cycle();
     }
     else{
@@ -153,28 +168,31 @@ void mwin::fill_opcodes_tree(){
     auto selected_cu = ov.control_units.at(ui->repl_cu_select->value());
     auto opcodes = selected_cu->opcodes;
     auto tree_widget = ui->opcode_display;
-    tree_widget->setColumnCount(3);
+    tree_widget->setColumnCount(4);
     QList<QTreeWidgetItem*>items;
     for (auto it = opcodes.begin(); it!= opcodes.end(); it++){
+        std::stringstream stream;
+        stream<<std::hex << it->first;
+        std::string opcode_num = stream.str();
         auto tree_w = new QTreeWidgetItem(
                     static_cast<QTreeWidget*>(nullptr),
-                    QStringList(QString("%0").arg(it->first)));
+                    QStringList(QStringList{QString("%0").arg(opcode_num.c_str()),
+                                            QString(""),
+                                            QString(""),
+                                            QString(it->second.literal.c_str())}));
 
 
         items.append(tree_w);
-
-
-
-
         std::vector<size_t> mc;
         std::vector<microcode> micro = (it->second).get_microcodes();
         for (auto mic :micro){
             QStringList q_lst = QStringList{};
             mc.push_back(mic.get_operator());
-            q_lst.append(QString("%0").arg(mic.get_operator()));
+            q_lst.append(QString("%0").arg(QString::number(mic.get_operator(),16)));
             for (auto operand: mic.get_operands()){
-                q_lst.append(QString("%0").arg(operand));
+                q_lst.append(QString("%0").arg(QString::number(operand,16)));
             }
+            q_lst.append(QString(mic.literal.c_str()));
             tree_w->addChild(new QTreeWidgetItem(
                                  static_cast<QTreeWidget*>(nullptr),
                                  q_lst));
@@ -291,4 +309,16 @@ void mwin::on_memory_fpath_input_returnPressed()
   loadMem(path, mem);
   ui->memory_list->clear();
   this->fill_memory_list();
+}
+
+void mwin::on_opcodes_fpath_input_returnPressed()
+{
+    control_unit* cu = ov.control_units[0].get(); //get because its a shared pointer
+    string path = ui->opcodes_fpath_input->text().toStdString();
+    std::string opcodes[MAXOPCODE][MAXMICROC];
+    loadOpcode(opcodes, path);
+    std::string Dopcode[100][MAXMICROC];
+    cu->opcodes = parseAllOpcodes(opcodes,  Dopcode);
+    ui->opcode_display->clear();
+    this->fill_opcodes_tree();
 }
