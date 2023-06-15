@@ -152,14 +152,14 @@ bool alu::get_zero(){return f_zero;}
 bool alu::get_equal(){return f_equal;}
 void alu::add() {
     Z->set(trim_input(Z->bits, A->info.to_ulong() + B->info.to_ulong()));
-    this->set_flags(sum);
+    this->set_flags(1);
 
 
                 }
 void alu::sub() {
     Z->set(trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong()));
     //Z->info = trim_input(Z->bits, A->info.to_ulong() - B->info.to_ulong());
-                this->set_flags(subt);}
+                this->set_flags(1);}
 void alu::SHR(size_t id, size_t amnt) {
     //maybe need to set the flags here?
   if (A->id == id){
@@ -179,8 +179,8 @@ void alu::SHL(size_t id, size_t amnt) {
   else {cout << "id invávlido em SHL" << endl;}
 }
 
-void alu::set_flags(operation op){
-    //if sub is true, assume it was a subtraction operation
+void alu::set_flags(size_t op){
+    //0 means add, 1 means sub
     //carry is when the result doesnt make sense when interpreted as unsigned
     //overflow is when the result doesn't make sense when interpreted as signed
     f_overflow = 0;
@@ -195,7 +195,40 @@ void alu::set_flags(operation op){
     if(zl ==0){f_zero = 1;}
     //need to double check these
     if (al + bl > (pow(2,Z->bits)/2)){f_negative =1;}
-    if (al + bl > (pow(2,Z->bits))){f_overflow =1;}
+
+
+
+
+    //check for overflow
+    //figure out their actual size due to bitset fixed size at compile time:
+    auto end_offset = A->info.size() - (A->info.size() - A->bits) - 1;
+    //cout << "AB: " << ab <<  " AB.flip(start_offset) " << ab.flip(end_offset-1) << endl;
+    // case 1: sum of two positives, sign bit true = overflow:
+    if (A->info.test(end_offset) && B->info.test(end_offset)){
+        if (Z->info.test(end_offset)){f_overflow =1;}
+    }
+    // case 2: sum of two negatives, sign bit true = overflow:
+    if (!(A->info.test(end_offset)) && !(B->info.test(end_offset))){
+        if (!Z->info.test(end_offset)){f_overflow =0;}
+    }
+    // case 3: all if not a sum of both positives or negatives stays off by default, no need to change
+
+
+
+    //check for carry
+    //checks if there has been an overflow in the unsigned operation
+    // if the unadjusted sum is higher than the adjusted sum
+    if (op == 0){
+        if (zl < al+bl){
+            f_carry = 1;
+        }
+    }
+    // if the unadjusted subtraction is lowewr than the adjusted subtraction
+    if (op == 1){
+        if (zl > al+bl){
+            f_carry = 1;
+        }
+    }
     this->display->setText(QString("E:%1 Z:%2 N:%3 O:%4 C:%5").arg(this->f_equal).arg(this->f_zero).arg(this->f_negative).arg(this->f_overflow).arg(this->f_carry));
     //todo carry
 
@@ -530,7 +563,7 @@ void overseer::cycle(){
   for(auto& cu:control_units){
     int ret = cu->opcode_execute(memories);
     if (ret == -1){break;}
-    
+
   }
 }
 

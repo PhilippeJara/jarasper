@@ -26,33 +26,33 @@ mwin::mwin(QWidget *parent) :
   new QGraphicsView(scene, centralWidget());
   //view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   //ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
-  ov.make_cu(12,8,4,1)->display->info.setText("control unit 0");
+  ov.make_cu(REGISTER_SIZE,8,8,1)->display->info.setText("control unit 0");
 
 
-  ov.memories.push_back(make_shared<memory>(MEMSIZE, 12, 12, 12));
+  ov.memories.push_back(make_shared<memory>(MEMSIZE, REGISTER_SIZE, REGISTER_SIZE, REGISTER_SIZE));
   ui->memory_fpath_input->setText(MEMTEMPHARDCODEDPATH);
   ui->opcodes_fpath_input->setText(OPCODETEMPHARDCODEDPATH);
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
   cu->opcodes = opmap;
   cu->add_opcode(std::vector<size_t>{0x701,0x175});
-  cu->make_alu(12);
+  cu->make_alu(REGISTER_SIZE);
   cu->get_alu(0)->A->set(std::bitset<max_bits>(0xfff));
   mem->body.at(0x002) = 15;
   //cu->get_register(cu->make_regist(12));
-  cu->make_regist(12);
-  cu->make_regist(12);
+  cu->make_regist(REGISTER_SIZE);
+  cu->make_regist(REGISTER_SIZE);
 
   for(auto item:cu->regists_in_out){cout << item.first << endl;}
   cu->get_register(4)->set(0x002);
   cu->get_register(5)->set(0x003);
-  auto bu = cu->get_bus(cu->make_bus(12));
+  auto bu = cu->get_bus(cu->make_bus(REGISTER_SIZE));
   for(auto& item:cu->regists_in_out){
     (get<0>(item.second))->link_in(bu);
     (get<0>(item.second))->link_out(bu);
   }
-  auto mar_id = cu->make_mar(12, mem);
-  auto mdr_id = cu->make_mdr(12, mem);
+  auto mar_id = cu->make_mar(REGISTER_SIZE, mem);
+  auto mdr_id = cu->make_mdr(REGISTER_SIZE, mem);
   //auto mar_id = cu->make_mar(12, mem);
   cout <<   cu->get_register(4)->info << endl;  
   cout <<   cu->get_register(5)->info << endl;  
@@ -69,13 +69,14 @@ mwin::mwin(QWidget *parent) :
   
   //ov.cycle();
   //on_criar_regist_clicked(); 
-   cout << "mar " << mar->id << " :" << mar->info << endl
-        << "mdr " << mdr->id << " :" << mdr->info << endl
-        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
-        << "mdr info: " << mdr->info.to_ulong() << endl;
+//   cout << "mar " << mar->id << " :" << mar->info << endl
+//        << "mdr " << mdr->id << " :" << mdr->info << endl
+//        << "local na memoria: " << mem->body.at(mar->info.to_ulong()) << endl
+//        << "mdr info: " << mdr->info.to_ulong() << endl;
 
  this->fill_opcodes_tree();
  this->fill_memory_list();
+  // qApp->processEvents();
 // std::string opcodes[MAXOPCODE][MAXMICROC];
 // std::string path{OPCODETEMPHARDCODEDPATH};
 // loadOpcode(opcodes, path);

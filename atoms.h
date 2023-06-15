@@ -116,7 +116,7 @@ public:
   void sub();
   void SHR(size_t id, size_t amnt);
   void SHL(size_t id, size_t amnt);
-  void set_flags(operation);
+  void set_flags(size_t op); //0 for add, 1 for sub
 };
 
 size_t get_operator(std::bitset<max_bits> microcode,

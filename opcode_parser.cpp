@@ -146,7 +146,7 @@ std::string parseOpcodeLine(std::string opcodeLine, std::string Dopcode[MAXMICRO
       }
       //SUB
       if(i < opcodeLine.length() -2 &&
-              opcodeLine.at(i) == 'S' && opcodeLine.at(i+1) == 'U'&& opcodeLine.at(i+2) == 'U'){
+              opcodeLine.at(i) == 'S' && opcodeLine.at(i+1) == 'U'&& opcodeLine.at(i+2) == 'B'){
         oper = 5;
         //UAtom1 = opcodeLine.substr(0,i);
 //    LAtom2 = parseOpcodeLine(opcodeLine.substr(i+1,opcodeLine.length()-1), Dopcode, lastIndx,opcod);

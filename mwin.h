@@ -58,7 +58,7 @@ private slots:
 
   void on_fetch_execute_button_clicked();
 
-private:
+public:
     Ui::mwin *ui;
 };
 

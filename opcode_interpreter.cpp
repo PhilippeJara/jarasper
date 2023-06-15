@@ -1,4 +1,5 @@
 #include "atoms.h"
+#include "mwin.h"
 // //inicialmente vamos decidir como ler os codigos, os opcodes são compostos pelo 
 
 // Para assignment:
@@ -158,6 +159,8 @@ int control_unit::interpret_minst(microcode mcode, const vector<shared_ptr<memor
 }
 void control_unit::sync_bus(){this->reg_out();this->reg_in();}
 int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories, bool fetch, size_t delay){
+//    mwin* mwinf = (mwin*) qApp::activeWindow();
+    mwin* mw = (mwin*)qApp->activeWindow();
     if (fetch){
         auto opcode_inst = this->opcodes.at(0);
         for(auto mcode: opcode_inst.get_microcodes()){
@@ -168,6 +171,8 @@ int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories, boo
           //if return is 1 we didn't satisfy a branch condition, so this opcode execution should stop
           if (ret == 1){break;}
           QThread::msleep(delay);
+          mw->ui->memory_list->clear();
+          mw->fill_memory_list();
         }
         return 0;
     }
@@ -187,6 +192,8 @@ int control_unit::opcode_execute(const vector<shared_ptr<memory>> &memories, boo
       //if return is 1 we didn't satisfy a branch condition, so this opcode execution should stop
       if (ret == 1){break;}
       QThread::msleep(delay);
+      mw->ui->memory_list->clear();
+      mw->fill_memory_list();
       std::cout<<"test"<<std::endl;
     }
   
