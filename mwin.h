@@ -9,7 +9,7 @@
 #include "opmap.hpp"
 #include <memory>
 #include <iostream>
-
+#include <QtConcurrent/qtconcurrentrun.h>
 #include<file_loader.h>
 #include<opcode_parser.h>
 //#include "global_macros.h"

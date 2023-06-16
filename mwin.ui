@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1202</width>
-    <height>993</height>
+    <width>1361</width>
+    <height>991</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -282,8 +282,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>870</x>
-      <y>380</y>
+      <x>1260</x>
+      <y>450</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -295,8 +295,8 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>850</y>
+      <x>1320</x>
+      <y>870</y>
       <width>21</width>
       <height>23</height>
      </rect>
@@ -308,8 +308,8 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>830</y>
+      <x>1310</x>
+      <y>840</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -409,7 +409,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1202</width>
+     <width>1361</width>
      <height>20</height>
     </rect>
    </property>

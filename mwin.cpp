@@ -331,7 +331,8 @@ void mwin::on_opcodes_fpath_input_returnPressed()
 void mwin::on_fetch_button_clicked()
 {
     control_unit* cu = ov.control_units[ui->repl_cu_select->value()].get(); //get because its a shared pointer
-    cu->opcode_execute(ov.memories,true);
+    cu ->opcode_execute(ov.memories,true);
+    //QtConcurrent::run(cu,&control_unit::opcode_execute,ov.memories,true,10000);
 }
 
 void mwin::on_execute_button_clicked()

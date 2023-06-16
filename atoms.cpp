@@ -275,12 +275,18 @@ control_unit::control_unit(size_t cu_reg_s,
 
 microcode control_unit::parse_microcode(size_t microcod){
   vector <size_t> mic_operands{};
+  //temporary set to operand_size/2
+  auto operand_siz = operand_size/2;
   size_t mic_operator = get_operator(microcod ,
 				     operator_size,
-				     operand_size,
-				     operand_amnt);
-  for (int iter = 0; iter < operand_amnt; iter++){
-    auto op =   get_operand(microcod, operand_size, iter);
+                     operand_siz,
+                                     2);
+                     //operand_amnt);
+  //for (int iter = 0; iter < operand_amnt; iter++){
+  for (int iter = 0; iter < 2; iter++){
+      //temporary set to operand_size/2
+      //auto op =   get_operand(microcod, operand_size, iter);
+    auto op =   get_operand(microcod, operand_siz, iter);
     cout << "construct_opcode iter inner: " << iter << "   " << op<< endl;
 
     mic_operands.push_back(op);
