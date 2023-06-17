@@ -194,7 +194,7 @@ void alu::set_flags(size_t op){
     if(al ==bl){ f_equal =1;};
     if(zl ==0){f_zero = 1;}
     //need to double check these
-    if (al + bl > (pow(2,Z->bits)/2)){f_negative =1;}
+    if (al - bl > 0){f_negative =1;}
 
 
 
