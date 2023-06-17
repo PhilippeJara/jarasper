@@ -25,6 +25,7 @@ class mwin : public QMainWindow
 public:
   overseer ov;
   explicit mwin(QWidget *parent = 0);
+  void load_default_architecture();
   void fill_opcodes_tree();
   void fill_memory_list();
   ~mwin();

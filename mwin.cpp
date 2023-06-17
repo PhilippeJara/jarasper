@@ -13,7 +13,37 @@
 #endif
 
 using namespace std;
- 
+void mwin::load_default_architecture(){
+    //creates a control unit with REGISTER_SIZE IR and IC size, opcode with 8 bits for operator and 8 for operand
+    ov.make_cu(REGISTER_SIZE,8,8,1)->display->info.setText("control unit 0");
+    /*creates a memory with 5000 adresses of REGISTER_SIZE word size,
+      REGISTER_SIZE width mdr bus and REGISTER_SIZE width mar bus*/
+    ov.memories.push_back(make_shared<memory>(MEMSIZE, REGISTER_SIZE, REGISTER_SIZE, REGISTER_SIZE));
+    auto cu = ov.control_units[0];
+    auto mem = ov.memories[0];
+    //creates an ALU with REGISTER_SIZE ALUa, ALUb and ALUz
+    cu->make_alu(REGISTER_SIZE);
+    cu->make_regist(REGISTER_SIZE);
+    cu->make_regist(REGISTER_SIZE);
+    //creates a bus with REGISTER_SIZE width and connects it to the control units registers
+    auto bu = cu->get_bus(cu->make_bus(REGISTER_SIZE));
+    for(auto& item:cu->regists_in_out){
+      (get<0>(item.second))->link_in(bu);
+      (get<0>(item.second))->link_out(bu);
+    }
+    //creates the memory adress register and the memory data register and link the with the previously defined bus
+    auto mar_id = cu->make_mar(REGISTER_SIZE, mem);
+    auto mdr_id = cu->make_mdr(REGISTER_SIZE, mem);
+    auto mdr = cu->get_mdr(mdr_id);
+    mdr->link_in(bu);
+    mdr->link_out(bu);
+    auto mar = cu->get_mar(mar_id);
+    mar->link_in(bu);
+    mar->link_out(bu);
+    //setting the initial value of the register number 5 to 0x3
+    cu->get_register(5)->set(0x003);
+
+}
 mwin::mwin(QWidget *parent) :
   QMainWindow(parent),
   ov(this),
@@ -24,27 +54,27 @@ mwin::mwin(QWidget *parent) :
   scene->setSceneRect(0,0,800,750);
   scene_info::scene = scene;
   new QGraphicsView(scene, centralWidget());
-  //view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  //ov.make_cu(12,4,4,2)->display->info.setText("control unit 0");
-  ov.make_cu(REGISTER_SIZE,8,8,1)->display->info.setText("control unit 0");
-
-
-  ov.memories.push_back(make_shared<memory>(MEMSIZE, REGISTER_SIZE, REGISTER_SIZE, REGISTER_SIZE));
   ui->memory_fpath_input->setText(MEMTEMPHARDCODEDPATH);
   ui->opcodes_fpath_input->setText(OPCODETEMPHARDCODEDPATH);
+  if (false){
+  ov.make_cu(REGISTER_SIZE,8,8,1)->display->info.setText("control unit 0");
+  ov.memories.push_back(make_shared<memory>(MEMSIZE, REGISTER_SIZE, REGISTER_SIZE, REGISTER_SIZE));
+//  ui->memory_fpath_input->setText(MEMTEMPHARDCODEDPATH);
+//  ui->opcodes_fpath_input->setText(OPCODETEMPHARDCODEDPATH);
   auto cu = ov.control_units[0];
   auto mem = ov.memories[0];
   cu->opcodes = opmap;
-  cu->add_opcode(std::vector<size_t>{0x701,0x175});
   cu->make_alu(REGISTER_SIZE);
-  cu->get_alu(0)->A->set(std::bitset<max_bits>(0xfff));
-  mem->body.at(0x002) = 15;
+//  cu->get_alu(0)->A->set(std::bitset<max_bits>(0xfff));
+//  cu->get_alu(0)->B->set(std::bitset<max_bits>(0x1));
+//  cu->get_alu(0)->Z->set(std::bitset<max_bits>(0x0));
+//  mem->body.at(0x002) = 15;
   //cu->get_register(cu->make_regist(12));
   cu->make_regist(REGISTER_SIZE);
   cu->make_regist(REGISTER_SIZE);
 
-  for(auto item:cu->regists_in_out){cout << item.first << endl;}
-  cu->get_register(4)->set(0x002);
+//  for(auto item:cu->regists_in_out){cout << item.first << endl;}
+  //cu->get_register(4)->set(0x002);
   cu->get_register(5)->set(0x003);
   auto bu = cu->get_bus(cu->make_bus(REGISTER_SIZE));
   for(auto& item:cu->regists_in_out){
@@ -54,8 +84,8 @@ mwin::mwin(QWidget *parent) :
   auto mar_id = cu->make_mar(REGISTER_SIZE, mem);
   auto mdr_id = cu->make_mdr(REGISTER_SIZE, mem);
   //auto mar_id = cu->make_mar(12, mem);
-  cout <<   cu->get_register(4)->info << endl;  
-  cout <<   cu->get_register(5)->info << endl;  
+//  cout <<   cu->get_register(4)->info << endl;
+//  cout <<   cu->get_register(5)->info << endl;
   auto mdr = cu->get_mdr(mdr_id);
   mdr->link_in(bu);  
   mdr->link_out(bu);
@@ -66,7 +96,10 @@ mwin::mwin(QWidget *parent) :
   mdr->set(0x002);
   cu->instruction_register->set(0xF53);
  
-  
+  }
+  else{
+      load_default_architecture();
+  }
   //ov.cycle();
   //on_criar_regist_clicked(); 
 //   cout << "mar " << mar->id << " :" << mar->info << endl
@@ -123,7 +156,6 @@ void mwin::on_repl_input_returnPressed()
 
 void mwin::on_microcode_repl_input_returnPressed()
 {
-  //NEED TO FIX THIS?? seems to work fine
   if(auto control_unit = this->ov.control_units.at(ui->repl_cu_select->value())){
     if(ui->microcode_repl_input->text().length() ==
        (control_unit->operand_size * control_unit->operand_amnt + control_unit->operator_size)/4){
@@ -134,6 +166,8 @@ void mwin::on_microcode_repl_input_returnPressed()
       cout << microcod.get_operator() << microcod.get_operand(0) << microcod.get_operand(1)<<endl;
       control_unit->interpret_minst(microcod,ov.memories);
       control_unit->sync_bus();
+      ui->memory_list->clear();
+      fill_memory_list();
      // ui->microcode_repl_display->appendPlainText(ui->repl_input->text());
       //this->ov.cycle();
       //auto cu = this->ov.control_units.at(ui->repl_cu_select->value());
