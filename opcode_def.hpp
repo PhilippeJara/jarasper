@@ -30,6 +30,7 @@ class opcode{
 public:
   std::vector<microcode> microcodes;
   std::string literal;
+  //this was supposed to be name operator not operand wtf
   size_t operand;
 
   opcode(){}

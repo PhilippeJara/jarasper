@@ -14,10 +14,11 @@
 
 using namespace std;
 void mwin::load_default_architecture(){
-    //creates a control unit with REGISTER_SIZE IR and IC size, opcode with 8 bits for operator and 8 for operand
+  /*creates a control unit with REGISTER_SIZE IR and IC size, 
+    opcode with 8 bits for operator and 8 for operand*/
     ov.make_cu(REGISTER_SIZE,8,8,1)->display->info.setText("control unit 0");
-    /*creates a memory with 5000 adresses of REGISTER_SIZE word size,
-      REGISTER_SIZE width mdr bus and REGISTER_SIZE width mar bus*/
+  /*creates a memory with MEMSIZE adresses of REGISTER_SIZE word size,
+    REGISTER_SIZE width mdr bus and REGISTER_SIZE width mar bus*/
     ov.memories.push_back(make_shared<memory>(MEMSIZE, REGISTER_SIZE, REGISTER_SIZE, REGISTER_SIZE));
     auto cu = ov.control_units[0];
     auto mem = ov.memories[0];
@@ -31,7 +32,8 @@ void mwin::load_default_architecture(){
       (get<0>(item.second))->link_in(bu);
       (get<0>(item.second))->link_out(bu);
     }
-    //creates the memory adress register and the memory data register and link the with the previously defined bus
+    /*creates the memory adress register and the memory data register 
+      and links them with the previously defined bus*/
     auto mar_id = cu->make_mar(REGISTER_SIZE, mem);
     auto mdr_id = cu->make_mdr(REGISTER_SIZE, mem);
     auto mdr = cu->get_mdr(mdr_id);
@@ -40,7 +42,7 @@ void mwin::load_default_architecture(){
     auto mar = cu->get_mar(mar_id);
     mar->link_in(bu);
     mar->link_out(bu);
-    //setting the initial value of the register number 5 to 0x3
+    //setting the initial value of the register 5 to 0x3
     cu->get_register(5)->set(0x003);
 
 }

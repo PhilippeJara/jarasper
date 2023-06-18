@@ -193,23 +193,21 @@ void alu::set_flags(size_t op){
     auto zl = Z->info.to_ulong();
     if(al ==bl){ f_equal =1;};
     if(zl ==0){f_zero = 1;}
-    //need to double check these
-    if (al - bl > 0){f_negative =1;}
-
-
-
-
-    //check for overflow
     //figure out their actual size due to bitset fixed size at compile time:
     auto end_offset = A->info.size() - (A->info.size() - A->bits) - 1;
-    //cout << "AB: " << ab <<  " AB.flip(start_offset) " << ab.flip(end_offset-1) << endl;
+    //it is negative if the sign bit is turned on
+    if ( Z->info.test(end_offset)){f_negative =1;}
+
+    //check for overflow
+
+    //cout << "AB: " << Z->info <<  " AB.flip(start_offset) " << Z->info.flip(end_offset) << endl;
     // case 1: sum of two positives, sign bit true = overflow:
-    if (A->info.test(end_offset) && B->info.test(end_offset)){
+    if (!A->info.test(end_offset) && !B->info.test(end_offset)){
         if (Z->info.test(end_offset)){f_overflow =1;}
     }
     // case 2: sum of two negatives, sign bit true = overflow:
-    if (!(A->info.test(end_offset)) && !(B->info.test(end_offset))){
-        if (!Z->info.test(end_offset)){f_overflow =0;}
+    if ((A->info.test(end_offset)) && (B->info.test(end_offset))){
+        if (!Z->info.test(end_offset)){f_overflow =1;}
     }
     // case 3: all if not a sum of both positives or negatives stays off by default, no need to change
 
