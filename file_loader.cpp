@@ -29,6 +29,12 @@ int loadMem(std::string path, memory* mem_target) {
       //std::cout<<"CHEGUEI 1:"<<mem[j].substr(4)<<"        "<< stoi(mem[j].substr(4), nullptr, 16)<<"   "<<j<<std::endl;
       int k = i-j;
       orgJmp = stoi(mem[j].substr(4), nullptr, 16);
+      if (orgJmp > MEMSIZE){
+          mem[j] = "0000";
+          for(int inner_loop = j;inner_loop<=i;inner_loop++){
+              mem[inner_loop] = "0000";
+          }
+          break;}
       mem[j] = "0000";
       while(k > 0){
     mem[orgJmp+k-1] = mem[j+k]; mem[j+k] = "0000";
@@ -42,9 +48,13 @@ int loadMem(std::string path, memory* mem_target) {
   //  while (i < MEMSIZE){
   //      if(mem[i] == ""){mem[i]= "0000";}
   //      i++;}
-
+  //clear the previous memory
+  for (int iter = 0;iter < MEMSIZE;iter++){
+      mem_target->body[iter] = 0;
+  }
   //now we turn it into a vector of size_t to match the new memory store:
   for (int iter = 0;iter < MEMSIZE;iter++){
+      if (mem[iter] == "" ||mem[iter] == "\r" ||mem[iter] == "\n" ||mem[iter] == "\r\n"){return 0;}
      mem_target->body[iter] =  stoi(mem[iter],nullptr,16);
 //     if (iter < 10){
 //         std::cout << mem[iter] << ": " << stoi(mem[iter],nullptr,16) << std::endl;

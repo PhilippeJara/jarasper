@@ -44,6 +44,9 @@ void mwin::load_default_architecture(){
     mar->link_out(bu);
     //setting the initial value of the register 5 to 0x3
     cu->get_register(5)->set(0x003);
+    auto alu = cu->get_alu(0);
+    //alu->A->set(1);
+    //alu->B->set(1);
 
 }
 mwin::mwin(QWidget *parent) :
