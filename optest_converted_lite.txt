@@ -1,0 +1,54 @@
+(00 FETCH
+7<-1
+;07<-01
+INC
+READ
+0<-8
+;CU<-/0
+)
+(01 H5LT
+H5LT
+)
+(02 ADD $D5T5 ,5
+2<-5
+3<-'0
+2ADD3
+5<-4
+)
+(03 "ADD #data,6"
+;Description "5dd to reg. 6 an immediate oper."
+2<-6
+3<-'0
+2ADD3
+6<-4
+)
+(04 "ADD addr,5"
+;Description "5dd to reg. 5 from a direct addr."
+7<-'0
+READ
+3<-8
+2<-5
+2ADD43
+5<-4
+)
+(17(05) Mnemonic "SHL 6"
+;Description "Shift left reg. 6"
+2<-6
+3<-'0
+SHL
+6<-4
+)
+(49(06) Mnemonic "JMP addr"
+;Description "Jump to a direct addr."
+1<-'0
+)
+(3F(07) Mnemonic "BNE addr"
+;Description "Branch to a direct addr. if zero flag clear (Z=0)"
+if PSRz==0
+1<-'0
+)
+(40(08) Mnemonic "BEQ addr"
+;Description "Branch to a direct addr. if zero flag set (Z=1)"
+if PSRz==1
+1<-'0
+)

@@ -1,0 +1,617 @@
+(00 FETCH
+;MAR has id 7, IC has id 1
+7<-1
+INC
+READ
+;MDR has id 0, MDR has id 8
+0<-8
+)
+(01 HALT
+HALT
+)
+(02 ADD $DATA ,A
+2<-5
+3<-'0
+2ADD3
+5<-4
+)
+(03 "ADD #data,B"
+;Description "Add to reg. B an immediate oper."
+2<-6
+3<-'0
+2ADD3
+6<-4
+)
+(04 "ADD addr,A"
+;Description "Add to reg. A from a direct addr."
+7<-'0
+READ
+3<-8
+2<-5
+2ADD3
+5<-4
+)
+(05 Mnemonic "ADD addr,B"
+;Description "Add to reg. B from a direct addr."
+7<-'0
+READ
+3<-8
+2<-6
+2ADD3
+6<-4
+)
+(06 Mnemonic "ADD (addr),A"
+;Description "Add to reg. A from an indirect addr."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+3<-8
+2<-5
+2ADD3
+5<-4
+)
+(07 Mnemonic "ADD (addr),B"
+;Description "Add to reg. B from an indirect addr."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+3<-8
+2<-6
+2ADD3
+6<-4
+)
+(08 Mnemonic "ADD B,A"
+;Description "Add B reg. to contents of A reg."
+3<-5
+2<-6
+2ADD3
+5<-4
+)
+(09 Mnemonic "ADD A,B"
+;Description "Add A reg. to contents of B reg."
+3<-5
+2<-6
+2ADD3
+6<-4
+)
+(0A Mnemonic "ADD (B),A"
+;Description "Add B reg. indirect oper. to A reg."
+7<-6
+READ
+3<-8
+2<-5
+2ADD3
+5<-4
+)
+(0B Mnemonic "ADD (A),B"
+;Description "Add A reg. indirect oper. to B reg."
+7<-5
+READ
+3<-8
+2<-6
+2ADD3
+6<-4
+)
+(0C * Mnemonic "SUB #data,A"
+;Description "Subtract an immediate oper. from A reg"
+2<-5
+3<-'0
+SUB
+5<-4
+)
+(0D Mnemonic "SUB #data,B"
+;Description "Subtract an immediate oper. from B reg"
+2<-6
+3<-'0
+SUB
+6<-4
+)
+(0E Mnemonic "SUB addr,A"
+;Description "Subtract from reg. A a direct oper."
+7<-'0
+READ
+2<-5
+3<-8
+SUB
+5<-4
+)
+(0F Mnemonic "SUB addr,B"
+;Description "Subtract from reg. B a direct oper."
+7<-'0
+READ
+2<-6
+3<-8
+SUB
+6<-4
+)
+(10 Mnemonic "SUB (addr),A"
+;Description "Subtract from reg. A an indirect oper."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+2<-5
+3<-8
+SUB
+5<-4
+)
+(11 Mnemonic "SUB (addr),B"
+;Description "Subtract from reg. B an indirect oper."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+2<-6
+3<-8
+SUB
+6<-4
+)
+(12 Mnemonic "SUB B,A"
+;Description "Subtract from reg. A the contents of reg. B"
+2<-5
+3<-6
+SUB
+5<-4
+)
+(13 Mnemonic "SUB A,B"
+;Description "Subtract from reg. B the contents of reg. A"
+2<-6
+3<-5
+SUB
+6<-4
+)
+(14 Mnemonic "SUB (B),A"
+;Description "Subtract from reg. A a reg. indirect oper."
+7<-6
+READ
+2<-5
+3<-8
+SUB
+5<-4
+)
+(15 Mnemonic "SUB (A),B"
+;Description "Subtract from reg. B a reg. indirect oper."
+7<-5
+READ
+2<-6
+3<-8
+SUB
+6<-4
+)
+(16 Mnemonic "SHL A"
+;Description "Shift left reg. A"
+2<-5
+ALU<<$1
+5<-4
+)
+(17 Mnemonic "SHL B"
+;Description "Shift left reg. B"
+2<-6
+ALU<<$1
+6<-4
+)
+(18 Mnemonic "SHR A"
+;Description "Shift right the contents of reg. A"
+2<-5
+2>>$1
+5<-4
+)
+(19 Mnemonic "SHR B"
+;Description "Shift right the contents of reg. B"
+2<-6
+2>>$1
+6<-4
+)
+(1A Mnemonic "CMP #data,A"
+;Description "Compare an immediate oper. with A reg"
+2<-5
+3<-'0
+SUB
+)
+(1B Mnemonic "CMP #data,B"
+;Description "Compare an immediate oper. with B reg"
+2<-6
+3<-'0
+SUB
+)
+(1C Mnemonic "CMP addr,A"
+;Description "Compare a direct oper. with A reg."
+7<-'0
+READ
+3<-8
+2<-5
+SUB
+)
+(1D Mnemonic "CMP addr,B"
+;Description "Compare a direct oper. with B reg."
+7<-'0
+READ
+3<-8
+2<-6
+SUB
+)
+(1E Mnemonic "CMP (addr),A"
+;Description "Compare an indirect oper. with A reg."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+3<-8
+2<-5
+SUB
+)
+(1F Mnemonic "CMP (addr),B"
+;Description "Compare an indirect oper. with B reg."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+3<-8
+2<-6
+SUB
+)
+(20 Mnemonic "CMP B,A"
+;Description "Compare A and B reg."
+2<-5
+3<-6
+SUB
+)
+(21 Mnemonic "CMP A,B"
+;Description "Compare B and A reg."
+2<-6
+3<-5
+SUB
+)
+(22 Mnemonic "CMP (B),A"
+;Description "Compare A with a reg. indirect oper."
+7<-6
+READ
+2<-5
+3<-8
+SUB
+)
+(23 Mnemonic "CMP (A),B"
+;Description "Compare B with a reg. indirect oper."
+7<-5
+READ
+2<-6
+3<-8
+SUB
+)
+(24 Mnemonic "CMP #data,A"
+;Description "Compare an immediate oper. with A reg"
+2<-5
+3<-'0
+SUB
+)
+(25 Mnemonic "CMP #data,B"
+;Description "Compare an immediate oper. with B reg"
+2<-6
+3<-'0
+SUB
+)
+(26 Mnemonic "CMP addr,A"
+;Description "Compare a direct oper. with A reg."
+7<-'0
+READ
+3<-8
+2<-5
+SUB
+)
+(27 Mnemonic "CMP addr,B"
+;Description "Compare a direct oper. with B reg."
+7<-'0
+READ
+3<-8
+2<-6
+SUB
+)
+(28 Mnemonic "CMP (addr),A"
+;Description "Compare an indirect oper. with A reg."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+3<-8
+2<-5
+SUB
+)
+(29 Mnemonic "CMP (addr),B"
+;Description "Compare an indirect oper. with B reg."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+3<-8
+2<-6
+SUB
+)
+(2A Mnemonic "CMP B,A"
+;Description "Compare A and B reg."
+2<-5
+3<-6
+SUB
+)
+(2B Mnemonic "CMP A,B"
+;Description "Compare B and A reg."
+2<-6
+3<-5
+SUB
+)
+(2C Mnemonic "CMP (B),A"
+;Description "Compare A with a reg. indirect oper."
+7<-6
+READ
+2<-5
+3<-8
+SUB
+)
+(2D Mnemonic "CMP (A),B"
+;Description "Compare B with a reg. indirect oper."
+7<-5
+READ
+2<-6
+3<-8
+SUB
+)
+(2E Mnemonic "MOVE #data,B"
+;Description "Move an immediate oper. into B"
+6<-'0
+)
+(2F Mnemonic "MOVE addr,A"
+;Description "Load reg. A from a direct addr."
+7<-'0
+READ
+5<-8
+)
+(30 Mnemonic "MOVE addr,B"
+;Description "Load reg. B from a direct addr."
+7<-'0
+READ
+6<-8
+)
+(31 Mnemonic "MOVE (addr),A"
+;Description "Load reg. A from an indirect addr."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+5<-8
+)
+(32 Mnemonic "MOVE (addr),B"
+;Description "Load reg. B from an indirect addr."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+6<-8
+)
+(33 Mnemonic "MOVE B,A"
+;Description "Move B reg. to A reg."
+8<-6
+5<-8
+)
+(34 Mnemonic "MOVE A,B"
+;Description "Move A reg. to B reg."
+8<-5
+6<-8
+)
+(35 Mnemonic "MOVE (B),A"
+;Description "Load A reg. with a reg. indirect oper."
+7<-6
+READ
+5<-8
+)
+(36 Mnemonic "MOVE (A),B"
+;Description "Load B reg. with a reg. indirect oper."
+7<-5
+READ
+6<-8
+)
+(37 Mnemonic "BPL #dis"
+;Description "Branch on negative clear to a 1 relative addr."
+if PSRn==0
+2<-1
+3<-'0
+2ADD3
+1<-4
+)
+(38 Mnemonic "BMI #dis"
+;Description "Branch on negative set to a 1 relative addr."
+if PSRn==1
+2<-1
+3<-'0
+2ADD3
+1<-4
+)
+(39 Mnemonic "BPL addr"
+;Description "Branch to a direct addr. if negative flag clear (N=0)"
+if PSRn==0
+1<-'0
+)
+(3A Mnemonic "BMI addr"
+;Description "Branch to a direct addr. if negative flag set (N=1)"
+if PSRn==1
+1<-'0
+)
+(3B Mnemonic "BPL (addr)"
+;Description "Branch to an indirect addr. if negative flag is clear"
+if PSRn==0
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+0<-8
+1<-'0
+)
+(3C Mnemonic "BMI (addr)"
+;Description "Branch to an indirect addr. if negative flag is set"
+if PSRn==1
+7<-'0
+0<-8
+7<-'0
+READ
+0<-8
+1<-'0
+)
+(3D Mnemonic "BNE #dis"
+;Description "Branch on zero clear to a 1 relative addr."
+if PSRz==0
+2<-1
+3<-'0
+2ADD3
+1<-4
+)
+(3E Mnemonic "BEQ #dis"
+;Description "Branch on zero set to a 1 relative addr."
+if PSRz==1
+2<-1
+3<-'0
+2ADD3
+1<-4
+)
+(3F Mnemonic "BNE addr"
+;Description "Branch to a direct addr. if zero flag clear (Z=0)"
+if PSRz==0
+1<-'0
+)
+(40 Mnemonic "BEQ addr"
+;Description "Branch to a direct addr. if zero flag set (Z=1)"
+if PSRz==1
+1<-'0
+)
+(41 Mnemonic "BNE (addr)"
+;Description "Branch to an indirect addr. if zero flag is clear"
+if PSRz==0
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+0<-8
+1<-'0
+)
+(42 Mnemonic "BEQ (addr)"
+;Description "Branch to an indirect addr. if zero flag is set"
+if PSRz==1
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+0<-8
+1<-'0
+)
+(43 Mnemonic "BVC #dis"
+;Description "Branch on no overflow to a 1 relative addr."
+if PSRv==0
+2<-1
+3<-'0
+2ADD3
+1<-4
+)
+(44 Mnemonic "BVS #dis"
+;Description "Branch on overflow to a 1 relative addr."
+if PSRv==1
+2<-1
+3<-'0
+2ADD3
+1<-4
+)
+(45 Mnemonic "BVC addr"
+;Description "Branch to a direct addr. if overflow flag clear (V=0)"
+if PSRv==0
+1<-'0
+)
+(46 Mnemonic "BVS addr"
+;Description "Branch to a direct addr. if overflow flag set (V=1)"
+if PSRv==1
+1<-'0
+)
+(47 Mnemonic "BVC (addr)"
+;Description "Branch to an indirect addr. if overflow flag is clear"
+if PSRv==0
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+0<-8
+1<-'0
+)
+(48 Mnemonic "BVS (addr)"
+;Description "Branch to an indirect addr. if overflow flag is set"
+if PSRv==1
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+0<-8
+1<-'0
+)
+(49 Mnemonic "JMP addr"
+;Description "Jump to a direct addr."
+1<-'0
+)
+(4A Mnemonic "JMP (addr)"
+;Description "Jump to an indirect addr."
+7<-'0
+READ
+0<-8
+7<-'0
+READ
+0<-8
+1<-'0
+)
+(4B Mnemonic "JMP A"
+;Description "Jump to an addr. held in the A reg."
+8<-5
+1<-8
+)
+(4C Mnemonic "JMP B"
+;Description "Jump to an addr. held in the B reg."
+1<-6
+)
+(4D Mnemonic "JMP (A)"
+;Description "Jump to a reg. indirect addr."
+7<-5
+READ
+1<-8
+)
+(4E Mnemonic "JMP (B)"
+;Description "Jump to a reg. indirect addr."
+7<-6
+READ
+1<-8
+)
+//
+(4F Mnemonic "MOVE #data,A"
+;Description "Move an immediate oper. into A"
+5<-'0
+)
+(50 Mnemonic "MOVE A,addr"
+;Description "Store the A reg. in memory at a direct addr."
+7<-'0
+8<-5
+WRITE
+)
+(51 Mnemonic "MOVE B,addr"
+;Description "Store the B reg. in memory at a direct addr."
+7<-'0
+8<-6
+WRITE
+)

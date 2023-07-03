@@ -1,0 +1,618 @@
+(00 FETCH
+MAR<-PC
+;07<-01
+INC<-PC
+PC<-INC
+MDR<-/MAR
+IR<-MDR
+CU<-/IR
+)
+(01 HALT
+HALT
+)
+(02 ADD $DATA ,A
+ALUx<-A
+ALUy<-'IR
+ALUx+ALUy
+A<-ALUr
+)
+(03 "ADD #data,B"
+;Description "Add to reg. B an immediate oper."
+ALUx<-B
+ALUy<-'IR
+ALUx+ALUy
+B<-ALUr
+)
+(04 "ADD addr,A"
+;Description "Add to reg. A from a direct addr."
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-A
+ALUx+ALUy
+A<-ALUr
+)
+(05 Mnemonic "ADD addr,B"
+;Description "Add to reg. B from a direct addr."
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-B
+ALUx+ALUy
+B<-ALUr
+)
+(06 Mnemonic "ADD (addr),A"
+;Description "Add to reg. A from an indirect addr."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-A
+ALUx+ALUy
+A<-ALUr
+)
+(07 Mnemonic "ADD (addr),B"
+;Description "Add to reg. B from an indirect addr."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-B
+ALUx+ALUy
+B<-ALUr
+)
+(08 Mnemonic "ADD B,A"
+;Description "Add B reg. to contents of A reg."
+ALUy<-A
+ALUx<-B
+ALUx+ALUy
+A<-ALUr
+)
+(09 Mnemonic "ADD A,B"
+;Description "Add A reg. to contents of B reg."
+ALUy<-A
+ALUx<-B
+ALUx+ALUy
+B<-ALUr
+)
+(0A Mnemonic "ADD (B),A"
+;Description "Add B reg. indirect oper. to A reg."
+MAR<-B
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-A
+ALUx+ALUy
+A<-ALUr
+)
+(0B Mnemonic "ADD (A),B"
+;Description "Add A reg. indirect oper. to B reg."
+MAR<-A
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-B
+ALUx+ALUy
+B<-ALUr
+)
+(0C * Mnemonic "SUB #data,A"
+;Description "Subtract an immediate oper. from A reg"
+ALUx<-A
+ALUy<-'IR
+ALUx-ALUy
+A<-ALUr
+)
+(0D Mnemonic "SUB #data,B"
+;Description "Subtract an immediate oper. from B reg"
+ALUx<-B
+ALUy<-'IR
+ALUx-ALUy
+B<-ALUr
+)
+(0E Mnemonic "SUB addr,A"
+;Description "Subtract from reg. A a direct oper."
+MAR<-'IR
+MDR<-/MAR
+ALUx<-A
+ALUy<-MDR
+ALUx-ALUy
+A<-ALUr
+)
+(0F Mnemonic "SUB addr,B"
+;Description "Subtract from reg. B a direct oper."
+MAR<-'IR
+MDR<-/MAR
+ALUx<-B
+ALUy<-MDR
+ALUx-ALUy
+B<-ALUr
+)
+(10 Mnemonic "SUB (addr),A"
+;Description "Subtract from reg. A an indirect oper."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUx<-A
+ALUy<-MDR
+ALUx-ALUy
+A<-ALUr
+)
+(11 Mnemonic "SUB (addr),B"
+;Description "Subtract from reg. B an indirect oper."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUx<-B
+ALUy<-MDR
+ALUx-ALUy
+B<-ALUr
+)
+(12 Mnemonic "SUB B,A"
+;Description "Subtract from reg. A the contents of reg. B"
+ALUx<-A
+ALUy<-B
+ALUx-ALUy
+A<-ALUr
+)
+(13 Mnemonic "SUB A,B"
+;Description "Subtract from reg. B the contents of reg. A"
+ALUx<-B
+ALUy<-A
+ALUx-ALUy
+B<-ALUr
+)
+(14 Mnemonic "SUB (B),A"
+;Description "Subtract from reg. A a reg. indirect oper."
+MAR<-B
+MDR<-/MAR
+ALUx<-A
+ALUy<-MDR
+ALUx-ALUy
+A<-ALUr
+)
+(15 Mnemonic "SUB (A),B"
+;Description "Subtract from reg. B a reg. indirect oper."
+MAR<-A
+MDR<-/MAR
+ALUx<-B
+ALUy<-MDR
+ALUx-ALUy
+B<-ALUr
+)
+(16 Mnemonic "SHL A"
+;Description "Shift left reg. A"
+ALUx<-A
+ALU<<$1
+A<-ALUr
+)
+(17 Mnemonic "SHL B"
+;Description "Shift left reg. B"
+ALUx<-B
+ALU<<$1
+B<-ALUr
+)
+(18 Mnemonic "SHR A"
+;Description "Shift right the contents of reg. A"
+ALUx<-A
+ALUx>>$1
+A<-ALUr
+)
+(19 Mnemonic "SHR B"
+;Description "Shift right the contents of reg. B"
+ALUx<-B
+ALUx>>$1
+B<-ALUr
+)
+(1A Mnemonic "CMP #data,A"
+;Description "Compare an immediate oper. with A reg"
+ALUx<-A
+ALUy<-'IR
+ALUx-ALUy
+)
+(1B Mnemonic "CMP #data,B"
+;Description "Compare an immediate oper. with B reg"
+ALUx<-B
+ALUy<-'IR
+ALUx-ALUy
+)
+(1C Mnemonic "CMP addr,A"
+;Description "Compare a direct oper. with A reg."
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-A
+ALUx-ALUy
+)
+(1D Mnemonic "CMP addr,B"
+;Description "Compare a direct oper. with B reg."
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-B
+ALUx-ALUy
+)
+(1E Mnemonic "CMP (addr),A"
+;Description "Compare an indirect oper. with A reg."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-A
+ALUx-ALUy
+)
+(1F Mnemonic "CMP (addr),B"
+;Description "Compare an indirect oper. with B reg."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-B
+ALUx-ALUy
+)
+(20 Mnemonic "CMP B,A"
+;Description "Compare A and B reg."
+ALUx<-A
+ALUy<-B
+ALUx-ALUy
+)
+(21 Mnemonic "CMP A,B"
+;Description "Compare B and A reg."
+ALUx<-B
+ALUy<-A
+ALUx-ALUy
+)
+(22 Mnemonic "CMP (B),A"
+;Description "Compare A with a reg. indirect oper."
+MAR<-B
+MDR<-/MAR
+ALUx<-A
+ALUy<-MDR
+ALUx-ALUy
+)
+(23 Mnemonic "CMP (A),B"
+;Description "Compare B with a reg. indirect oper."
+MAR<-A
+MDR<-/MAR
+ALUx<-B
+ALUy<-MDR
+ALUx-ALUy
+)
+(24 Mnemonic "CMP #data,A"
+;Description "Compare an immediate oper. with A reg"
+ALUx<-A
+ALUy<-'IR
+ALUx-ALUy
+)
+(25 Mnemonic "CMP #data,B"
+;Description "Compare an immediate oper. with B reg"
+ALUx<-B
+ALUy<-'IR
+ALUx-ALUy
+)
+(26 Mnemonic "CMP addr,A"
+;Description "Compare a direct oper. with A reg."
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-A
+ALUx-ALUy
+)
+(27 Mnemonic "CMP addr,B"
+;Description "Compare a direct oper. with B reg."
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-B
+ALUx-ALUy
+)
+(28 Mnemonic "CMP (addr),A"
+;Description "Compare an indirect oper. with A reg."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-A
+ALUx-ALUy
+)
+(29 Mnemonic "CMP (addr),B"
+;Description "Compare an indirect oper. with B reg."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+ALUy<-MDR
+ALUx<-B
+ALUx-ALUy
+)
+(2A Mnemonic "CMP B,A"
+;Description "Compare A and B reg."
+ALUx<-A
+ALUy<-B
+ALUx-ALUy
+)
+(2B Mnemonic "CMP A,B"
+;Description "Compare B and A reg."
+ALUx<-B
+ALUy<-A
+ALUx-ALUy
+)
+(2C Mnemonic "CMP (B),A"
+;Description "Compare A with a reg. indirect oper."
+MAR<-B
+MDR<-/MAR
+ALUx<-A
+ALUy<-MDR
+ALUx-ALUy
+)
+(2D Mnemonic "CMP (A),B"
+;Description "Compare B with a reg. indirect oper."
+MAR<-A
+MDR<-/MAR
+ALUx<-B
+ALUy<-MDR
+ALUx-ALUy
+)
+(2E Mnemonic "MOVE #data,B"
+;Description "Move an immediate oper. into B"
+B<-'IR
+)
+(2F Mnemonic "MOVE addr,A"
+;Description "Load reg. A from a direct addr."
+MAR<-'IR
+MDR<-/MAR
+A<-MDR
+)
+(30 Mnemonic "MOVE addr,B"
+;Description "Load reg. B from a direct addr."
+MAR<-'IR
+MDR<-/MAR
+B<-MDR
+)
+(31 Mnemonic "MOVE (addr),A"
+;Description "Load reg. A from an indirect addr."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+A<-MDR
+)
+(32 Mnemonic "MOVE (addr),B"
+;Description "Load reg. B from an indirect addr."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+B<-MDR
+)
+(33 Mnemonic "MOVE B,A"
+;Description "Move B reg. to A reg."
+MDR<-B
+A<-MDR
+)
+(34 Mnemonic "MOVE A,B"
+;Description "Move A reg. to B reg."
+MDR<-A
+B<-MDR
+)
+(35 Mnemonic "MOVE (B),A"
+;Description "Load A reg. with a reg. indirect oper."
+MAR<-B
+MDR<-/MAR
+A<-MDR
+)
+(36 Mnemonic "MOVE (A),B"
+;Description "Load B reg. with a reg. indirect oper."
+MAR<-A
+MDR<-/MAR
+B<-MDR
+)
+(37 Mnemonic "BPL #dis"
+;Description "Branch on negative clear to a PC relative addr."
+if PSRn==0
+ALUx<-PC
+ALUy<-'IR
+ALUx+ALUy
+PC<-ALUr
+)
+(38 Mnemonic "BMI #dis"
+;Description "Branch on negative set to a PC relative addr."
+if PSRn==1
+ALUx<-PC
+ALUy<-'IR
+ALUx+ALUy
+PC<-ALUr
+)
+(39 Mnemonic "BPL addr"
+;Description "Branch to a direct addr. if negative flag clear (N=0)"
+if PSRn==0
+PC<-'IR
+)
+(3A Mnemonic "BMI addr"
+;Description "Branch to a direct addr. if negative flag set (N=1)"
+if PSRn==1
+PC<-'IR
+)
+(3B Mnemonic "BPL (addr)"
+;Description "Branch to an indirect addr. if negative flag is clear"
+if PSRn==0
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+PC<-'IR
+)
+(3C Mnemonic "BMI (addr)"
+;Description "Branch to an indirect addr. if negative flag is set"
+if PSRn==1
+MAR<-'IR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+PC<-'IR
+)
+(3D Mnemonic "BNE #dis"
+;Description "Branch on zero clear to a PC relative addr."
+if PSRz==0
+ALUx<-PC
+ALUy<-'IR
+ALUx+ALUy
+PC<-ALUr
+)
+(3E Mnemonic "BEQ #dis"
+;Description "Branch on zero set to a PC relative addr."
+if PSRz==1
+ALUx<-PC
+ALUy<-'IR
+ALUx+ALUy
+PC<-ALUr
+)
+(3F Mnemonic "BNE addr"
+;Description "Branch to a direct addr. if zero flag clear (Z=0)"
+if PSRz==0
+PC<-'IR
+)
+(40 Mnemonic "BEQ addr"
+;Description "Branch to a direct addr. if zero flag set (Z=1)"
+if PSRz==1
+PC<-'IR
+)
+(41 Mnemonic "BNE (addr)"
+;Description "Branch to an indirect addr. if zero flag is clear"
+if PSRz==0
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+PC<-'IR
+)
+(42 Mnemonic "BEQ (addr)"
+;Description "Branch to an indirect addr. if zero flag is set"
+if PSRz==1
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+PC<-'IR
+)
+(43 Mnemonic "BVC #dis"
+;Description "Branch on no overflow to a PC relative addr."
+if PSRv==0
+ALUx<-PC
+ALUy<-'IR
+ALUx+ALUy
+PC<-ALUr
+)
+(44 Mnemonic "BVS #dis"
+;Description "Branch on overflow to a PC relative addr."
+if PSRv==1
+ALUx<-PC
+ALUy<-'IR
+ALUx+ALUy
+PC<-ALUr
+)
+(45 Mnemonic "BVC addr"
+;Description "Branch to a direct addr. if overflow flag clear (V=0)"
+if PSRv==0
+PC<-'IR
+)
+(46 Mnemonic "BVS addr"
+;Description "Branch to a direct addr. if overflow flag set (V=1)"
+if PSRv==1
+PC<-'IR
+)
+(47 Mnemonic "BVC (addr)"
+;Description "Branch to an indirect addr. if overflow flag is clear"
+if PSRv==0
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+PC<-'IR
+)
+(48 Mnemonic "BVS (addr)"
+;Description "Branch to an indirect addr. if overflow flag is set"
+if PSRv==1
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+PC<-'IR
+)
+(49 Mnemonic "JMP addr"
+;Description "Jump to a direct addr."
+PC<-'IR
+)
+(4A Mnemonic "JMP (addr)"
+;Description "Jump to an indirect addr."
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+MAR<-'IR
+MDR<-/MAR
+IR<-MDR
+PC<-'IR
+)
+(4B Mnemonic "JMP A"
+;Description "Jump to an addr. held in the A reg."
+MDR<-A
+PC<-MDR
+)
+(4C Mnemonic "JMP B"
+;Description "Jump to an addr. held in the B reg."
+PC<-B
+)
+(4D Mnemonic "JMP (A)"
+;Description "Jump to a reg. indirect addr."
+MAR<-A
+MDR<-/MAR
+PC<-MDR
+)
+(4E Mnemonic "JMP (B)"
+;Description "Jump to a reg. indirect addr."
+MAR<-B
+MDR<-/MAR
+PC<-MDR
+)
+//
+(4F Mnemonic "MOVE #data,A"
+;Description "Move an immediate oper. into A"
+A<-'IR
+)
+(50 Mnemonic "MOVE A,addr"
+;Description "Store the A reg. in memory at a direct addr."
+MAR<-'IR
+MDR<-A
+/MAR<-MDR
+)
+(51 Mnemonic "MOVE B,addr"
+;Description "Store the B reg. in memory at a direct addr."
+MAR<-'IR
+MDR<-B
+/MAR<-MDR
+)

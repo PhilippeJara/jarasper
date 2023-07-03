@@ -280,13 +280,22 @@
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>450</y>
+      <x>880</x>
+      <y>700</y>
       <width>121</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>121</width>
+      <height>23</height>
+     </size>
     </property>
     <property name="text">
      <string>redraw memory</string>
@@ -295,11 +304,17 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>1320</x>
-      <y>870</y>
+      <x>950</x>
+      <y>660</y>
       <width>21</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>21</width>
+      <height>23</height>
+     </size>
     </property>
     <property name="text">
      <string>save_state_test</string>
@@ -308,11 +323,17 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>1310</x>
-      <y>840</y>
+      <x>940</x>
+      <y>630</y>
       <width>80</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>80</width>
+      <height>23</height>
+     </size>
     </property>
     <property name="text">
      <string>load_state</string>
@@ -389,15 +410,15 @@
      <string>Fetch + Execute</string>
     </property>
    </widget>
+   <zorder>pushButton_3</zorder>
+   <zorder>pushButton_2</zorder>
+   <zorder>pushButton</zorder>
    <zorder>frame</zorder>
    <zorder>repl_cu_select</zorder>
    <zorder>repl_cu_select_label</zorder>
    <zorder>opcode_display</zorder>
    <zorder>repls</zorder>
    <zorder>memory_list</zorder>
-   <zorder>pushButton</zorder>
-   <zorder>pushButton_2</zorder>
-   <zorder>pushButton_3</zorder>
    <zorder>memory_fpath_input</zorder>
    <zorder>opcodes_fpath_input</zorder>
    <zorder>fetch_button</zorder>
